@@ -3,9 +3,9 @@
 # Author: Jason Ziglar <jpz@vt.edu>
 
 dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-abs_dir=`readlink -f "${dir}/.."`
+abs_dir="${dir}/.."
 
-if [ ! -d "${abs_dir}/papers" ]; then
+if [ ! -d "${abs_dir}/common" ]; then
   read -p "Please provide a git repository to store templates within:" repo
   if [ -z "$repo" ]; then
     repo="https://github.com/TRECVT/peg-multimarkdown-latex-support.git"
@@ -17,8 +17,8 @@ if [ ! -d "${abs_dir}/papers" ]; then
 fi
 
 case `uname` in
-  Darwin) latex_dir="~/Library/texmf/";;
-  Linux) latex_dir="~/texmf";;
+  Darwin) latex_dir="${HOME}/Library/texmf";;
+  Linux) latex_dir="${HOME}/texmf";;
   *) echo "This platform not yet supported."; exit 1;;
   #Todo: Add Windows support
 esac
