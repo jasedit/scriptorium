@@ -7,8 +7,11 @@ dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 abs_dir="${dir}/.."
 
 if [ ! -d "${abs_dir}/papers" ]; then
+  cur_dir=`pwd`
   read -p "Please provide a git repository to point at to store papers:" repo
-  git submodule add --force $repo "${abs_dir}"/papers
+  cd $abs_dir
+  git submodule add --force $repo papers
+  cd $cur_dir
 else
   exit 0
 fi

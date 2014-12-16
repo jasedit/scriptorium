@@ -10,7 +10,10 @@ if [ ! -d "${abs_dir}/papers" ]; then
   if [ -z "$repo" ]; then
     repo="https://github.com/TRECVT/peg-multimarkdown-latex-support.git"
   fi
-  git submodule add --force $repo "${abs_dir}"/common
+  cur_dir=`pwd`
+  cd $abs_dir
+  git submodule add --force $repo common
+  cd $cur_dir
 fi
 
 case `uname` in
