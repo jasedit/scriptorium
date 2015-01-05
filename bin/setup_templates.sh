@@ -1,5 +1,5 @@
 #!/bin/bash
-# Sets up the template repositories for the paper framework.
+# Sets up the template submodule for the paper framework.
 # Author: Jason Ziglar <jpz@vt.edu>
 
 dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -19,8 +19,8 @@ fi
 case `uname` in
   Darwin) latex_dir="${HOME}/Library/texmf";;
   Linux) latex_dir="${HOME}/texmf";;
+  CYGWIN_NT-6.3) latex_dir="${HOME}/.config/texmf";;
   *) echo "This platform not yet supported."; exit 1;;
-  #Todo: Add Windows support
 esac
 
 mkdir -p "${latex_dir}"/tex/latex

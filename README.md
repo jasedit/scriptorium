@@ -1,5 +1,4 @@
-papers_base
-===========
+# papers_base
 
 Repository creating a framework for providing a MultiMarkdown and LaTeX based system for easily writing academic papers.
 
@@ -27,6 +26,22 @@ Installation is broken down into two separate phases, depending on which part of
 
 1. Clone the base reposotiry corresponding to the group you want to use. It is best if you include use the `--recursive` flag, so all submodules are checked out as part of the initial clone.
 
+### Ubuntu 14.04 Setup
+
+1. Run `bin/install.sh` to install multimarkdown and latex packages necessary for this system to build.
+2. Run `./bin/setup_templates.sh` to symlink the templates for multimarkdown.
+
+### Windows Setup
+
+1. Install Cygwin from http://cygwin.com/
+2. Make sure the following Cygwin packages are installed: texlive, texlive-collection-latexextra, texlive-collection-publishers, git, openssh, make, libglib2.0-devel, gcc-core, gcc-g++
+3. Once cygwin is installed, open up the Cygwin terminal for the following steps.
+4. Set up an SSH key. The easiest way is to execute "ssh-keygen" and follow the prompts.
+5. Add the public key to GitHub.
+6. Clone Multimarkdown with the following command: `git clone --recursive git@github.com:fletcher/peg-multimarkdown-latex-support.git $MMD_DIR`, where `$MMD_DIR` is a location to download the MultiMarkdown source code.
+7. `cd $MMD_DIR; make; make install`
+8. `git clone --recursive $PAPER_REPO $PAPER_DIR` where `$PAPER_REPO` is your paper repository, and `$PAPER_DIR` is the location to save the papers.
+9. `cd $PAPER_REPO/bin; ./steup_templates.sh`
 
 ## Creating a new paper
 
