@@ -36,4 +36,8 @@ mkdir $paper_dir
 cp -r "${abs_dir}"/etc/example_paper/* $paper_dir
 mv "${paper_dir}"/gitignore "${paper_dir}"/.gitignore
 
-sed -i '' -e "s/TEMPLATE/${2}/g" "${paper_dir}"/paper.mmd
+if [ `uname` = "Darwin" ]; then
+  sed -i '' -e "s/TEMPLATE/${2}/g" "${paper_dir}"/paper.mmd
+else
+  sed -i -e "s/TEMPLATE/${2}/g" "${paper_dir}"/paper.mmd
+fi
