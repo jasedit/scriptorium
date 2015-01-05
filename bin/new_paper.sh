@@ -30,7 +30,9 @@ fi
 if [ -d "${paper_dir}" ]; then
   echo "Paper directory already exists, refusing to blow it away."
   exit 3
+fi
 
+mkdir $paper_dir
 cp -r "${abs_dir}"/etc/example_paper/* $paper_dir
 mv "${paper_dir}"/gitignore "${paper_dir}"/.gitignore
 
