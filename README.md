@@ -45,4 +45,15 @@ Installation is broken down into two separate phases, depending on which part of
 
 ## Creating a new paper
 
-This repository provides a base example paper for creating new papers using this framework. To create a new paper, you can execute `./bin/new_paper.sh paper_name template_name`, where `paper_name` and `template_name` are the name of the subfolder in papers to save the paper in, and the template to set the paper to use, respectively.
+This repository provides a base example paper for creating new papers using this framework. To create a new paper, you can execute `./bin/new_paper.sh paper_name template_name`, where `paper_name` and `template_name` are the name of the subfolder in papers to save the paper in, and the name of the folder inside common containing the template to use for this paper, respectively. As an example, a new paper named `my_conference_paper` using the IEEE conference template can be created by invoking:
+```
+./bin/new_paper.sh my_conference_paper ieee
+```
+
+## Creating a new template
+
+A template defines the latex setup defining how a paper is going to be laid out, which packages it will use, etc. A template is made in three steps:
+
+1. A folder inside the common directory. The name of this folder is what is used to reference the template in a MultiMarkdown paper by the `latex template` metadata.
+2. A LaTeX file named `setup.tex` inside this folder, which contains the template preamble. The preamble should include everything at the start of the document before the content, through the `\begin{document}` statement. More may be included in this preamble, such as seen in the IEEE example.
+3. a LaTeX file named `footer.tex` inside this folder, which contains any LaTeX which should be appended to the end of the file. This often includes the biliography commands. The IEEE `footer.tex` file is a good example of such a footer.
