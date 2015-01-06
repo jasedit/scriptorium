@@ -16,7 +16,7 @@ installLinux()
   #Install from Debian Packages
   sudo apt-add-repository ppa:trecvt/ppa
   sudo apt-get update
-  sudo apt-get install multimarkdown texlive latexmk texlive-latex-extra
+  sudo apt-get install multimarkdown texlive latexmk texlive-latex-extra texlive-publishers
 }
 
 installCygwin()
