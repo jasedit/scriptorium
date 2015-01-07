@@ -24,12 +24,12 @@ Installation is broken down into two separate phases, depending on which part of
 
 ## End User Setup
 
-1. Clone the base reposotiry corresponding to the group you want to use. It is best if you include use the `--recursive` flag, so all submodules are checked out as part of the initial clone.
+1. Clone the base repository corresponding to the group you want to use. It is best if you include use the `--recursive` flag, so all submodules are checked out as part of the initial clone.
 
 ### Ubuntu 14.04 Setup
 
-1. Run `bin/install.sh` to install multimarkdown and latex packages necessary for this system to build.
-2. Run `./bin/setup_templates.sh` to symlink the templates for multimarkdown.
+1. Run `bin/install.sh` to install MultiMarkdown and latex packages necessary for this system to build.
+2. Run `./bin/setup_templates.sh` to symlink the templates for MultiMarkdown.
 
 ### Windows Setup
 
@@ -38,10 +38,10 @@ Installation is broken down into two separate phases, depending on which part of
 3. Once cygwin is installed, open up the Cygwin terminal for the following steps.
 4. Set up an SSH key. The easiest way is to execute "ssh-keygen" and follow the prompts.
 5. Add the public key to GitHub.
-6. Clone Multimarkdown with the following command: `git clone --recursive git@github.com:fletcher/peg-multimarkdown-latex-support.git $MMD_DIR`, where `$MMD_DIR` is a location to download the MultiMarkdown source code.
+6. Clone MultiMarkdown with the following command: `git clone --recursive git@github.com:fletcher/MultiMarkdown-4.git $MMD_DIR`, where `$MMD_DIR` is a location to download the MultiMarkdown source code.
 7. `cd $MMD_DIR; make; make install`
 8. `git clone --recursive $PAPER_REPO $PAPER_DIR` where `$PAPER_REPO` is your paper repository, and `$PAPER_DIR` is the location to save the papers.
-9. `cd $PAPER_REPO/bin; ./steup_templates.sh`
+9. `cd $PAPER_REPO/bin; ./setup_templates.sh`
 
 ## Creating a new paper
 
@@ -56,4 +56,4 @@ A template defines the latex setup defining how a paper is going to be laid out,
 
 1. A folder inside the common directory. The name of this folder is what is used to reference the template in a MultiMarkdown paper by the `latex template` metadata.
 2. A LaTeX file named `setup.tex` inside this folder, which contains the template preamble. The preamble should include everything at the start of the document before the content, through the `\begin{document}` statement. More may be included in this preamble, such as seen in the IEEE example.
-3. a LaTeX file named `footer.tex` inside this folder, which contains any LaTeX which should be appended to the end of the file. This often includes the biliography commands. The IEEE `footer.tex` file is a good example of such a footer.
+3. a LaTeX file named `footer.tex` inside this folder, which contains any LaTeX which should be appended to the end of the file. This often includes the bibliography commands. The IEEE `footer.tex` file is a good example of such a footer.
