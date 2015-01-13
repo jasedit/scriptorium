@@ -34,7 +34,7 @@ os=`uname`
 case $os in
   Linux) installLinux;;
   Darwin) installMac;;
-  CYGWIN_NT-6.3) installCygwin;;
+  CYGWIN_NT*) installCygwin;;
   *) echo "$os is not currently supported. Please add support and submit a pull request, or file an issue."; exit 2;;
 esac
 

@@ -34,9 +34,9 @@ Installation is broken down into two separate phases, depending on which part of
 ### Windows Setup
 
 1. Install Cygwin from http://cygwin.com/
-2. Make sure the following Cygwin packages are installed: texlive, texlive-collection-latexextra, texlive-collection-publishers, git, openssh, make, libglib2.0-devel, gcc-core, gcc-g++
+2. Make sure the following Cygwin packages are installed: texlive, texlive-collection-latexextra, texlive-collection-publishers, git, openssh, make, libglib2.0-devel, gcc-core, gcc-g++, and texlive-fonts-recommended
 3. Once cygwin is installed, open up the Cygwin terminal for the following steps.
-4. Set up an SSH key. The easiest way is to execute "ssh-keygen" and follow the prompts.
+4. Set up an SSH key. The easiest way is to execute `ssh-keygen` and follow the prompts.
 5. Add the public key to GitHub.
 6. Clone MultiMarkdown with the following command: `git clone --recursive git@github.com:fletcher/MultiMarkdown-4.git $MMD_DIR`, where `$MMD_DIR` is a location to download the MultiMarkdown source code.
 7. `cd $MMD_DIR; make; make install`

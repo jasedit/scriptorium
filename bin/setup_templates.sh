@@ -19,7 +19,7 @@ fi
 case `uname` in
   Darwin) latex_dir="${HOME}/Library/texmf";;
   Linux) latex_dir="${HOME}/texmf";;
-  CYGWIN_NT-6.3) latex_dir="${HOME}/.config/texmf";;
+  CYGWIN_NT*) latex_dir="${HOME}/.config/texmf";;
   *) echo "This platform not yet supported."; exit 1;;
 esac
 
