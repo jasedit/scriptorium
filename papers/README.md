@@ -1,0 +1,1 @@
+This directory is where repositories containing papers should be committed. Instead of having this be one massive repository, this configuration allows any number of submodules here on a per-person basis.
