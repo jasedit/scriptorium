@@ -32,7 +32,7 @@ if [ -d "${paper_dir}" ]; then
   exit 3
 fi
 
-mkdir $paper_dir
+mkdir -p $paper_dir
 cp -r "${abs_dir}"/etc/example_paper/* $paper_dir
 mv "${paper_dir}"/gitignore "${paper_dir}"/.gitignore
 
