@@ -5,15 +5,22 @@
 dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 abs_dir="${dir}/.."
 
+# Read in multimarkdown latex support repository location
+repo="https://github.com/fletcher/peg-multimarkdown-latex-support.git"
+while getopts ":c" opt; do
+  case $opt in
+    c) repo=$OPTARG;;
+  esac
+done
+
+# If common doesn't exist, clone it now
 if [ ! -d "${abs_dir}/common" ]; then
-  read -p "Please provide a git repository to store templates within:" repo
-  if [ -z "$repo" ]; then
-    repo="https://github.com/fletcher/peg-multimarkdown-latex-support.git"
+  if [ -n "$repo" ]; then
+    cur_dir=`pwd`
+    cd $abs_dir
+    git clone $repo ./common
+    cd $cur_dir
   fi
-  cur_dir=`pwd`
-  cd $abs_dir
-  git submodule add --force $repo common
-  cd $cur_dir
 fi
 
 case `uname` in
@@ -30,6 +37,7 @@ mmd_dir="${latex_dir}/tex/latex/mmd"
 bst_dir="${latex_dir}/bibtex/bst"
 bib_dir="${latex_dir}/bibtex/bib"
 
+# Attempt to symlink Latex files
 if [ -d "${latex_dir}"/tex/latex/mmd ]; then
   echo "Directories for LaTeX already exist, which is problematic. Please determine if the following directories are correct, or remove them and run again."
   echo $mmd_dir
@@ -41,6 +49,7 @@ else
   ln -s ${abs_dir}/common $bib_dir
 fi
 
+# Inject environment variable for building these files. If this isn't set, none of this will work.
 echo "Looking for dir ${abs_dir}"
 mmdl_dir=`grep "${abs_dir}/templates" ~/.bashrc`
 echo "Done"
