@@ -10,21 +10,9 @@ This repository provides a framework for a research group to develop a common se
 
 # Installation
 
-Installation is broken down into two separate phases, depending on which part of the system is being built: first time setup for a group, or first time setup for an end user.
-
-## Group Setup Instructions
-
-1. Fork this repository. This repository will be modified during your group's usage of it, so you want to create your own fork for general use. The only proprietary information which should be directly stored in this repository is where your two submodules exist.
-2. Select a template repository. An bare-bones repository is available [here](https://github.com/TRECVT/peg-multimarkdown-latex-support), which contains the barebones latex support. It is likely that your group will want to fork this repository and begin building up the set of templates which correspond to common papers being written in the lab.
-3. Create a papers repository. This should be a git repository that has the appropriate level of protection for your papers.
-4. Clone your forked version of this repository to a machine.
-5. Run `./bin/setup_templates.sh` in the cloned repository, and specify the desired template repository location.
-6. Run `./bin/setup_papers.sh` in the cloned repository, and specify the desired papers repository location.
-7. Commit and push the new submodule configuration to your base repository for others to share.
-
-## End User Setup
-
-1. Clone the base repository corresponding to the group you want to use. It is best if you include use the `--recursive` flag, so all submodules are checked out as part of the initial clone.
+1. Clone this repository to your local machine.
+2. From inside the repository, run `./bin/setup_templates.sh` in the cloned repository, and specify the desired MultiMarkdown LaTeX support repository. The default is set to the official [repository](https://github.com/fletcher/peg-multimarkdown-latex-support). **NOTE:** This script injects an environment variable, `TEXINPUTS`, into your .bashrc file to enable building files appropriately.
+3. Clone some number of template repositories under the templates folder. This repository does not track those repositories, so the base repository can be shared publicly, and templates can be distributed in whatever organization makes sense for individual groups/projects.
 
 ### Ubuntu 14.04 Setup
 
@@ -45,15 +33,16 @@ Installation is broken down into two separate phases, depending on which part of
 
 ## Creating a new paper
 
-This repository provides a base example paper for creating new papers using this framework. To create a new paper, you can execute `./bin/new_paper.sh paper_name template_name`, where `paper_name` and `template_name` are the name of the subfolder in papers to save the paper in, and the name of the folder inside common containing the template to use for this paper, respectively. As an example, a new paper named `my_conference_paper` using the IEEE conference template can be created by invoking:
+This repository provides a base example paper for creating new papers using this framework. To create a new paper, you can execute `./bin/new_paper.sh paper_name template_name`, where `paper_name` and `template_name` are the name of the subfolder in papers to save the paper in, and the name of the folder inside common containing the template to use for this paper, respectively. Note that the paper location should include the path into the paper repository, and the path will be created as specified. As an example, a new paper named `my_conference_paper` inside the `my_papers` subdirectory of papers using the IEEE conference template can be created by invoking:
 ```
-./bin/new_paper.sh my_conference_paper ieee
+./bin/new_paper.sh my_papers/my_conference_paper ieee
 ```
+which will create a skeleton paper in `papers/my_papers/my_conference_paper`.
 
 ## Creating a new template
 
-A template defines the latex setup defining how a paper is going to be laid out, which packages it will use, etc. A template is made in three steps:
+A template defines the latex setup defining how a paper is going to be laid out, which packages it will use, etc. A template is made in a few steps:
 
-1. A folder inside the common directory. The name of this folder is what is used to reference the template in a MultiMarkdown paper by the `latex template` metadata.
+1. A folder inside the templates directory. The name of this folder is what is used to reference the template in a MultiMarkdown paper, by LaTeX's recursive subdirectory search.
 2. A LaTeX file named `setup.tex` inside this folder, which contains the template preamble. The preamble should include everything at the start of the document before the content, through the `\begin{document}` statement. More may be included in this preamble, such as seen in the IEEE example.
-3. a LaTeX file named `footer.tex` inside this folder, which contains any LaTeX which should be appended to the end of the file. This often includes the bibliography commands. The IEEE `footer.tex` file is a good example of such a footer.
+3. A LaTeX file named `footer.tex` inside this folder, which contains any LaTeX which should be appended to the end of the file. This often includes the bibliography commands. The IEEE `footer.tex` file is a good example of such a footer.
