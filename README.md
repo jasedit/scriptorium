@@ -11,13 +11,13 @@ This repository provides a framework for a research group to develop a common se
 # Installation
 
 1. Clone this repository to your local machine.
-2. From inside the repository, run `./bin/setup_templates.sh` in the cloned repository, and specify the desired MultiMarkdown LaTeX support repository. The default is set to the official [repository](https://github.com/fletcher/peg-multimarkdown-latex-support). **NOTE:** This script injects an environment variable, `TEXINPUTS`, into your .bashrc file to enable building files appropriately.
+2. Follow the installation instructions for your platform of choice below.
 3. Clone some number of template repositories under the templates folder. This repository does not track those repositories, so the base repository can be shared publicly, and templates can be distributed in whatever organization makes sense for individual groups/projects.
 
 ### Ubuntu 14.04 Setup
 
 1. Run `bin/install.sh` to install MultiMarkdown and latex packages necessary for this system to build.
-2. Run `./bin/setup_templates.sh` to symlink the templates for MultiMarkdown.
+2. From inside the repository, run `./bin/setup_templates.sh` in the cloned repository, and specify the desired MultiMarkdown LaTeX support repository. The default is set to the official [repository](https://github.com/fletcher/peg-multimarkdown-latex-support). **NOTE:** This script injects an environment variable, `TEXINPUTS`, into your .bashrc file to enable building files appropriately.
 
 ### Windows Setup
 
@@ -29,7 +29,7 @@ This repository provides a framework for a research group to develop a common se
 6. Clone MultiMarkdown with the following command: `git clone --recursive git@github.com:fletcher/MultiMarkdown-4.git $MMD_DIR`, where `$MMD_DIR` is a location to download the MultiMarkdown source code.
 7. `cd $MMD_DIR; make; make install`
 8. `git clone --recursive $PAPER_REPO $PAPER_DIR` where `$PAPER_REPO` is your paper repository, and `$PAPER_DIR` is the location to save the papers.
-9. `cd $PAPER_REPO/bin; ./setup_templates.sh`
+9. From inside the repository, run `./bin/setup_templates.sh` in the cloned repository, and specify the desired MultiMarkdown LaTeX support repository. The default is set to the official [repository](https://github.com/fletcher/peg-multimarkdown-latex-support). **NOTE:** This script injects an environment variable, `TEXINPUTS`, into your .bashrc file to enable building files appropriately.
 
 ## Creating a new paper
 
