@@ -19,7 +19,6 @@ dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 abs_dir="${dir}/.."
 
 paper_dir="${abs_dir}/papers/$1"
-"${abs_dir}"/bin/setup_papers.sh
 
 if [ ! -d "${abs_dir}/papers" ]; then
   echo "Papers directory does not exist."
