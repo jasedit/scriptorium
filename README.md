@@ -5,7 +5,7 @@ Repository creating a framework for providing a MultiMarkdown and LaTeX based sy
 This repository provides a framework for a research group to develop a common setup for writing academic papers. This aims to be easy to use, scalable, and re-usable between labs. The system breaks down into three main areas:
 
 1. [MultiMarkdown](http://fletcherpenney.net/multimarkdown/) templating - A framework extending the MultiMarkdown [Latex support](https://github.com/fletcher/peg-multimarkdown-latex-support) to provide a method for pulling in LaTeX templates for various academic conferences/journals.
-2. Papers as a submodule. Since papers in development are generally not open-source, this framework pushes papers as a user-definable submodule. This way, any lab can keep their actual academic text in a private repository, while the templates and framework can be left open-source.
+2. Papers as separate repositories. Since papers in development are generally not open-source, this framework pushes papers into other repositories inside the papers directory. This way, any lab can keep their actual academic text in a private repository, while the templates and framework can be left open-source. Submodules are not used so that individual users can share a papers_base repository, while not necessarily sharing the same papers.
 3. This repository - the glue logic which makes this system as easy to use as possible.
 
 # Installation
