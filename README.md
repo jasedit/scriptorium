@@ -73,8 +73,8 @@ The Base Header Level is important for configuring MultiMarkdown to avoid sectio
 
 ## Template Organization
 
-A template defines the latex setup defining how a paper is going to be laid out, which packages it will use, etc. A template is made in a few steps:
+A template defines the latex setup defining how a paper is going to be laid out, which packages it will use, etc. For reference, consider templates in the [simple templates](https://github.com/jasedit/simple_templates) repository. A template is made in a few steps:
 
 1. A folder inside the templates directory. The name of this folder is what is used to reference the template in a MultiMarkdown paper, by LaTeX's recursive subdirectory search.
-2. A LaTeX file named `setup.tex` inside this folder, which contains the template preamble. The preamble should include everything at the start of the document before the content, through the `\begin{document}` statement. More may be included in this preamble, such as seen in the IEEE example.
-3. A LaTeX file named `footer.tex` inside this folder, which contains any LaTeX which should be appended to the end of the file. This often includes the bibliography commands. The IEEE `footer.tex` file is a good example of such a footer.
+2. A LaTeX file named `setup.tex` inside this folder, which contains the template preamble. The preamble should include everything at the start of the document before the content, through the `\begin{document}` statement. More may be included in this preamble, such as seen in the IEEEtran example in the simple templates.
+3. A LaTeX file named `footer.tex` inside this folder, which contains any LaTeX which should be appended to the end of the file. This often includes the bibliography commands. The IEEEtran `footer.tex` file is a good example of such a footer.
