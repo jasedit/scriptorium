@@ -1,7 +1,7 @@
 all:
 	multimarkdown -t latex -o paper.tex paper.mmd
 	pdflatex paper.tex
-	#biber paper.aux
+	#biber paper
 	pdflatex paper.tex
 
 clean:
