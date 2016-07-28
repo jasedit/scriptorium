@@ -26,7 +26,6 @@ In order to respond to these observations, this framework aims to provide:
 ## Ubuntu 14.04 Setup
 
 1. Run `bin/install.sh` to install MultiMarkdown and latex packages necessary for this system to build.
-2. From inside the repository, run `./bin/setup_templates.sh` in the cloned repository, and specify the desired MultiMarkdown LaTeX support repository. The default is set to the official [repository](https://github.com/fletcher/peg-multimarkdown-latex-support). **NOTE:** This script injects an environment variable, `TEXINPUTS`, into your .bashrc file to enable building files appropriately.
 
 ## Windows Setup
 
