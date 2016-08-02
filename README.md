@@ -1,6 +1,6 @@
-# Papers Base
+# Scriptorium
 
-Repository creating a framework for providing a MultiMarkdown and LaTeX based system for more easily writing academic papers. This system is designed with several important design guidelines and observations:
+Framework for easily using MultiMarkdown and LaTeX based system to write academic papers, especially those with shared templates for organization. This system is designed with several important design guidelines and observations:
 
 1. Many academic publications are collaborative, continuously evolving works.
 2. Many academic publications provide LaTeX templates to meet the formatting guidelines for submission.
