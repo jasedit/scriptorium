@@ -11,6 +11,7 @@ installLinux()
   codename=`lsb_release -c | cut -d':' -f2 | tr -d [:space:]`
   case $codename in
     trusty);;
+    xenial);;
     *) echo "${codename} not yet supported."; exit 1;;
   esac
   sudo apt-get install texlive latexmk texlive-latex-extra texlive-publishers cmake
