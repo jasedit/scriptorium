@@ -13,10 +13,19 @@ installLinux()
     trusty);;
     *) echo "${codename} not yet supported."; exit 1;;
   esac
-  #Install from Debian Packages
-  sudo apt-add-repository ppa:trecvt/ppa
-  sudo apt-get update
-  sudo apt-get install multimarkdown texlive latexmk texlive-latex-extra texlive-publishers
+  sudo apt-get install texlive latexmk texlive-latex-extra texlive-publishers cmake
+  mkdir ~/src
+  old_wd=$(pwd)
+  cd ~/src
+  git clone https://github.com/jasedit/MultiMarkdown-5.git
+  cd MultiMarkdown-5
+  ./link_git_modules
+  ./update_git_modules
+  make
+  cd build
+  make
+  cpack -G DEB
+  sudo dpkg -i *.deb
 }
 
 installCygwin()
