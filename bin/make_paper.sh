@@ -6,7 +6,12 @@ cur_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 abs_dir="${cur_dir}/.."
 
 export TEXINPUTS=".:${abs_dir}/templates/.//:$TEXINPUTS"
-cd $1
+
+#change to specified directory, if given
+if [ -n "$1" ]; then
+  cd $1
+fi
+
 /usr/local/bin/multimarkdown -t latex -o ./paper.tex paper.mmd
 pdflatex -shell-escape paper.tex
 
