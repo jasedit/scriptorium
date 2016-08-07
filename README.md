@@ -23,7 +23,7 @@ In order to respond to these observations, this framework aims to provide:
 2. Follow the installation instructions for your platform of choice below.
 3. Clone some number of template repositories under the templates folder. This repository does not track those repositories, so the base repository can be shared publicly, and templates can be distributed in whatever organization makes sense for individual groups/projects.
 
-## Ubuntu 14.04 Setup
+## Ubuntu Setup
 
 1. Run `bin/install.sh` to install MultiMarkdown and latex packages necessary for this system to build.
 
