@@ -13,7 +13,16 @@ if [ -n "$1" ]; then
 fi
 
 /usr/local/bin/multimarkdown -t latex -o ./paper.tex paper.mmd
+
+if [ $? != 0 ]; then
+  exit 1
+fi
+
 pdflatex -shell-escape paper.tex
+
+if [ $? != 0 ]; then
+  exit 1
+fi
 
 #Test if paper is using a bibliography or not
 full_paper=$(latexpand paper.tex)
