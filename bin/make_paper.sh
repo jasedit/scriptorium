@@ -26,7 +26,7 @@ fi
 
 #Test if paper is using a bibliography or not
 full_paper=$(latexpand paper.tex)
-if [ -n "$(echo $full_paper | grep \\printbibliography)" ]; then
+if [ -n "$(echo $paper.mmd | grep bibtex:)" ]; then
   if [ -n "$(echo $full_paper | grep backend=biber)" ]; then
     biber paper
   else
