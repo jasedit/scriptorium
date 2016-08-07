@@ -4,6 +4,8 @@ paper.aux
 *.doc
 *.docx
 *.pdf
+*.bcf
+*.run.xml
 *.glg
 *.glg.old
 *.gls
