@@ -49,9 +49,9 @@ Since papers in development are generally not open-source, this framework pushes
 
 ### Paper Creation
 
-This repository provides a base example paper for creating new papers using this framework. To create a new paper, you can execute `./bin/new_paper.sh paper_name template_name`, where `paper_name` and `template_name` are the name of the subfolder in papers to save the paper in, and the name of the folder inside common containing the template to use for this paper, respectively. Note that the paper location should include the path into the paper repository, and the path will be created as specified. As an example, a new paper named `my_conference_paper` inside the `my_papers` subdirectory of papers using the IEEE conference template can be created by invoking:
+This repository provides a base example paper for creating new papers using this framework. To create a new paper, you can execute `./bin/new_paper.sh -o dir -t template`, where `dir` and `template_name` are the name of the subfolder in papers to save the paper in, and the name of the folder inside templates containing the template to use for this paper, respectively. Note that the paper location should include the path into the paper repository, and the path will be created as specified. As an example, a new paper named `my_conference_paper` inside the `my_papers` subdirectory of papers using the IEEE conference template can be created by invoking:
 ```
-./bin/new_paper.sh my_papers/my_conference_paper ieee
+./bin/new_paper.sh -o my_papers/my_conference_paper -t ieee
 ```
 which will create a skeleton paper in `papers/my_papers/my_conference_paper`.
 
