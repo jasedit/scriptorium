@@ -34,16 +34,16 @@ In order to respond to these observations, this framework aims to provide:
 
 ## Windows Setup
 
-1. Install Cygwin from http://cygwin.com/
+1. Install [Cygwin](http://cygwin.com/)
 2. Make sure the following Cygwin packages are installed: texlive, texlive-collection-latexextra, texlive-collection-publishers, git, openssh, make, libglib2.0-devel, gcc-core, gcc-g++, and texlive-fonts-recommended
 3. Once cygwin is installed, open up the Cygwin terminal for the following steps.
 4. Set up an SSH key. The easiest way is to execute `ssh-keygen` and follow the prompts.
-5. Add the public key to GitHub.
+5. [Add](https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/) the public key to GitHub.
 6. Run `bin/install.sh` to install MultiMarkdown and configure this paper system.
 
 # Implementation
 
-The implementation here provides relativey little in the way of actual code or new tools. Instead, the focus is on pulling together existing tools and organizing them in such a way to provide the desired functionality. [MultiMarkdown](http://fletcherpenney.net/multimarkdown/) is used for the user friendly markup language. MultiMarkdown extends the [Markdown](http://daringfireball.net/projects/markdown/) to provide several additional commands for citations, tables, and footnotes. Usefully, MultiMarkdown includes an extension for [LaTeX support](https://github.com/fletcher/peg-multimarkdown-latex-support). This is used to provide a method for pulling in LaTeX templates for various academic conferences/journals/theses. Templates are stored in the templates directory of this repository - simply download/clone/store templates there. The default system is configured to recursively search this directory for any templates, so paths are not required (although unique names for templates likely are.) Similarly, papers are simply directories stored in the papers subdirectory. These are highly encourage to be repositories with version control, but the system doesn't enforce this on folders.
+The implementation here provides relativey little in the way of actual code or new tools. Instead, the focus is on pulling together existing tools and organizing them in such a way to provide the desired functionality. [MultiMarkdown](http://fletcherpenney.net/multimarkdown/) is used for the user friendly markup language. MultiMarkdown extends the [Markdown](http://daringfireball.net/projects/markdown/) to provide several additional commands for citations, tables, and footnotes. Usefully, MultiMarkdown includes an extension for [LaTeX support](https://github.com/fletcher/peg-multimarkdown-latex-support). This is used to provide a method for pulling in LaTeX templates for various academic publications. Templates are stored in the templates directory of this repository - simply download/clone/store templates there. The default system is configured to recursively search this directory for any templates, so paths are not required (although unique names for templates likely are.) Similarly, papers are simply directories stored in the papers subdirectory. These are highly encourage to be repositories with version control, but the system doesn't enforce this on folders.
 
 ## Papers Organization
 
