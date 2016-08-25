@@ -27,6 +27,11 @@ In order to respond to these observations, this framework aims to provide:
 
 1. Run `bin/install.sh` to install MultiMarkdown and latex packages necessary for this system to build.
 
+## Mac OS X Setup
+
+1. Install [MacTeX](http://tug.org/mactex/) for LaTeX tools.
+2. Run `bin/install.sh` to install MultiMarkdown and configure this paper system.
+
 ## Windows Setup
 
 1. Install Cygwin from http://cygwin.com/
@@ -34,10 +39,7 @@ In order to respond to these observations, this framework aims to provide:
 3. Once cygwin is installed, open up the Cygwin terminal for the following steps.
 4. Set up an SSH key. The easiest way is to execute `ssh-keygen` and follow the prompts.
 5. Add the public key to GitHub.
-6. Clone MultiMarkdown with the following command: `git clone --recursive git@github.com:fletcher/MultiMarkdown-4.git $MMD_DIR`, where `$MMD_DIR` is a location to download the MultiMarkdown source code.
-7. `cd $MMD_DIR; make; make install`
-8. `git clone --recursive $PAPER_REPO $PAPER_DIR` where `$PAPER_REPO` is your paper repository, and `$PAPER_DIR` is the location to save the papers.
-9. From inside the repository, run `./bin/setup_templates.sh` in the cloned repository, and specify the desired MultiMarkdown LaTeX support repository. The default is set to the official [repository](https://github.com/fletcher/peg-multimarkdown-latex-support). **NOTE:** This script injects an environment variable, `TEXINPUTS`, into your .bashrc file to enable building files appropriately.
+6. Run `bin/install.sh` to install MultiMarkdown and configure this paper system.
 
 # Implementation
 
