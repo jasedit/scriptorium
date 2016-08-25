@@ -5,41 +5,69 @@
 dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 abs_dir=`readlink -f "${dir}/.."`
 
+installMMD5Linux()
+{
+  cpack -G DEB
+  sudo dpkg -i *.deb
+}
+
+installMMD5Mac()
+{
+  sudo make install
+}
+
+installMMD5Cygwin()
+{
+  sudo make install
+}
+
+installMMD5()
+{
+  mkdir ~/src
+  old_wd=$(pwd)
+  cd ~/src
+  git clone https://github.com/fletcher/MultiMarkdown-5.git
+  cd MultiMarkdown-5
+  ./link_git_modules
+  ./update_git_modules
+  make shared
+  cd build
+  make
+
+  case $(uname) in
+    Linux) installMMD5Linux;;
+    Darwin) installMMD5Mac;;
+    Cygwin_NT) installMMD5Cygwin;;
+  esac
+
+  cd $old_wd
+}
+
 #Install packages for Ubuntu
 installLinux()
 {
-  codename=`lsb_release -c | cut -d':' -f2 | tr -d [:space:]`
+  codename=$(lsb_release -c | cut -d':' -f2 | tr -d [:space:])
   case $codename in
     trusty);;
     xenial);;
     *) echo "${codename} not yet supported."; exit 1;;
   esac
   sudo apt-get install texlive latexmk texlive-latex-extra texlive-publishers cmake
-  mkdir ~/src
-  old_wd=$(pwd)
-  cd ~/src
-  git clone https://github.com/jasedit/MultiMarkdown-5.git
-  cd MultiMarkdown-5
-  ./link_git_modules
-  ./update_git_modules
-  make
-  cd build
-  make
-  cpack -G DEB
-  sudo dpkg -i *.deb
+  installMMD5
+
 }
 
 installCygwin()
 {
-  echo "Please install using Cygwin, as referenced in the README.";
+  installMMD5
 }
 
 installMac()
 {
-  echo "Please install MultiMarkdown from http://fletcherpenney.net/multimarkdown/download/";
+  installMMD5
 }
 
-os=`uname`
+os=$(uname)
 
 case $os in
   Linux) installLinux;;
