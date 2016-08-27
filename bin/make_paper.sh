@@ -7,6 +7,7 @@ abs_dir="${cur_dir}/.."
 
 export TEXINPUTS=".:${abs_dir}/templates/.//:$TEXINPUTS"
 
+old_cwd=$(pwd)
 #change to specified directory, if given
 if [ -n "$1" ]; then
   cd $1
@@ -36,3 +37,8 @@ fi
 
 pdflatex -shell-escape paper.tex
 pdflatex -shell-escape paper.tex
+
+# Revert to old directory
+if [ "$old_cwd" != "$(pwd)" ]; then
+  cd "$old_cwd"
+fi
