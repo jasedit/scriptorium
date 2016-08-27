@@ -13,21 +13,36 @@ if [ -n "$1" ]; then
   cd $1
 fi
 
-/usr/local/bin/multimarkdown -t latex -o ./paper.tex paper.mmd
+#The root document for this is the one which contains frontmatter, or metadata
+for file in $(ls *.mmd); do
+  if [ -n "$(multimarkdown -m $file)" ]; then
+    paper=$file
+    break
+  fi
+done
+
+if [ -z "$paper" ]; then
+  echo "No .mmd file contains metadata, which is required for interfacing with scriptorium. Cannot continue."
+  exit 1
+fi
+
+tex_file="./$(basename $paper).tex"
+
+/usr/local/bin/multimarkdown -t latex -o "$tex_file" "$paper"
 
 if [ $? != 0 ]; then
   exit 1
 fi
 
-pdflatex -shell-escape paper.tex
+pdflatex -shell-escape "$tex_file"
 
 if [ $? != 0 ]; then
   exit 1
 fi
 
 #Test if paper is using a bibliography or not
-full_paper=$(latexpand paper.tex)
-if [ -n "$(echo $paper.mmd | grep bibtex:)" ]; then
+full_paper=$(latexpand "$tex_file")
+if [ -n "$(echo $paper | grep bibtex:)" ]; then
   if [ -n "$(echo $full_paper | grep backend=biber)" ]; then
     biber paper
   else
@@ -35,8 +50,8 @@ if [ -n "$(echo $paper.mmd | grep bibtex:)" ]; then
   fi
 fi
 
-pdflatex -shell-escape paper.tex
-pdflatex -shell-escape paper.tex
+pdflatex -shell-escape "$tex_file"
+pdflatex -shell-escape "$tex_file"
 
 # Revert to old directory
 if [ "$old_cwd" != "$(pwd)" ]; then
