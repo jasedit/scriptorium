@@ -39,7 +39,8 @@ In order to respond to these observations, this framework aims to provide:
 3. Once cygwin is installed, open up the Cygwin terminal for the following steps.
 4. Set up an SSH key. The easiest way is to execute `ssh-keygen` and follow the prompts.
 5. [Add](https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/) the public key to GitHub.
-6. Run `bin/install.sh` to install MultiMarkdown and configure this paper system.
+6. Clone this repository to your local machine. In Cygwin, open a terminal, navigate to the desired location, and execute `git clone https://github.com/jasedit/scriptorium`
+7. Install the system: `cd scriptorium; ./bin/install.sh`
 
 # Implementation
 
