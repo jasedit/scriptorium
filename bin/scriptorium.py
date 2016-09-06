@@ -71,6 +71,16 @@ def make(args):
     if not os.path.samefile(os.getcwd(), old_cwd):
         os.chdir(old_cwd)
 
+def find_theme(fname):
+    """Attempts to find the theme of a paper in a given file."""
+
+    output = subprocess.check_output(['multimarkdown', '-e', 'latexfooter', fname])
+    theme_re = re.compile(r'(?P<theme>[a-zA-Z0-9._]*)\/footer.tex')
+
+    match = theme_re.search(output)
+
+    return match.group('theme') if match else None
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
