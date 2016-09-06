@@ -35,7 +35,7 @@ In order to respond to these observations, this framework aims to provide:
 ## Windows Setup
 
 1. Install [Cygwin](http://cygwin.com/)
-2. Make sure the following Cygwin packages are installed: texlive, texlive-collection-latexextra, texlive-collection-publishers, git, openssh, make, libglib2.0-devel, gcc-core, gcc-g++, and texlive-fonts-recommended
+2. Make sure the following Cygwin packages are installed: texlive, texlive-collection-latexextra, texlive-collection-publishers, git, openssh, make, libglib2.0-devel, gcc-core, gcc-g++, and texlive-fonts-recommended, cmake
 3. Once cygwin is installed, open up the Cygwin terminal for the following steps.
 4. Set up an SSH key. The easiest way is to execute `ssh-keygen` and follow the prompts.
 5. [Add](https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/) the public key to GitHub.
