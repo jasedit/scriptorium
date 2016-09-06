@@ -8,6 +8,7 @@ import os.path
 import glob
 import re
 import shutil
+import sys
 
 BIN_DIR = os.path.dirname(os.path.realpath(__file__))
 BASE_DIR = os.path.abspath(os.path.join(BIN_DIR, '..'))
@@ -81,6 +82,25 @@ def find_theme(fname):
 
     return match.group('theme') if match else None
 
+def info(args):
+    """Function to attempt to extract useful information from a specified paper."""
+
+    fname = find_paper_root(args.paper)
+
+    if not fname:
+        raise IOError('{0} does not contain a valid root document.'.format(args.paper))
+
+    if not fname:
+        print('Could not find the root of the paper.')
+        sys.exit(1)
+
+    if args.template:
+        theme = find_theme(os.path.join(args.paper, fname))
+        if not theme:
+            print('Could not find footer indicating theme name.')
+            sys.exit(2)
+        print(theme)
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
@@ -91,6 +111,11 @@ if __name__ == "__main__":
     make_parser.add_argument("paper", default=".", help="Directory containing paper to make")
     make_parser.add_argument('-o', '--output', help='Filename to store resulting PDF as.')
     make_parser.set_defaults(func=make)
+
+    info_parser = subparsers.add_parser("info")
+    info_parser.add_argument("paper", default=".", help="Directory containing paper to make")
+    info_parser.add_argument('-t', '--template', action="store_true", help="Flag to extract template")
+    info_parser.set_defaults(func=info)
 
     args = parser.parse_args()
 
