@@ -101,6 +101,12 @@ def info(args):
             sys.exit(2)
         print(theme)
 
+def create(args):
+    if os.path.exists(args.output) and not args.force:
+        print('{0} exists, will not overwrite. Use -f to force creation.'.format(args.output))
+        sys.exit(3)
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
@@ -116,6 +122,13 @@ if __name__ == "__main__":
     info_parser.add_argument("paper", default=".", help="Directory containing paper to make")
     info_parser.add_argument('-t', '--template', action="store_true", help="Flag to extract template")
     info_parser.set_defaults(func=info)
+
+    new_parser = subparsers.add_parser("new")
+    new_parser.add_argument("-o", "--output", help="Directory to create paper in.")
+    new_parser.add_argument("-f", "--force", action="store_true", help="Overwrite files in paper creation.")
+    new_parser.add_argument("-t", "--template", help="Template to use in paper.")
+    new_parser.add_argument("-c", "--config", help="Config file containing key-value pairs for replacement")
+    new_parser.set_defaults(func=create)
 
     args = parser.parse_args()
 
