@@ -13,6 +13,19 @@ BIN_DIR = os.path.dirname(os.path.realpath(__file__))
 BASE_DIR = os.path.abspath(os.path.join(BIN_DIR, '..'))
 TEMPLATES_DIR = os.path.abspath(os.path.join(BASE_DIR, 'templates'))
 
+def find_paper_root(dname):
+  """Given a directory, finds the root document for the paper."""
+
+  root_doc = None
+  for fname in glob.glob(os.path.join(dname, '*.mmd')):
+      #Metadata only exists in the root document
+      output = subprocess.check_output(['multimarkdown', '-m', fname])
+      if output:
+          root_doc = fname
+          break
+
+  return os.path.basename(root_doc) if root_doc else None
+
 def make(args):
     """Build paper in the given directory."""
     paper = os.path.abspath(args.paper)
@@ -22,13 +35,7 @@ def make(args):
     if not os.path.samefile(old_cwd, paper):
         os.chdir(paper)
 
-    #Only the file with metadata can serve as the root file for a paper
-    for fname in glob.glob('*.mmd'):
-        output = subprocess.check_output(['multimarkdown', '-m', fname])
-        if output:
-            break
-        #Reset output, so if no file has metadata, there is no valid file
-        fname = ''
+    fname = find_paper_root('.')
 
     if not fname:
         raise IOError("{0} does not contain a file that appears to be the root of the paper.".format(paper))
