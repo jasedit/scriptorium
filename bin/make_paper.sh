@@ -26,7 +26,10 @@ if [ -z "$paper" ]; then
   exit 1
 fi
 
-tex_file="./$(basename $paper).tex"
+bname=$(basename $paper)
+base="${bname%.*}"
+
+tex_file="./$base.tex"
 
 /usr/local/bin/multimarkdown -t latex -o "$tex_file" "$paper"
 
