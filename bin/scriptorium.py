@@ -106,7 +106,6 @@ def create(args):
         print('{0} exists, will not overwrite. Use -f to force creation.'.format(args.output))
         sys.exit(3)
 
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
