@@ -28,6 +28,7 @@ installMMD5()
   cd ~/src
   git clone https://github.com/fletcher/MultiMarkdown-5.git
   cd MultiMarkdown-5
+  git checkout develop
   ./link_git_modules
   ./update_git_modules
   make shared
