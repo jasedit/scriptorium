@@ -78,15 +78,15 @@ def make(args):
     if not os.path.samefile(os.getcwd(), old_cwd):
         os.chdir(old_cwd)
 
-def find_theme(fname):
-    """Attempts to find the theme of a paper in a given file."""
+def extract_paper_template(fname):
+    """Attempts to find the template of a paper in a given file."""
 
     output = subprocess.check_output(['multimarkdown', '-e', 'latexfooter', fname])
-    theme_re = re.compile(r'(?P<theme>[a-zA-Z0-9._]*)\/footer.tex')
+    template_re = re.compile(r'(?P<template>[a-zA-Z0-9._]*)\/footer.tex')
 
-    match = theme_re.search(output)
+    match = template_re.search(output)
 
-    return match.group('theme') if match else None
+    return match.group('template') if match else None
 
 def info(args):
     """Function to attempt to extract useful information from a specified paper."""
@@ -101,11 +101,11 @@ def info(args):
         sys.exit(1)
 
     if args.template:
-        theme = find_theme(os.path.join(args.paper, fname))
-        if not theme:
-            print('Could not find footer indicating theme name.')
+        template = extract_paper_template(os.path.join(args.paper, fname))
+        if not template:
+            print('Could not find footer indicating template name.')
             sys.exit(2)
-        print(theme)
+        print(template)
 
 def create(args):
     if os.path.exists(args.output) and not args.force:
