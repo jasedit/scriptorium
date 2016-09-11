@@ -49,10 +49,16 @@ def make(args):
     new_env = dict(os.environ)
     new_env['TEXINPUTS'] = './:{0}:{1}'.format(TEMPLATES_DIR + '/.//', new_env['TEXINPUTS'])
     pdf_cmd = ['pdflatex', '-shell-escape', '-halt-on-error', tname]
-    output = subprocess.check_output(pdf_cmd, env=new_env)
+    try:
+        output = subprocess.check_output(pdf_cmd, env=new_env)
+    except CalledProcessError:
+        print('LaTeX conversion failed with the following output:')
+        print(output)
+        sys.exit(5)
 
     auxname = '{0}.aux'.format(bname)
-    bibtex_re = re.compile(r'bibtex:')
+    #Check if bibtex is defined in the frontmatter
+    bibtex_re = re.compile(r'^bibtex:')
     if bibtex_re.search(open(fname).read()):
         biber_re = re.compile(r'\\bibdata')
         full = open('paper.aux').read()
