@@ -107,6 +107,29 @@ def info(args):
             sys.exit(2)
         print(template)
 
+def list_templates(dname):
+    """Builds list of installed templates."""
+
+    templates = []
+    for dirpath, _, filenames in os.walk(dname):
+        if 'setup.tex' in filenames:
+            templates.append(os.path.basename(dirpath))
+
+    return templates
+
+def find_template(tname, tdir=TEMPLATES_DIR):
+    """Searches given template directory for the named template."""
+    for dirpath, _, _ in os.walk(tdir):
+        if os.path.basename(dirpath) == tname:
+            return os.path.join(tdir, dirpath)
+    return None
+
+def list_cmd(args):
+    """Prints out all installed templates."""
+    templates = list_templates(TEMPLATES_DIR)
+    for template in templates:
+        print('{0}'.format(template))
+
 def create(args):
     if os.path.exists(args.output) and not args.force:
         print('{0} exists, will not overwrite. Use -f to force creation.'.format(args.output))
@@ -134,6 +157,9 @@ if __name__ == "__main__":
     new_parser.add_argument("-t", "--template", help="Template to use in paper.")
     new_parser.add_argument("-c", "--config", help="Config file containing key-value pairs for replacement")
     new_parser.set_defaults(func=create)
+
+    list_parser = subparsers.add_parser("list")
+    list_parser.set_defaults(func=list_cmd)
 
     args = parser.parse_args()
 
