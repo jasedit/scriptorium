@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 #Script to build a scriptorium paper in a cross-platform friendly fashion
 
+import scriptorium
 import argparse
 import subprocess
 import os
@@ -14,84 +15,16 @@ BIN_DIR = os.path.dirname(os.path.realpath(__file__))
 BASE_DIR = os.path.abspath(os.path.join(BIN_DIR, '..'))
 TEMPLATES_DIR = os.path.abspath(os.path.join(BASE_DIR, 'templates'))
 
-def find_paper_root(dname):
-  """Given a directory, finds the root document for the paper."""
-
-  root_doc = None
-  for fname in glob.glob(os.path.join(dname, '*.mmd')):
-      #Metadata only exists in the root document
-      output = subprocess.check_output(['multimarkdown', '-m', fname])
-      if output:
-          root_doc = fname
-          break
-
-  return os.path.basename(root_doc) if root_doc else None
-
 def make(args):
-    """Build paper in the given directory."""
-    paper = os.path.abspath(args.paper)
-    if not os.path.isdir(paper):
-        raise IOError("{0} is not a valid directory".format(paper))
-    old_cwd = os.getcwd()
-    if not os.path.samefile(old_cwd, paper):
-        os.chdir(paper)
+    """Creates PDF from paper in the requested location."""
+    pdf = scriptorium.to_pdf(args.paper, TEMPLATES_DIR, args.shell_escape)
 
-    fname = find_paper_root('.')
-
-    if not fname:
-        raise IOError("{0} does not contain a file that appears to be the root of the paper.".format(paper))
-
-    bname = os.path.basename(fname).split('.')[0]
-    tname = '{0}.tex'.format(bname)
-    subprocess.check_call(['multimarkdown', '-t', 'latex', '-o', tname, fname])
-
-    #Need to set up environment here
-    new_env = dict(os.environ)
-    new_env['TEXINPUTS'] = './:{0}:{1}'.format(TEMPLATES_DIR + '/.//', new_env['TEXINPUTS'])
-    pdf_cmd = ['pdflatex', '-shell-escape', '-halt-on-error', tname]
-    try:
-        output = subprocess.check_output(pdf_cmd, env=new_env)
-    except CalledProcessError:
-        print('LaTeX conversion failed with the following output:')
-        print(output)
-        sys.exit(5)
-
-    auxname = '{0}.aux'.format(bname)
-    #Check if bibtex is defined in the frontmatter
-    bibtex_re = re.compile(r'^bibtex:')
-    if bibtex_re.search(open(fname).read()):
-        biber_re = re.compile(r'\\bibdata')
-        full = open('paper.aux').read()
-        with open(os.devnull, 'w') as fp:
-            if biber_re.search(full):
-                subprocess.check_call(['bibtex', auxname], stdout=fp, stderr=fp)
-            else:
-                subprocess.check_call(['biber', bname], stdout=fp, stderr=fp)
-
-            subprocess.check_call(pdf_cmd, env=new_env, stdout=fp, stderr=fp)
-            subprocess.check_call(pdf_cmd, env=new_env, stdout=fp, stderr=fp)
-
-    # Move file from default location to specified location
-    if args.output:
-        shutil.move('{0}.pdf'.format(bname), os.path.join(old_cwd, args.output))
-    # Revert working directory
-    if not os.path.samefile(os.getcwd(), old_cwd):
-        os.chdir(old_cwd)
-
-def extract_paper_template(fname):
-    """Attempts to find the template of a paper in a given file."""
-
-    output = subprocess.check_output(['multimarkdown', '-e', 'latexfooter', fname])
-    template_re = re.compile(r'(?P<template>[a-zA-Z0-9._]*)\/footer.tex')
-
-    match = template_re.search(output)
-
-    return match.group('template') if match else None
+    if args.output and pdf != args.output:
+        shutil.move(pdf, args.output)
 
 def info(args):
     """Function to attempt to extract useful information from a specified paper."""
-
-    fname = find_paper_root(args.paper)
+    fname = scriptorium.paper_root(args.paper)
 
     if not fname:
         raise IOError('{0} does not contain a valid root document.'.format(args.paper))
@@ -101,32 +34,15 @@ def info(args):
         sys.exit(1)
 
     if args.template:
-        template = extract_paper_template(os.path.join(args.paper, fname))
+        template = scriptorium.get_template(os.path.join(args.paper, fname))
         if not template:
             print('Could not find footer indicating template name.')
             sys.exit(2)
         print(template)
 
-def list_templates(dname):
-    """Builds list of installed templates."""
-
-    templates = []
-    for dirpath, _, filenames in os.walk(dname):
-        if 'setup.tex' in filenames:
-            templates.append(os.path.basename(dirpath))
-
-    return templates
-
-def find_template(tname, tdir=TEMPLATES_DIR):
-    """Searches given template directory for the named template."""
-    for dirpath, _, _ in os.walk(tdir):
-        if os.path.basename(dirpath) == tname:
-            return os.path.join(tdir, dirpath)
-    return None
-
 def list_cmd(args):
     """Prints out all installed templates."""
-    templates = list_templates(TEMPLATES_DIR)
+    templates = scriptorium.all_templates(TEMPLATES_DIR)
     for template in templates:
         print('{0}'.format(template))
 
@@ -136,7 +52,7 @@ def create(args):
         print('{0} exists, will not overwrite. Use -f to force creation.'.format(args.output))
         sys.exit(3)
 
-    template_dir = find_template(args.template)
+    template_dir = scriptorium.find_template(args.template, TEMPLATES_DIR)
 
     if not template_dir:
         print('{0} is not an installed template.'.format(args.template))
@@ -195,6 +111,7 @@ if __name__ == "__main__":
 
     make_parser.add_argument("paper", default=".", help="Directory containing paper to make")
     make_parser.add_argument('-o', '--output', help='Filename to store resulting PDF as.')
+    make_parser.add_argument('-s', '--shell-escape', action='store_true', help='Flag to indicate shell-escape should be used')
     make_parser.set_defaults(func=make)
 
     info_parser = subparsers.add_parser("info")
