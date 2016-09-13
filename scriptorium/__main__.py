@@ -102,34 +102,33 @@ def create(args):
         for mtch in var_re.finditer(metadata):
             print('{0} contains unpopulated variable {1}'.format(metadata_file, mtch.group(0)))
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
+parser = argparse.ArgumentParser()
 
-    subparsers = parser.add_subparsers()
+subparsers = parser.add_subparsers()
 
-    make_parser = subparsers.add_parser("make")
+make_parser = subparsers.add_parser("make")
 
-    make_parser.add_argument("paper", default=".", help="Directory containing paper to make")
-    make_parser.add_argument('-o', '--output', help='Filename to store resulting PDF as.')
-    make_parser.add_argument('-s', '--shell-escape', action='store_true', help='Flag to indicate shell-escape should be used')
-    make_parser.set_defaults(func=make)
+make_parser.add_argument("paper", default=".", help="Directory containing paper to make")
+make_parser.add_argument('-o', '--output', help='Filename to store resulting PDF as.')
+make_parser.add_argument('-s', '--shell-escape', action='store_true', help='Flag to indicate shell-escape should be used')
+make_parser.set_defaults(func=make)
 
-    info_parser = subparsers.add_parser("info")
-    info_parser.add_argument("paper", default=".", help="Directory containing paper to make")
-    info_parser.add_argument('-t', '--template', action="store_true", help="Flag to extract template")
-    info_parser.set_defaults(func=info)
+info_parser = subparsers.add_parser("info")
+info_parser.add_argument("paper", default=".", help="Directory containing paper to make")
+info_parser.add_argument('-t', '--template', action="store_true", help="Flag to extract template")
+info_parser.set_defaults(func=info)
 
-    new_parser = subparsers.add_parser("new")
-    new_parser.add_argument("output", help="Directory to create paper in.")
-    new_parser.add_argument("-f", "--force", action="store_true", help="Overwrite files in paper creation.")
-    new_parser.add_argument("-t", "--template", help="Template to use in paper.")
-    new_parser.add_argument("-c", "--config", nargs=2, action='append', default=[],
-                            help='Flag to provide options for filling out variables in new papers, in the form key value')
-    new_parser.set_defaults(func=create)
+new_parser = subparsers.add_parser("new")
+new_parser.add_argument("output", help="Directory to create paper in.")
+new_parser.add_argument("-f", "--force", action="store_true", help="Overwrite files in paper creation.")
+new_parser.add_argument("-t", "--template", help="Template to use in paper.")
+new_parser.add_argument("-c", "--config", nargs=2, action='append', default=[],
+                        help='Flag to provide options for filling out variables in new papers, in the form key value')
+new_parser.set_defaults(func=create)
 
-    list_parser = subparsers.add_parser("list")
-    list_parser.set_defaults(func=list_cmd)
+list_parser = subparsers.add_parser("list")
+list_parser.set_defaults(func=list_cmd)
 
-    args = parser.parse_args()
+args = parser.parse_args()
 
-    args.func(args)
+args.func(args)
