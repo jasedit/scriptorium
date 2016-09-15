@@ -26,6 +26,15 @@ In order to respond to these observations, this framework aims to provide:
     3. [Python](http://python.org/)
 2. Execute `python setup.py install`
 
+# Operation
+
+Executing scriptorium is done by invoking the python module, which takes the form:
+```
+python -m scriptorium
+```
+
+with commands and relevant arguments. The most common command is `make`, which accepts an argument pointing at the paper to build, e.g. `python -m scriptorium make Documents/example_paper`
+
 # Implementation
 
 The implementation here provides relativey little in the way of actual code or new tools. Instead, the focus is on pulling together existing tools and organizing them in such a way to provide the desired functionality. [MultiMarkdown](http://fletcherpenney.net/multimarkdown/) is used for the user friendly markup language. MultiMarkdown extends the [Markdown](http://daringfireball.net/projects/markdown/) to provide several additional commands for citations, tables, and footnotes. Usefully, MultiMarkdown includes an extension for [LaTeX support](https://github.com/fletcher/peg-multimarkdown-latex-support). This is used to provide a method for pulling in LaTeX templates for various academic publications. Templates are stored in the templates directory of this repository - simply download/clone/store templates there. The default system is configured to recursively search this directory for any templates, so paths are not required (although unique names for templates likely are.) Similarly, papers are simply directories stored in the papers subdirectory. These are highly encourage to be repositories with version control, but the system doesn't enforce this on folders.
