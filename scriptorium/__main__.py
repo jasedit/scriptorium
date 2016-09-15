@@ -47,59 +47,8 @@ def list_cmd(args):
 
 def create(args):
     """Creates a new paper given flags."""
-    if os.path.exists(args.output) and not args.force:
-        print('{0} exists, will not overwrite. Use -f to force creation.'.format(args.output))
+    if not scriptorium.create(args.output, args.template, force=args.force, config=args.config):
         sys.exit(3)
-
-    template_dir = scriptorium.find_template(args.template)
-
-    if not template_dir:
-        print('{0} is not an installed template.'.format(args.template))
-        sys.exit(4)
-
-    os.mkdir(args.output)
-    giname = os.path.join(BIN_DIR, 'data', 'gitignore')
-    shutil.copyfile(giname, os.path.join(args.output, '.gitignore'))
-
-    #Create frontmatter section for paper
-    front_file = os.path.join(template_dir, 'frontmatter.mmd')
-    if os.path.exists(front_file):
-        with open(front_file, 'r') as fp:
-            paper = fp.read()
-    else:
-        paper = ''
-
-    #Create metadata section
-    metaex_file = os.path.join(template_dir, 'metadata.tex')
-    if os.path.exists(metaex_file):
-        with open(metaex_file, 'r') as fp:
-            metadata = fp.read()
-    else:
-        metadata = ''
-
-    for opt in args.config:
-        repl = re.compile('${0}'.format(opt[0].upper()))
-        repl.sub(opt[1], paper)
-        repl.sub(opt[1], metadata)
-
-    #Regex to find variable names
-    var_re = re.compile(r'\$[A-Z0-9]+')
-    paper_file = os.path.join(args.output, 'paper.mmd')
-    with open(paper_file, 'w') as fp:
-        fp.write(paper)
-        fp.write('\n')
-        fp.write('latex input: {0}/setup.tex\n'.format(args.template))
-        fp.write('latex footer: {0}/footer.tex\n\n'.format(args.template))
-
-    for ii in var_re.finditer(paper):
-        print('{0} contains unpopulated variable {1}'.format(paper_file, ii.group(0)))
-
-    if metadata:
-        metadata_file = os.path.join(args.output, 'metadata.tex')
-        with open(metadata_file, 'w') as fp:
-            fp.write(metadata)
-        for mtch in var_re.finditer(metadata):
-            print('{0} contains unpopulated variable {1}'.format(metadata_file, mtch.group(0)))
 
 def main():
     parser = argparse.ArgumentParser()
@@ -127,6 +76,7 @@ def main():
     new_parser.set_defaults(func=create)
 
     list_parser = subparsers.add_parser("list")
+    list_parser.add_argument("-t", "--template_dir", default=scriptorium.TEMPLATES_DIR, help="Overrides template directory used for listing templates")
     list_parser.set_defaults(func=list_cmd)
 
     args = parser.parse_args()

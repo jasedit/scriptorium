@@ -5,6 +5,8 @@ import glob
 import subprocess
 import re
 import os
+import shutil
+
 import scriptorium
 
 def paper_root(dname):
@@ -82,3 +84,63 @@ def to_pdf(paper_dir, template_dir=scriptorium.TEMPLATE_DIR, use_shell_escape=Fa
         os.chdir(old_cwd)
 
     return os.path.join(paper, '{0}.pdf'.format(bname))
+
+def create(paper_dir, template, force=False, use_git=True, config=None):
+    """Create folder with paper skeleton."""
+    config = config if config else []
+    if os.path.exists(paper_dir) and not force:
+        print('{0} exists, will not overwrite. Use -f to force creation.'.format(output))
+        return False
+    template_dir = scriptorium.find_template(template, scriptorium.TEMPLATES_DIR)
+
+    if not template_dir:
+        print('{0} is not an installed template.'.format(template))
+        return False
+
+    os.makedirs(paper_dir)
+    if use_git:
+        here = os.path.dirname(os.path.realpath(__file__))
+        giname = os.path.join(here, 'data', 'gitignore')
+        shutil.copyfile(giname, os.path.join(paper_dir))
+
+    #Create frontmatter section for paper
+    front_file = os.path.join(scriptorium.TEMPLATES_DIR, 'frontmatter.mmd')
+    if os.path.exists(front_file):
+        with open(front_file, 'r') as fp:
+            paper = fp.read()
+    else:
+        paper = ''
+
+    #Create metadata section
+    metaex_file = os.path.join(scriptorium.TEMPLATES_DIR, 'metadata.tex')
+    if os.path.exists(metaex_file):
+        with open(metaex_file, 'r') as fp:
+            metadata = fp.read()
+    else:
+        metadata = ''
+
+    for opt in config:
+        repl = re.compile('${0}'.format(opt[0].upper()))
+        repl.sub(opt[1], paper)
+        repl.sub(opt[1], metadata)
+
+    #Regex to find variable names
+    var_re = re.compile(r'\$[A-Z0-9]+')
+    paper_file = os.path.join(paper_dir, 'paper.mmd')
+    with open(paper_file, 'w') as fp:
+        fp.write(paper)
+        fp.write('\n')
+        fp.write('latex input: {0}/setup.tex\n'.format(template))
+        fp.write('latex footer: {0}/footer.tex\n\n'.format(template))
+
+    for ii in var_re.finditer(paper):
+        print('{0} contains unpopulated variable {1}'.format(paper_file, ii.group(0)))
+
+    if metadata:
+        metadata_file = os.path.join(paper_dir, 'metadata.tex')
+        with open(metadata_file, 'w') as fp:
+            fp.write(metadata)
+        for mtch in var_re.finditer(metadata):
+            print('{0} contains unpopulated variable {1}'.format(metadata_file, mtch.group(0)))
+
+    return True
