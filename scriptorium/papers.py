@@ -99,6 +99,7 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
 
 def create(paper_dir, template, force=False, use_git=True, config=None):
     """Create folder with paper skeleton."""
+
     config = config if config else []
     if os.path.exists(paper_dir) and not force:
         print('{0} exists, will not overwrite. Use -f to force creation.'.format(output))
