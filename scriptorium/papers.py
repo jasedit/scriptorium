@@ -52,7 +52,11 @@ def to_pdf(paper_dir, template_dir=scriptorium.TEMPLATE_DIR, use_shell_escape=Fa
 
     #Need to set up environment here
     new_env = dict(os.environ)
-    new_env['TEXINPUTS'] = './:{0}:{1}'.format(template_dir + '/.//', new_env['TEXINPUTS'])
+    texinputs = './:{0}'.format(template_dir + '/.//')
+    if 'TEXINPUTS' in new_env:
+      texinputs = '{0}:{1}'.format(texinputs, new_env['TEXINPUTS'])
+    texinputs = texinputs + ':'
+    new_env['TEXINPUTS'] = texinputs
     pdf_cmd = ['pdflatex', '-halt-on-error', tname]
 
     if use_shell_escape:
