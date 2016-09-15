@@ -30,7 +30,7 @@ setup(
     ],
     packages=find_packages(),
     entry_points = {
-        'console_scripts': ['scriptorium = scriptorium.main'],
+        'console_scripts': ['scriptorium = scriptorium:main'],
     },
     package_data={'scriptorium': ['data/gitignore']}
     )
