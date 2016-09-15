@@ -5,6 +5,7 @@ import glob
 import subprocess
 import re
 import os
+import scriptorium
 
 def paper_root(dname):
   """Given a directory, finds the root document for the paper."""
@@ -29,7 +30,7 @@ def get_template(fname):
 
     return match.group('template') if match else None
 
-def to_pdf(paper_dir, template_dir, use_shell_escape=False):
+def to_pdf(paper_dir, template_dir=scriptorium.TEMPLATE_DIR, use_shell_escape=False):
     """Build paper in the given directory, returning the PDF filename if successful."""
     paper = os.path.abspath(paper_dir)
     if not os.path.isdir(paper):

@@ -13,11 +13,10 @@ import sys
 
 BIN_DIR = os.path.dirname(os.path.realpath(__file__))
 BASE_DIR = os.path.abspath(os.path.join(BIN_DIR, '..'))
-TEMPLATES_DIR = os.path.abspath(os.path.join(BASE_DIR, 'templates'))
 
 def make(args):
     """Creates PDF from paper in the requested location."""
-    pdf = scriptorium.to_pdf(args.paper, TEMPLATES_DIR, args.shell_escape)
+    pdf = scriptorium.to_pdf(args.paper, use_shell_escape=args.shell_escape)
 
     if args.output and pdf != args.output:
         shutil.move(pdf, args.output)
@@ -52,7 +51,7 @@ def create(args):
         print('{0} exists, will not overwrite. Use -f to force creation.'.format(args.output))
         sys.exit(3)
 
-    template_dir = scriptorium.find_template(args.template, TEMPLATES_DIR)
+    template_dir = scriptorium.find_template(args.template)
 
     if not template_dir:
         print('{0} is not an installed template.'.format(args.template))

@@ -3,6 +3,8 @@
 
 import os
 
+import scriptorium
+
 def all_templates(dname):
     """Builds list of installed templates."""
 
@@ -13,7 +15,7 @@ def all_templates(dname):
 
     return templates
 
-def find_template(tname, tdir):
+def find_template(tname, tdir=scriptorium.TEMPLATES_DIR):
     """Searches given template directory for the named template."""
     for dirpath, _, _ in os.walk(tdir):
         if os.path.basename(dirpath) == tname:
