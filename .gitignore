@@ -27,5 +27,6 @@
 papers/*
 common/
 *.pyc
-build/*
+build/
+dist/
 scriptorium.egg-info/
