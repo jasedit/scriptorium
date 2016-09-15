@@ -116,7 +116,7 @@ def create(paper_dir, template, force=False, use_git=True, config=None):
         shutil.copyfile(giname, os.path.join(paper_dir))
 
     #Create frontmatter section for paper
-    front_file = os.path.join(scriptorium.TEMPLATES_DIR, 'frontmatter.mmd')
+    front_file = os.path.join(scriptorium.TEMPLATE_DIR, 'frontmatter.mmd')
     if os.path.exists(front_file):
         with open(front_file, 'r') as fp:
             paper = fp.read()
@@ -124,7 +124,7 @@ def create(paper_dir, template, force=False, use_git=True, config=None):
         paper = ''
 
     #Create metadata section
-    metaex_file = os.path.join(scriptorium.TEMPLATES_DIR, 'metadata.tex')
+    metaex_file = os.path.join(scriptorium.TEMPLATE_DIR, 'metadata.tex')
     if os.path.exists(metaex_file):
         with open(metaex_file, 'r') as fp:
             metadata = fp.read()
