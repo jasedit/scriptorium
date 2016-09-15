@@ -69,7 +69,7 @@ def main():
     new_parser.set_defaults(func=create)
 
     list_parser = subparsers.add_parser("list")
-    list_parser.add_argument("-t", "--template_dir", default=scriptorium.TEMPLATES_DIR, help="Overrides template directory used for listing templates")
+    list_parser.add_argument("-t", "--template_dir", default=scriptorium.TEMPLATE_DIR, help="Overrides template directory used for listing templates")
     list_parser.set_defaults(func=list_cmd)
 
     args = parser.parse_args()
