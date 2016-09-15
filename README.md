@@ -20,27 +20,11 @@ In order to respond to these observations, this framework aims to provide:
 # Installation
 
 1. Clone this repository to your local machine.
-2. Follow the installation instructions for your platform of choice below.
-3. Clone some number of template repositories under the templates folder. This repository does not track those repositories, so the base repository can be shared publicly, and templates can be distributed in whatever organization makes sense for individual groups/projects.
-
-## Ubuntu Setup
-
-1. Run `bin/install.sh` to install MultiMarkdown and latex packages necessary for this system to build.
-
-## Mac OS X Setup
-
-1. Install [MacTeX](http://tug.org/mactex/) for LaTeX tools.
-2. Run `bin/install.sh` to install MultiMarkdown and configure this paper system.
-
-## Windows Setup
-
-1. Install [Cygwin](http://cygwin.com/)
-2. Make sure the following Cygwin packages are installed: texlive, texlive-collection-latexextra, texlive-collection-publishers, git, openssh, make, libglib2.0-devel, gcc-core, gcc-g++, and texlive-fonts-recommended, cmake
-3. Once cygwin is installed, open up the Cygwin terminal for the following steps.
-4. Set up an SSH key. The easiest way is to execute `ssh-keygen` and follow the prompts.
-5. [Add](https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/) the public key to GitHub.
-6. Clone this repository to your local machine. In Cygwin, open a terminal, navigate to the desired location, and execute `git clone https://github.com/jasedit/scriptorium`
-7. Install the system: `cd scriptorium; ./bin/install.sh`
+2. Install external dependencies:
+    1. [MultiMarkdown 5](https://github.com/fletcher/MultiMarkdown-5)
+    2. [LaTeX](http://www.latex-project.org/)
+    3. [Python](http://python.org/)
+2. Execute `python setup.py install`
 
 # Implementation
 
