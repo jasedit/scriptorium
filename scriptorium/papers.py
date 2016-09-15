@@ -142,7 +142,9 @@ def create(paper_dir, template, force=False, use_git=True, config=None):
     paper_file = os.path.join(paper_dir, 'paper.mmd')
     with open(paper_file, 'w') as fp:
         fp.write(paper)
-        fp.write('\n')
+        #Only add a newline if previous material exists
+        if paper:
+            fp.write('\n')
         fp.write('latex input: {0}/setup.tex\n'.format(template))
         fp.write('latex footer: {0}/footer.tex\n\n'.format(template))
 
