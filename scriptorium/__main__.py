@@ -41,7 +41,7 @@ def info(args):
 
 def list_cmd(args):
     """Prints out all installed templates."""
-    templates = scriptorium.all_templates(TEMPLATES_DIR)
+    templates = scriptorium.all_templates(args.template_dir)
     for template in templates:
         print('{0}'.format(template))
 
