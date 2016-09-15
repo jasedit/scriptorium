@@ -32,8 +32,10 @@ def get_template(fname):
 
     return match.group('template') if match else None
 
-def to_pdf(paper_dir, template_dir=scriptorium.TEMPLATE_DIR, use_shell_escape=False):
+def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
     """Build paper in the given directory, returning the PDF filename if successful."""
+
+    template_dir = template_dir if template_dir else scriptorium.TEMPLATES_DIR
     paper = os.path.abspath(paper_dir)
     if not os.path.isdir(paper):
         raise IOError("{0} is not a valid directory".format(paper))

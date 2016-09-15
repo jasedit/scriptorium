@@ -15,9 +15,11 @@ def all_templates(dname):
 
     return templates
 
-def find_template(tname, tdir=scriptorium.TEMPLATE_DIR):
+def find_template(tname, template_dir=None):
     """Searches given template directory for the named template."""
-    for dirpath, _, _ in os.walk(tdir):
+
+    template_dir = template_dir if template_dir else scriptorium.TEMPLATE_DIR
+    for dirpath, _, _ in os.walk(template_dir):
         if os.path.basename(dirpath) == tname:
             return os.path.join(tdir, dirpath)
     return None
