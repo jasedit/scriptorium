@@ -114,7 +114,7 @@ def create(paper_dir, template, force=False, use_git=True, config=None):
     if use_git:
         here = os.path.dirname(os.path.realpath(__file__))
         giname = os.path.join(here, 'data', 'gitignore')
-        shutil.copyfile(giname, os.path.join(paper_dir))
+        shutil.copyfile(giname, os.path.join(paper_dir, '.gitignore'))
 
     #Create frontmatter section for paper
     front_file = os.path.join(scriptorium.TEMPLATE_DIR, 'frontmatter.mmd')
