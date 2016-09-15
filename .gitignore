@@ -27,3 +27,4 @@
 papers/*
 common/
 *.pyc
+build/*
