@@ -50,7 +50,7 @@ def main():
 
     # Make command
     make_parser = subparsers.add_parser("make")
-    make_parser.add_argument("paper", default=".", help="Directory containing paper to make")
+    make_parser.add_argument("paper", default=".", nargs='?', help="Directory containing paper to make")
     make_parser.add_argument('-o', '--output', help='Filename to store resulting PDF as.')
     make_parser.add_argument('-s', '--shell-escape', action='store_true', help='Flag to indicate shell-escape should be used')
     make_parser.set_defaults(func=make)
