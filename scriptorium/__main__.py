@@ -1,18 +1,11 @@
 #!/usr/bin/env python
 #Script to build a scriptorium paper in a cross-platform friendly fashion
 
-import scriptorium
 import argparse
-import subprocess
-import os
-import os.path
-import glob
-import re
 import shutil
 import sys
 
-BIN_DIR = os.path.dirname(os.path.realpath(__file__))
-BASE_DIR = os.path.abspath(os.path.join(BIN_DIR, '..'))
+import scriptorium
 
 def make(args):
     """Creates PDF from paper in the requested location."""
