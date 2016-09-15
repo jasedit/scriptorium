@@ -82,14 +82,14 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
     if bibtex_re.search(open(fname).read()):
         biber_re = re.compile(r'\\bibdata')
         full = open('paper.aux').read()
-        with open(os.devnull, 'w') as fp:
+        with open(os.devnull, 'w') as null:
             if biber_re.search(full):
-                subprocess.check_call(['bibtex', auxname], stdout=fp, stderr=fp)
+                subprocess.check_call(['bibtex', auxname], stdout=null, stderr=null)
             else:
-                subprocess.check_call(['biber', bname], stdout=fp, stderr=fp)
+                subprocess.check_call(['biber', bname], stdout=null, stderr=null)
 
-            subprocess.check_call(pdf_cmd, env=new_env, stdout=fp, stderr=fp)
-            subprocess.check_call(pdf_cmd, env=new_env, stdout=fp, stderr=fp)
+            subprocess.check_call(pdf_cmd, env=new_env, stdout=null, stderr=null)
+            subprocess.check_call(pdf_cmd, env=new_env, stdout=null, stderr=null)
 
     # Revert working directory
     if not os.path.samefile(os.getcwd(), old_cwd):
