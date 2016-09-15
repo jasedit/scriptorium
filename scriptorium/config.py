@@ -20,7 +20,9 @@ def read_config():
         here = os.path.dirname(os.path.realpath(__file__))
         old_templates = os.path.join(here, '..', 'templates')
         if os.path.exists(old_templates):
+            print('Migrating templates to new directory structure.')
             shutil.copytree(old_templates, tdir)
+            print('Templates now in {0}. You should review and remove them from {1}'.format(old_templates, tdir))
         else:
             os.makedirs(tdir)
         scriptorium.TEMPLATE_DIR = tdir
