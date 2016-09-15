@@ -24,7 +24,8 @@
 *.lof
 *.lot
 *~
-papers/*
+papers/
+templates/
 common/
 *.pyc
 build/
