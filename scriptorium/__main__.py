@@ -59,7 +59,7 @@ def create(args):
         sys.exit(4)
 
     os.mkdir(args.output)
-    giname = os.path.join(BASE_DIR, 'etc', 'example_paper', 'gitignore')
+    giname = os.path.join(BIN_DIR, 'data', 'gitignore')
     shutil.copyfile(giname, os.path.join(args.output, '.gitignore'))
 
     #Create frontmatter section for paper
