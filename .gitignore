@@ -28,3 +28,4 @@ papers/*
 common/
 *.pyc
 build/*
+scriptorium.egg-info/
