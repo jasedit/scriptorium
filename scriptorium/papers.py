@@ -73,8 +73,7 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
     try:
         output = subprocess.check_output(pdf_cmd, env=new_env)
     except subprocess.CalledProcessError:
-        print('LaTeX conversion failed with the following output:')
-        print(output)
+        print('LaTeX conversion failed with the following output:\n', output)
         return None
 
     auxname = '{0}.aux'.format(bname)
