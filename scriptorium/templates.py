@@ -21,5 +21,5 @@ def find_template(tname, template_dir=None):
     template_dir = template_dir if template_dir else scriptorium.TEMPLATE_DIR
     for dirpath, _, _ in os.walk(template_dir):
         if os.path.basename(dirpath) == tname:
-            return os.path.join(tdir, dirpath)
+            return os.path.join(template_dir, dirpath)
     return None
