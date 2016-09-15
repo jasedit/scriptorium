@@ -28,12 +28,10 @@ In order to respond to these observations, this framework aims to provide:
 
 # Operation
 
-Executing scriptorium is done by invoking the python module, which takes the form:
+Scriptorium can be invoked directly from the command line using the name `scriptorium`. Example commands:
 ```
-python -m scriptorium
+scriptorium make example_paper_directory
 ```
-
-with commands and relevant arguments. The most common command is `make`, which accepts an argument pointing at the paper to build, e.g. `python -m scriptorium make Documents/example_paper`
 
 # Implementation
 
