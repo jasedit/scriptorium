@@ -10,17 +10,17 @@ import shutil
 import scriptorium
 
 def paper_root(dname):
-  """Given a directory, finds the root document for the paper."""
+    """Given a directory, finds the root document for the paper."""
 
-  root_doc = None
-  for fname in glob.glob(os.path.join(dname, '*.mmd')):
-      #Metadata only exists in the root document
-      output = subprocess.check_output(['multimarkdown', '-m', fname])
-      if output:
-          root_doc = fname
-          break
+    root_doc = None
+    for fname in glob.glob(os.path.join(dname, '*.mmd')):
+        #Metadata only exists in the root document
+        output = subprocess.check_output(['multimarkdown', '-m', fname])
+        if output:
+            root_doc = fname
+            break
 
-  return os.path.basename(root_doc) if root_doc else None
+    return os.path.basename(root_doc) if root_doc else None
 
 def get_template(fname):
     """Attempts to find the template of a paper in a given file."""
