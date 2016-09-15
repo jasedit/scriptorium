@@ -46,9 +46,16 @@ def to_pdf(paper_dir, template_dir=scriptorium.TEMPLATE_DIR, use_shell_escape=Fa
     if not fname:
         raise IOError("{0} does not contain a file that appears to be the root of the paper.".format(paper))
 
+    all_mmd = glob.glob('*.mmd')
+    default_mmd = subprocess.check_output(['multimarkdown', '-x', fname], universal_newlines=True)
+    default_mmd = default_mmd.splitlines()
+    for mmd in set(all_mmd) - set(default_mmd):
+        bname = os.path.basename(mmd).split('.')[0]
+        tname = '{0}.tex'.format(bname)
+        subprocess.check_call(['multimarkdown', '-t', 'latex', '-o', tname, mmd])
+
     bname = os.path.basename(fname).split('.')[0]
     tname = '{0}.tex'.format(bname)
-    subprocess.check_call(['multimarkdown', '-t', 'latex', '-o', tname, fname])
 
     #Need to set up environment here
     new_env = dict(os.environ)
