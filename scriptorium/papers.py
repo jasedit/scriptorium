@@ -71,9 +71,9 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
     if use_shell_escape:
       pdf_cmd.append('-shell-escape')
     try:
-        output = subprocess.check_output(pdf_cmd, env=new_env)
-    except subprocess.CalledProcessError:
-        print('LaTeX conversion failed with the following output:\n', output)
+        subprocess.check_output(pdf_cmd, env=new_env, universal_newlines=True)
+    except subprocess.CalledProcessError as e:
+        print('\n'.join(["LaTeX conversion failed with the following output:", e.output]))
         return None
 
     auxname = '{0}.aux'.format(bname)
