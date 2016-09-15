@@ -24,7 +24,8 @@ In order to respond to these observations, this framework aims to provide:
     1. [MultiMarkdown 5](https://github.com/fletcher/MultiMarkdown-5)
     2. [LaTeX](http://www.latex-project.org/)
     3. [Python](http://python.org/)
-2. Execute `python setup.py install`
+3. Install requirements using `pip install -r requirements.txt`
+4. Execute `python setup.py install`
 
 # Operation
 
