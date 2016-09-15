@@ -29,6 +29,8 @@ setup(
         'Programming Language :: Python :: 3'
     ],
     packages=find_packages(),
-    scripts=['bin/scriptorium'],
+    entry_points = {
+        'console_scripts': ['scriptorium = scriptorium.main'],
+    },
     package_data={'scriptorium': ['data/gitignore']}
     )
