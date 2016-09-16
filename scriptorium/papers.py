@@ -40,7 +40,7 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
     if not os.path.isdir(paper):
         raise IOError("{0} is not a valid directory".format(paper))
     old_cwd = os.getcwd()
-    if not os.path.samefile(old_cwd, paper):
+    if old_cwd != paper_dir:
         os.chdir(paper)
 
     fname = paper_root('.')
@@ -92,7 +92,7 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
             subprocess.check_call(pdf_cmd, env=new_env, stdout=null, stderr=null)
 
     # Revert working directory
-    if not os.path.samefile(os.getcwd(), old_cwd):
+    if os.getcwd() != old_cwd:
         os.chdir(old_cwd)
 
     return os.path.join(paper, '{0}.pdf'.format(bname))
