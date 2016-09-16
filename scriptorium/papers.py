@@ -77,7 +77,8 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
       texinputs = '{0}:{1}'.format(texinputs, new_env['TEXINPUTS'])
     texinputs = texinputs + ':'
     new_env['TEXINPUTS'] = texinputs
-    pdf_cmd = ['pdflatex', '-halt-on-error', tname]
+
+    pdf_cmd = ['pdflatex', '-halt-on-error', '-interaction=nonstopmode', tname]
 
     if use_shell_escape:
       pdf_cmd.insert(1, '-shell-escape')
