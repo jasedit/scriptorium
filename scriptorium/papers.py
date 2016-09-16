@@ -59,9 +59,20 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
     bname = os.path.basename(fname).split('.')[0]
     tname = '{0}.tex'.format(bname)
 
+    template = get_template(fname)
+    if not template:
+        raise IOError('{0} does not appear to have lines necessary to load a template.'.format(fname))
+
+    template_loc = scriptorium.find_template(template)
+
+    if not template_loc:
+        raise IOError('{0} template not installed in {1}'.format(template, template_dir))
+
+    template_loc = os.path.abspath(os.path.join(template_loc, '..'))
+
     #Need to set up environment here
     new_env = dict(os.environ)
-    texinputs = './:{0}'.format(template_dir + '/.//')
+    texinputs = './:{0}'.format(template_loc + '/.//')
     if 'TEXINPUTS' in new_env:
       texinputs = '{0}:{1}'.format(texinputs, new_env['TEXINPUTS'])
     texinputs = texinputs + ':'
