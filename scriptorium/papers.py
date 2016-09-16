@@ -15,7 +15,7 @@ def paper_root(dname):
     root_doc = None
     for fname in glob.glob(os.path.join(dname, '*.mmd')):
         #Metadata only exists in the root document
-        output = subprocess.check_output(['multimarkdown', '-m', fname])
+        output = subprocess.check_output(['multimarkdown', '-m', fname]).decode('utf-8')
         if output:
             root_doc = fname
             break
@@ -25,7 +25,7 @@ def paper_root(dname):
 def get_template(fname):
     """Attempts to find the template of a paper in a given file."""
 
-    output = subprocess.check_output(['multimarkdown', '-e', 'latexfooter', fname])
+    output = subprocess.check_output(['multimarkdown', '-e', 'latexfooter', fname]).decode('utf-8')
     template_re = re.compile(r'(?P<template>[a-zA-Z0-9._]*)\/footer.tex')
 
     match = template_re.search(output)
@@ -49,7 +49,7 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
         raise IOError("{0} does not contain a file that appears to be the root of the paper.".format(paper))
 
     all_mmd = glob.glob('*.mmd')
-    default_mmd = subprocess.check_output(['multimarkdown', '-x', fname], universal_newlines=True)
+    default_mmd = subprocess.check_output(['multimarkdown', '-x', fname], universal_newlines=True).decode('utf-8')
     default_mmd = default_mmd.splitlines()
     for mmd in set(all_mmd) - set(default_mmd):
         bname = os.path.basename(mmd).split('.')[0]
@@ -71,7 +71,7 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
     if use_shell_escape:
       pdf_cmd.insert(1, '-shell-escape')
     try:
-        subprocess.check_output(pdf_cmd, env=new_env, universal_newlines=True)
+        subprocess.check_output(pdf_cmd, env=new_env, universal_newlines=True).decode('utf-8')
     except subprocess.CalledProcessError as e:
         print('\n'.join(["LaTeX conversion failed with the following output:", e.output]))
         return None
