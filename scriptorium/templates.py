@@ -45,8 +45,8 @@ def install_template(url, template_dir=None, rev=None):
 
     try:
         subprocess.check_output(['git', 'clone', url, template_dest], universal_newlines=True)
-    except subprocess.CalledProcessError as e:
-        print('\n'.join(['Could not clone template:', e.output]))
+    except subprocess.CalledProcessError as exc:
+        print('\n'.join(['Could not clone template:', exc.output]))
 
     if rev:
         repo_checkout(template_dest, rev)
