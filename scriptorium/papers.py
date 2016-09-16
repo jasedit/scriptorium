@@ -69,7 +69,7 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
     pdf_cmd = ['pdflatex', '-halt-on-error', tname]
 
     if use_shell_escape:
-      pdf_cmd.append('-shell-escape')
+      pdf_cmd.insert(1, '-shell-escape')
     try:
         subprocess.check_output(pdf_cmd, env=new_env, universal_newlines=True)
     except subprocess.CalledProcessError as e:
