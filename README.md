@@ -28,9 +28,7 @@ In general, the following instructions will install the Scriptorium system. For 
     1. [MultiMarkdown 5](https://github.com/fletcher/MultiMarkdown-5)
     2. [LaTeX](http://www.latex-project.org/)
     3. [Python](http://python.org/)
-2. Clone this repository to your local machine.
-3. Install requirements using `pip install -r requirements.txt`
-4. Execute `python setup.py install`
+2. Execute `pip install scriptorium`
 
 ## Windows Setup
 
