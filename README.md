@@ -20,27 +20,47 @@ In order to respond to these observations, this framework aims to provide:
 # Installation
 
 1. Clone this repository to your local machine.
-2. Follow the installation instructions for your platform of choice below.
-3. Clone some number of template repositories under the templates folder. This repository does not track those repositories, so the base repository can be shared publicly, and templates can be distributed in whatever organization makes sense for individual groups/projects.
+2. Install external dependencies:
+    1. [MultiMarkdown 5](https://github.com/fletcher/MultiMarkdown-5)
+    2. [LaTeX](http://www.latex-project.org/)
+    3. [Python](http://python.org/)
+3. Install requirements using `pip install -r requirements.txt`
+4. Execute `python setup.py install`
 
-## Ubuntu Setup
+# Tutorial
 
-1. Run `bin/install.sh` to install MultiMarkdown and latex packages necessary for this system to build.
+Scriptorium can be invoked directly from the command line using the name `scriptorium`.
 
-## Mac OS X Setup
+Install some example [templates](https://github.com/jasedit/simple_templates):
+```
+scriptorium template -i https://github.com/jasedit/simple_templates
+```
 
-1. Install [MacTeX](http://tug.org/mactex/) for LaTeX tools.
-2. Run `bin/install.sh` to install MultiMarkdown and configure this paper system.
+To list which templates are currently available in scriptorium:
+```
+scriptorium template -l
+```
 
-## Windows Setup
+To create a new paper using the report template previously installed:
+```
+scriptorium new example_report -t report -c author "John Doe" -c title "My Example Report"
+```
 
-1. Install [Cygwin](http://cygwin.com/)
-2. Make sure the following Cygwin packages are installed: texlive, texlive-collection-latexextra, texlive-collection-publishers, git, openssh, make, libglib2.0-devel, gcc-core, gcc-g++, and texlive-fonts-recommended, cmake
-3. Once cygwin is installed, open up the Cygwin terminal for the following steps.
-4. Set up an SSH key. The easiest way is to execute `ssh-keygen` and follow the prompts.
-5. [Add](https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/) the public key to GitHub.
-6. Clone this repository to your local machine. In Cygwin, open a terminal, navigate to the desired location, and execute `git clone https://github.com/jasedit/scriptorium`
-7. Install the system: `cd scriptorium; ./bin/install.sh`
+Adding example content using the command:
+```
+echo "# Introduction
+
+This is an introductory section." >> example_report/paper.mmd
+```
+
+The PDF of the report can be built using:
+```
+scriptorium build example_report
+```
+or, if inside `example_report`:
+```
+scriptorium build
+```
 
 # Implementation
 

@@ -48,13 +48,3 @@ else
   ln -s ${abs_dir}/common $bst_dir
   ln -s ${abs_dir}/common $bib_dir
 fi
-
-# Inject environment variable for building these files. If this isn't set, none of this will work.
-echo "Looking for dir ${abs_dir}"
-mmdl_dir=`grep "${abs_dir}/templates" ~/.bashrc`
-echo "Done"
-#Environment variable not defined, inject one for this repository
-if [ -z "$mmdl_dir" ]; then
-  echo "Configuring .bashrc"
-  echo "export TEXINPUTS=${abs_dir}/templates/.//:$TEXINPUTS:" >> ~/.bashrc
-fi

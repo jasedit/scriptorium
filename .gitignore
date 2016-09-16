@@ -24,5 +24,10 @@
 *.lof
 *.lot
 *~
-papers/*
+papers/
+templates/
 common/
+*.pyc
+build/
+dist/
+scriptorium.egg-info/
