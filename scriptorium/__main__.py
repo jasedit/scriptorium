@@ -43,6 +43,10 @@ def create(args):
     if not scriptorium.create(args.output, args.template, force=args.force, config=args.config):
         sys.exit(3)
 
+def install_cmd(args):
+    """Installs a given template."""
+    scriptorium.install_template(args.url)
+
 def main():
     parser = argparse.ArgumentParser()
 
@@ -71,6 +75,10 @@ def main():
     list_parser = subparsers.add_parser("list")
     list_parser.add_argument("-t", "--template_dir", default=scriptorium.TEMPLATE_DIR, help="Overrides template directory used for listing templates")
     list_parser.set_defaults(func=list_cmd)
+
+    install_parser = subparsers.add_parser('install')
+    install_parser.add_argument('url', help='URL containing templates to install')
+    install_parser.set_defaults(func=install_cmd)
 
     args = parser.parse_args()
 
