@@ -27,11 +27,39 @@ In order to respond to these observations, this framework aims to provide:
 3. Install requirements using `pip install -r requirements.txt`
 4. Execute `python setup.py install`
 
-# Operation
+# Tutorial
 
-Scriptorium can be invoked directly from the command line using the name `scriptorium`. Example commands:
+Scriptorium can be invoked directly from the command line using the name `scriptorium`.
+
+Install some example [templates](https://github.com/jasedit/simple_templates):
 ```
-scriptorium make example_paper_directory
+scriptorium template -i https://github.com/jasedit/simple_templates
+```
+
+To list which templates are currently available in scriptorium:
+```
+scriptorium template -l
+```
+
+To create a new paper using the report template previously installed:
+```
+scriptorium new example_report -t report -c author "John Doe" -c title "My Example Report"
+```
+
+Adding example content using the command:
+```
+echo "# Introduction
+
+This is an introductory section." >> example_report/paper.mmd
+```
+
+The PDF of the report can be built using:
+```
+scriptorium build example_report
+```
+or, if inside `example_report`:
+```
+scriptorium build
 ```
 
 # Implementation
