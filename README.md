@@ -1,3 +1,5 @@
+[![Latest Version](https://img.shields.io/pypi/v/scriptorium.svg)](https://pypi.python.org/pypi/scriptorium) [![Downloads](https://img.shields.io/pypi/dm/scriptorium.svg)](https://pypi.python.org/pypi/scriptorium) [![License](https://img.shields.io/pypi/l/scriptorium.svg)](https://pypi.python.org/pypi/scriptorium) [![Code Health](https://landscape.io/github/jasedit/scriptorium/master/landscape.svg?style=flat)](https://landscape.io/github/jasedit/scriptorium/master)
+
 # Scriptorium
 
 Framework for easily using MultiMarkdown and LaTeX based system to write academic papers, especially those with shared templates for organization. This system is designed with several important design guidelines and observations:
