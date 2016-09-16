@@ -54,7 +54,8 @@ def install_template(url, template_dir=None, rev=None):
     except subprocess.CalledProcessError as exc:
         print('\n'.join(['Could not clone template:', exc.output]))
 
-    if rev:
+    treeish_re = re.compile(r'[A-Za-z0-9_-.]+')
+    if rev and treeish_re.match(rev):
         repo_checkout(template_dest, rev)
 
     return True
@@ -72,7 +73,9 @@ def update_template(template, template_dir=None, rev=None, max_depth=100):
         if not rev:
             rev = subprocess.check_output(['git', 'symbolic-ref', '--short', 'HEAD'], universal_newlines=True)
             rev = rev.rstrip()
-        subprocess.check_call(['git', 'pull', 'origin', rev])
+        treeish_re = re.compile(r'[A-Za-z0-9_-.]+')
+        if treeish_re.match(rev):
+            subprocess.check_call(['git', 'pull', 'origin', rev])
     except subprocess.CalledProcessError as e:
         print('Update failed on {0}'.format(template))
         return False
