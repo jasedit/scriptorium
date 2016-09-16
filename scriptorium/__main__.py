@@ -70,7 +70,7 @@ def main():
     build_parser = subparsers.add_parser("build")
     build_parser.add_argument("paper", default=".", nargs='?', help="Directory containing paper to build")
     build_parser.add_argument('-o', '--output', help='Destination of PDF')
-    build_parser.add_argument('-s', '--shell-escape', action='store_true', help='Flag indicating shell-escape should be used')
+    build_parser.add_argument('-s', '--shell-escape', action='store_true', default=False, help='Flag indicating shell-escape should be used')
     build_parser.set_defaults(func=build_cmd)
 
     # Info Command
