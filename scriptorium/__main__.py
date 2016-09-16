@@ -9,7 +9,7 @@ import os.path
 
 import scriptorium
 
-def make(args):
+def build_cmd(args):
     """Creates PDF from paper in the requested location."""
     pdf = scriptorium.to_pdf(args.paper, use_shell_escape=args.shell_escape)
 
@@ -66,12 +66,12 @@ def main():
 
     subparsers = parser.add_subparsers()
 
-    # Make command
-    make_parser = subparsers.add_parser("make")
-    make_parser.add_argument("paper", default=".", nargs='?', help="Directory containing paper to make")
-    make_parser.add_argument('-o', '--output', help='Filename to store resulting PDF as.')
-    make_parser.add_argument('-s', '--shell-escape', action='store_true', help='Flag to indicate shell-escape should be used')
-    make_parser.set_defaults(func=make)
+    # Build Command
+    build_parser = subparsers.add_parser("build")
+    build_parser.add_argument("paper", default=".", nargs='?', help="Directory containing paper to build")
+    build_parser.add_argument('-o', '--output', help='Destination of PDF')
+    build_parser.add_argument('-s', '--shell-escape', action='store_true', help='Flag indicating shell-escape should be used')
+    build_parser.set_defaults(func=build_cmd)
 
     info_parser = subparsers.add_parser("info")
     info_parser.add_argument("paper", default=".", help="Directory containing paper to make")
