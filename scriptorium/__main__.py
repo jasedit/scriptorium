@@ -60,7 +60,6 @@ def create(args):
     if not scriptorium.create(args.output, args.template, force=args.force, config=args.config):
         sys.exit(3)
 
-
 def main():
     parser = argparse.ArgumentParser()
 
