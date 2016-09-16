@@ -6,6 +6,7 @@ import subprocess
 import re
 import os
 import shutil
+import platform
 
 import scriptorium
 
@@ -79,6 +80,9 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
     new_env['TEXINPUTS'] = texinputs
 
     pdf_cmd = ['pdflatex', '-halt-on-error', '-interaction=nonstopmode', tname]
+
+    if platform.system() == 'Windows':
+        pdf_cmd.insert(-2, '-include-directory={0}'.format(template_loc))
 
     if use_shell_escape:
       pdf_cmd.insert(1, '-shell-escape')
