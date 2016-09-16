@@ -19,13 +19,34 @@ In order to respond to these observations, this framework aims to provide:
 
 # Installation
 
-1. Clone this repository to your local machine.
-2. Install external dependencies:
+## General Instructions
+
+In general, the following instructions will install the Scriptorium system. For Windows, please be sure to follow the Windows directions to handle the peculiarities of Windows and the command line.
+
+1. Install external dependencies:
+    1. [git](https://git-scm.com/)
     1. [MultiMarkdown 5](https://github.com/fletcher/MultiMarkdown-5)
     2. [LaTeX](http://www.latex-project.org/)
     3. [Python](http://python.org/)
+2. Clone this repository to your local machine.
 3. Install requirements using `pip install -r requirements.txt`
 4. Execute `python setup.py install`
+
+## Windows Setup
+
+These instructions provide a method to configure Scriptorium to work on Windows with a minimum of fuss. There are many other ways to configure this system, and cleaner instructions would be appreciated in a pull request
+
+1. Install the [GitHub Desktop Client](https://desktop.github.com/), and follow the directions to configure it with your GitHub account.
+2. Install [MultiMarkdown 5](https://github.com/fletcher/MultiMarkdown-5/releases) using the graphical installer
+3. Install [MikTex](http://miktex.org/)
+4. Install [Python](https://www.python.org/downloads/), either 2.7 or 3.5.
+5. Modify the Environment Variables to add Python to the `PATH` variable. Based on the helpful instructions [here](http://stackoverflow.com/questions/23400030/windows-7-add-path):
+    1. Right click on "My Computer" and select Properties
+    2. In the System Properties window, click on Advanced
+    3. Click on the "Environment Variables" button
+    4. Select the `PATH` variable, and add Python. The default values would be `C:\Python27` and `C:\Python27\Scripts` for Python 2.7, or `C:\Python35` and `C:\Python35\Scripts` for Python 3.5, although this would changed if the installation directories were changed in previous steps.
+5. Open the "Git Shell" installed by GitHub, and verify that `python.exe` and `pip` are recognized commands.
+7. Follow the general installation instructions listed above.
 
 # Tutorial
 
