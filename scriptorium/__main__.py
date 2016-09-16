@@ -73,11 +73,13 @@ def main():
     build_parser.add_argument('-s', '--shell-escape', action='store_true', help='Flag indicating shell-escape should be used')
     build_parser.set_defaults(func=build_cmd)
 
+    # Info Command
     info_parser = subparsers.add_parser("info")
     info_parser.add_argument("paper", default=".", help="Directory containing paper to make")
     info_parser.add_argument('-t', '--template', action="store_true", help="Flag to extract template")
     info_parser.set_defaults(func=info)
 
+    # New Command
     new_parser = subparsers.add_parser("new")
     new_parser.add_argument("output", help="Directory to create paper in.")
     new_parser.add_argument("-f", "--force", action="store_true", help="Overwrite files in paper creation.")
@@ -86,6 +88,7 @@ def main():
                             help='Flag to provide options for filling out variables in new papers, in the form key value')
     new_parser.set_defaults(func=create)
 
+    # Template Command
     template_parser = subparsers.add_parser("template")
     template_parser.add_argument('-l', '--list', action='store_true', default=False, help='List available templates')
     template_parser.add_argument('-u', '--update', default=None, help='Update the given template to the latest version')
