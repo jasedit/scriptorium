@@ -11,6 +11,8 @@ import scriptorium
 def all_templates(dname):
     """Builds list of installed templates."""
 
+    if not dname:
+        dname = scriptorium.TEMPLATE_DIR
     templates = []
     for dirpath, _, filenames in os.walk(dname):
         if 'setup.tex' in filenames:
