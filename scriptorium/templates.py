@@ -2,6 +2,7 @@
 """Tools for reasoning over templates."""
 
 import subprocess
+import re
 import os
 import os.path
 
@@ -35,7 +36,12 @@ def repo_checkout(repo, rev):
 
 def install_template(url, template_dir=None, rev=None):
     """Installs a template in the template_dir, optionally selecting a revision."""
-    _, _, template = url.rpartition('/')
+    url_re = re.compile(r'((git|ssh|http(s)?)(:(//)?)|([\w\d]*@))?(?P<url>[\w\.]+).*\/(?P<dir>[\w\-]+)(\.git)(/)?')
+    match = url_re.search(url)
+    if not match:
+        print('{0} is not a valid git URL'.format(url))
+        return False
+    template = match.group('dir')
     template_dir = template_dir if template_dir else scriptorium.TEMPLATE_DIR
     template_dest = os.path.join(template_dir, template)
 
