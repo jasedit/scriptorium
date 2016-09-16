@@ -3,15 +3,15 @@ from codecs import open
 from os import path
 from distutils.core import setup
 from setuptools import find_packages
+import pypandoc
 
 here = path.abspath(path.dirname(__file__))
 
-with open(path.join(here, 'README.md'), encoding='utf-8') as f:
-    long_description = f.read()
+long_description = pypandoc.convert_file('README.md', 'rst')
 
 setup(
     name='scriptorium',
-    version='2.0.0',
+    version='2.0.1',
     description='Multimarkdown and LaTeX framework for academic papers.',
     long_description=long_description,
     license='MIT',
@@ -19,7 +19,7 @@ setup(
     author_email='jasedit@gmail.com',
     url="https://github.com/jasedit/scriptorium",
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'Topic :: Text Processing :: Markup',
         'Topic :: Text Processing :: Filters',
