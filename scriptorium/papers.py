@@ -133,9 +133,9 @@ def create(paper_dir, template, force=False, use_git=True, config=None):
         metadata = ''
 
     for opt in config:
-        repl = re.compile('${0}'.format(opt[0].upper()))
-        repl.sub(opt[1], paper)
-        repl.sub(opt[1], metadata)
+        repl = re.compile(r'\${0}'.format(opt[0].upper()))
+        paper = repl.sub(opt[1], paper)
+        metadata = repl.sub(opt[1], metadata)
 
     #Regex to find variable names
     var_re = re.compile(r'\$[A-Z0-9]+')
