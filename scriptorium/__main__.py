@@ -4,6 +4,8 @@
 import argparse
 import shutil
 import sys
+import os
+import os.path
 
 import scriptorium
 
@@ -32,20 +34,32 @@ def info(args):
             sys.exit(2)
         print(template)
 
-def list_cmd(args):
+def template_cmd(args):
     """Prints out all installed templates."""
-    templates = scriptorium.all_templates(args.template_dir)
-    for template in templates:
-        print('{0}'.format(template))
+
+    if args.update:
+        scriptorium.update_template(args.update)
+
+    if args.list:
+        templates = scriptorium.all_templates(args.template_dir)
+        for template in templates:
+            print('{0}'.format(template))
+
+    if args.readme:
+        template = scriptorium.find_template(args.readme)
+        template_readme = os.path.join(template, 'README.md')
+        if template and os.path.exists(template_readme):
+            with open(template_readme, 'r') as readme:
+                print(readme.read())
+
+    if args.install:
+        scriptorium.install_template(args.install)
 
 def create(args):
     """Creates a new paper given flags."""
     if not scriptorium.create(args.output, args.template, force=args.force, config=args.config):
         sys.exit(3)
 
-def install_cmd(args):
-    """Installs a given template."""
-    scriptorium.install_template(args.url)
 
 def main():
     parser = argparse.ArgumentParser()
@@ -72,13 +86,13 @@ def main():
                             help='Flag to provide options for filling out variables in new papers, in the form key value')
     new_parser.set_defaults(func=create)
 
-    list_parser = subparsers.add_parser("list")
-    list_parser.add_argument("-t", "--template_dir", default=scriptorium.TEMPLATE_DIR, help="Overrides template directory used for listing templates")
-    list_parser.set_defaults(func=list_cmd)
-
-    install_parser = subparsers.add_parser('install')
-    install_parser.add_argument('url', help='URL containing templates to install')
-    install_parser.set_defaults(func=install_cmd)
+    template_parser = subparsers.add_parser("template")
+    template_parser.add_argument('-l', '--list', action='store_true', default=False, help='List available templates')
+    template_parser.add_argument('-u', '--update', default=None, help='Update the given template to the latest version')
+    template_parser.add_argument('-r', '--readme', help='Print README for the specified template')
+    template_parser.add_argument("-t", "--template_dir", default=None, help="Overrides template directory used for listing templates")
+    template_parser.add_argument('-i', '--install', help='Install repository at given URL in template directory')
+    template_parser.set_defaults(func=template_cmd)
 
     args = parser.parse_args()
 
