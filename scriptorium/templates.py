@@ -74,3 +74,21 @@ def update_template(template, template_dir=None, rev=None):
     except subprocess.CalledProcessError as e:
         raise IOError('Cannot update {0}'.format(template))
     os.chdir(old_cwd)
+
+def list_variables(template, template_dir=None):
+    """List variables a template offers for paper creation."""
+    template_dir = template_dir if template_dir else scriptorium.TEMPLATE_DIR
+
+    template_loc = find_template(template, template_dir)
+
+    var_re = re.compile(r'\$(?P<var>[A-Z0-9]+)')
+
+    files = [os.path.join(template_loc, 'frontmatter.mmd'),
+             os.path.join(template_loc, 'metadata.tex')
+            ]
+    variables = []
+    for test_file in files:
+        with open(test_file, 'r') as fp:
+            for match in re.finditer(var_re, fp.read()):
+                variables.append(match.group('var'))
+    return variables

@@ -51,6 +51,10 @@ def template_cmd(args):
     if args.install:
         scriptorium.install_template(args.install, args.template_dir)
 
+    if args.variables:
+        variables = scriptorium.list_variables(args.template_dir)
+        print('\n'.join(variables))
+
 def create(args):
     """Creates a new paper given flags."""
     if not scriptorium.create(args.output, args.template, force=args.force, config=args.config):
@@ -90,6 +94,8 @@ def main():
     template_parser.add_argument('-r', '--readme', help='Print README for the specified template')
     template_parser.add_argument("-t", "--template_dir", default=None, help="Overrides template directory used for listing templates")
     template_parser.add_argument('-i', '--install', help='Install repository at given URL in template directory')
+    template_parser.add_argument('-v', '--variables',
+                                 help='List variables available when using the new command')
     template_parser.set_defaults(func=template_cmd)
 
     args = parser.parse_args()
