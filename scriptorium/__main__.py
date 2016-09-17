@@ -35,21 +35,21 @@ def template_cmd(args):
     """Prints out all installed templates."""
 
     if args.update:
-        scriptorium.update_template(args.update)
+        scriptorium.update_template(args.update, args.template_dir)
 
     if args.list:
         templates = scriptorium.all_templates(args.template_dir)
         print('\n'.join(templates))
 
     if args.readme:
-        template = scriptorium.find_template(args.readme)
+        template = scriptorium.find_template(args.readme, args.template_dir)
         template_readme = os.path.join(template, 'README.md')
         if template and os.path.exists(template_readme):
             with open(template_readme, 'r') as readme:
                 print(readme.read())
 
     if args.install:
-        scriptorium.install_template(args.install)
+        scriptorium.install_template(args.install, args.template_dir)
 
 def create(args):
     """Creates a new paper given flags."""
