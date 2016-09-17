@@ -21,10 +21,7 @@ def info(args):
     fname = scriptorium.paper_root(args.paper)
 
     if not fname:
-        raise IOError('{0} does not contain a valid root document.'.format(args.paper))
-
-    if not fname:
-        print('Could not find the root of the paper.')
+        print('{0} does not contain a valid root document.'.format(args.paper))
         sys.exit(1)
 
     if args.template:
