@@ -39,8 +39,7 @@ def template_cmd(args):
 
     if args.list:
         templates = scriptorium.all_templates(args.template_dir)
-        for template in templates:
-            print('{0}'.format(template))
+        print('\n'.join(templates))
 
     if args.readme:
         template = scriptorium.find_template(args.readme)
