@@ -91,14 +91,6 @@ The implementation here provides relativey little in the way of actual code or n
 
 Since papers in development are generally not open-source, this framework pushes papers into other folders inside the papers directory. This way, any lab can keep their actual academic text in a private repository, while the templates and framework can be left open-source. Submodules are not used so that individual users can share a papers_base repository, while not necessarily sharing the same papers. Generally, version control repositories don't handle binary files (e.g. images) particularly well, so it is recommended to break up papers into more repositories to require less overhead storing history, as well as providing higher granularity in sharing papers.
 
-### Paper Creation
-
-This repository provides a base example paper for creating new papers using this framework. To create a new paper, you can execute `./bin/new_paper.sh -o dir -t template`, where `dir` and `template_name` are the name of the subfolder in papers to save the paper in, and the name of the folder inside templates containing the template to use for this paper, respectively. Note that the paper location should include the path into the paper repository, and the path will be created as specified. As an example, a new paper named `my_conference_paper` inside the `my_papers` subdirectory of papers using the [IEEE conference template](https://github.com/jasedit/simple_templates) can be created by invoking:
-```
-./bin/new_paper.sh -o my_papers/my_conference_paper -t ieeetran
-```
-which will create a skeleton paper in `papers/my_papers/my_conference_paper`.
-
 ### Paper Metadata
 
 In order to integrate the template system, the MultiMarkdown metadata header requires a few important statements. Consider an example header, as shown below.
