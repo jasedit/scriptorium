@@ -66,34 +66,42 @@ def main():
     subparsers = parser.add_subparsers()
 
     # Build Command
-    build_parser = subparsers.add_parser("build")
-    build_parser.add_argument("paper", default=".", nargs='?', help="Directory containing paper to build")
+    build_parser = subparsers.add_parser('build')
+    build_parser.add_argument('paper', default='.', nargs='?',
+                              help='Directory containing paper to build')
     build_parser.add_argument('-o', '--output', help='Destination of PDF')
-    build_parser.add_argument('-s', '--shell-escape', action='store_true', default=False, help='Flag indicating shell-escape should be used')
+    build_parser.add_argument('-s', '--shell-escape', action='store_true', default=False,
+                              help='Flag indicating shell-escape should be used')
     build_parser.set_defaults(func=build_cmd)
 
     # Info Command
-    info_parser = subparsers.add_parser("info")
-    info_parser.add_argument("paper", default=".", help="Directory containing paper to make")
-    info_parser.add_argument('-t', '--template', action="store_true", help="Flag to extract template")
+    info_parser = subparsers.add_parser('info')
+    info_parser.add_argument('paper', default='.', help='Directory containing paper to make')
+    info_parser.add_argument('-t', '--template', action='store_true',
+                             help='Flag to extract template')
     info_parser.set_defaults(func=info)
 
     # New Command
     new_parser = subparsers.add_parser("new")
     new_parser.add_argument("output", help="Directory to create paper in.")
-    new_parser.add_argument("-f", "--force", action="store_true", help="Overwrite files in paper creation.")
+    new_parser.add_argument("-f", "--force", action="store_true",
+                            help="Overwrite files in paper creation.")
     new_parser.add_argument("-t", "--template", help="Template to use in paper.")
     new_parser.add_argument("-c", "--config", nargs=2, action='append', default=[],
-                            help='Flag to provide options for filling out variables in new papers, in the form key value')
+                            help='Provide "key" "value" to replace in default paper.')
     new_parser.set_defaults(func=create)
 
     # Template Command
     template_parser = subparsers.add_parser("template")
-    template_parser.add_argument('-l', '--list', action='store_true', default=False, help='List available templates')
-    template_parser.add_argument('-u', '--update', default=None, help='Update the given template to the latest version')
+    template_parser.add_argument('-l', '--list', action='store_true', default=False,
+                                 help='List available templates')
+    template_parser.add_argument('-u', '--update', default=None,
+                                 help='Update the given template to the latest version')
     template_parser.add_argument('-r', '--readme', help='Print README for the specified template')
-    template_parser.add_argument("-t", "--template_dir", default=None, help="Overrides template directory used for listing templates")
-    template_parser.add_argument('-i', '--install', help='Install repository at given URL in template directory')
+    template_parser.add_argument('-d', '--template_dir', default=None,
+                                 help='Overrides template directory used for listing templates')
+    template_parser.add_argument('-i', '--install',
+                                 help='Install repository at given URL in template directory')
     template_parser.add_argument('-v', '--variables',
                                  help='List variables available when using the new command')
     template_parser.set_defaults(func=template_cmd)
