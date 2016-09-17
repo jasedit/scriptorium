@@ -58,7 +58,7 @@ def install_template(url, template_dir=None, rev=None):
     if rev and treeish_re.match(rev):
         repo_checkout(template_dest, rev)
 
-def update_template(template, template_dir=None, rev=None, max_depth=100):
+def update_template(template, template_dir=None, rev=None):
     """Updates the given template repository."""
     template_loc = find_template(template, template_dir)
 
