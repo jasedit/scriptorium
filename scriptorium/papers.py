@@ -136,16 +136,16 @@ def create(paper_dir, template, force=False, use_git=True, config=None):
     #Create frontmatter section for paper
     front_file = os.path.join(template_dir, 'frontmatter.mmd')
     if os.path.exists(front_file):
-        with open(front_file, 'r') as fp:
-            paper = fp.read()
+        with open(front_file, 'r') as paper_fp:
+            paper = paper_fp.read()
     else:
         paper = ''
 
     #Create metadata section
     metaex_file = os.path.join(template_dir, 'metadata.tex')
     if os.path.exists(metaex_file):
-        with open(metaex_file, 'r') as fp:
-            metadata = fp.read()
+        with open(metaex_file, 'r') as meta_fp:
+            metadata = meta_fp.read()
     else:
         metadata = ''
 
@@ -157,13 +157,13 @@ def create(paper_dir, template, force=False, use_git=True, config=None):
     #Regex to find variable names
     var_re = re.compile(r'\$[A-Z0-9]+')
     paper_file = os.path.join(paper_dir, 'paper.mmd')
-    with open(paper_file, 'w') as fp:
-        fp.write(paper)
+    with open(paper_file, 'w') as paper_fp:
+        paper_fp.write(paper)
         #Only add a newline if previous material exists
         if paper:
-            fp.write('\n')
-        fp.write('latex input: {0}/setup.tex\n'.format(template))
-        fp.write('latex footer: {0}/footer.tex\n\n'.format(template))
+            paper_fp.write('\n')
+        paper_fp.write('latex input: {0}/setup.tex\n'.format(template))
+        paper_fp.write('latex footer: {0}/footer.tex\n\n'.format(template))
 
     unset_vars = set([ii.group(0) for ii in var_re.finditer(paper)])
 
