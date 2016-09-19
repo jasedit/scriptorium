@@ -114,7 +114,8 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
     return os.path.join(paper, '{0}.pdf'.format(bname))
 
 def create(paper_dir, template, force=False, use_git=True, config=None):
-    """Create folder with paper skeleton."""
+    """Create folder with paper skeleton.
+    Returns a list of unpopulated variables if successfully created."""
 
     config = config if config else []
     if os.path.exists(paper_dir) and not force:
@@ -164,14 +165,13 @@ def create(paper_dir, template, force=False, use_git=True, config=None):
         fp.write('latex input: {0}/setup.tex\n'.format(template))
         fp.write('latex footer: {0}/footer.tex\n\n'.format(template))
 
-    for ii in var_re.finditer(paper):
-        print('{0} contains unpopulated variable {1}'.format(paper_file, ii.group(0)))
+    unset_vars = set([ii.group(0) for ii in var_re.finditer(paper)])
 
     if metadata:
         metadata_file = os.path.join(paper_dir, 'metadata.tex')
-        with open(metadata_file, 'w') as fp:
-            fp.write(metadata)
-        for mtch in var_re.finditer(metadata):
-            print('{0} contains unpopulated variable {1}'.format(metadata_file, mtch.group(0)))
+        with open(metadata_file, 'w') as meta_fp:
+            meta_fp.write(metadata)
+        for match in var_re.finditer(metadata):
+            unset_vars += match.group(0)
 
-    return True
+    return unset_vars
