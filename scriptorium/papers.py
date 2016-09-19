@@ -119,13 +119,11 @@ def create(paper_dir, template, force=False, use_git=True, config=None):
 
     config = config if config else []
     if os.path.exists(paper_dir) and not force:
-        print('{0} exists, will not overwrite. Use -f to force creation.'.format(paper_dir))
-        return False
+        raise IOError('{0} exists'.format(paper_dir))
     template_dir = scriptorium.find_template(template, scriptorium.TEMPLATE_DIR)
 
     if not template_dir:
-        print('{0} is not an installed template.'.format(template))
-        return False
+        raise ValueError('{0} is not an installed template.'.format(template))
 
     os.makedirs(paper_dir)
     if use_git:
