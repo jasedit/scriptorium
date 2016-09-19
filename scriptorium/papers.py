@@ -155,7 +155,7 @@ def create(paper_dir, template, force=False, use_git=True, config=None):
         metadata = repl.sub(opt[1], metadata)
 
     #Regex to find variable names
-    var_re = re.compile(r'\$[A-Z0-9]+')
+    var_re = re.compile(r'\$[A-Z0-9_\.\-]+')
     paper_file = os.path.join(paper_dir, 'paper.mmd')
     with open(paper_file, 'w') as paper_fp:
         paper_fp.write(paper)
