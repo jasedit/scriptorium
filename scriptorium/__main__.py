@@ -60,6 +60,13 @@ def create(args):
     if not scriptorium.create(args.output, args.template, force=args.force, config=args.config):
         sys.exit(3)
 
+def doctor_cmd(args):
+
+    missing_binaries = scriptorium.missing_binaries()
+    if missing_binaries:
+        print('Missing binaries:\n')
+        print('\n'.join(missing_binaries))
+
 def main():
     parser = argparse.ArgumentParser()
 
@@ -105,6 +112,9 @@ def main():
     template_parser.add_argument('-v', '--variables',
                                  help='List variables available when using the new command')
     template_parser.set_defaults(func=template_cmd)
+
+    doctor_parser = subparsers.add_parser('doctor')
+    doctor_parser.set_defaults(func=doctor_cmd)
 
     args = parser.parse_args()
 
