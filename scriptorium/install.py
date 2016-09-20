@@ -6,7 +6,11 @@ import os
 import platform
 from collections import defaultdict
 
-REQUIRED_BINARIES = ['git', 'pdflatex', 'multimarkdown', 'biber']
+REQUIRED_PACKAGES = {
+  'git': ['git'],
+  'latex': ['pdflatex', 'biber'],
+  'multimarkdown': ['multimarkdown']
+}
 
 SPLIT_TOKENS = {
     'Windows' : ';',
@@ -16,24 +20,43 @@ SPLIT_TOKENS = {
 
 BINARY_EXT = defaultdict(str, [('Windows', '.exe')])
 
-def find_binaries():
+def required_binaries():
+    """Return flat list of all binaries"""
+    all_binaries = []
+    for binaries in REQUIRED_BINARIES.values():
+        all_binaries += binaries
+
+    return all_binaries
+
+def find_binaries(binaries):
     """Checks that all the required tools are installed."""
-    open_binaries = set(REQUIRED_BINARIES)
     found_binaries = set()
 
     system = platform.system()
-    for path in os.environ['PATH'].split(SPLIT_TOKENS[system]):
-        new_binaries = set()
-        for binary in open_binaries:
+    for binary in binaries:
+        for path in os.environ['PATH'].split(SPLIT_TOKENS[system]):
             binary_path = os.path.join(path, binary + BINARY_EXT[system])
             #Test if path is an executable file
             if os.path.isfile(binary_path) and os.access(binary_path, os.X_OK):
-                new_binaries.add(binary)
-        open_binaries -= new_binaries
-        found_binaries |= new_binaries
+                found_binaries.add(binary)
+                break
 
     return found_binaries
 
-def missing_binaries():
+def find_missing_packages():
+    missing_packages = {}
+    for package, binaries in REQUIRED_PACKAGES.items():
+        if not find_binaries(binaries):
+          if package not in missing_packages:
+              missing_packages[package] = []
+          missing_packages[package].append(package)
+          continue
+    return missing_packages
+
+def find_missing_binaries():
     """Return list of missing binaries."""
-    return set(REQUIRED_BINARIES) - find_binaries()
+    missing_binaries = []
+    missing_packages = find_missing_packages()
+    for package, binaries in missing_packages:
+        missing_binaries += binaries
+    return missing_binaries
