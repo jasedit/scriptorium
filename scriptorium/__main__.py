@@ -67,6 +67,16 @@ def doctor_cmd(args):
         for package, binaries in missing_packages:
             print('Missing package {0}\n'.format(package))
 
+def config_cmd(args):
+    """Command to access configuration values."""
+    if args.list:
+        print('TEMPLATE_DIR = {0}'.format(scriptorium.TEMPLATE_DIR))
+    elif len(args.value) == 1:
+        print(getattr(scriptorium, args.value[0]))
+    elif len(args.value) == 2:
+        setattr(scriptorium, args.value[0], args.value[1])
+        scriptorium.save_config()
+
 def main():
     parser = argparse.ArgumentParser()
 
@@ -116,6 +126,11 @@ def main():
     doctor_parser = subparsers.add_parser('doctor')
     doctor_parser.set_defaults(func=doctor_cmd)
 
+    config_parser = subparsers.add_parser('config')
+    config_parser.add_argument('-l', '--list', action='store_true', help='List available configuration options and current vaules')
+    config_parser.add_argument('value', nargs='*', help='Access configuration value')
+    config_parser.set_defaults(func=config_cmd)
+
     args = parser.parse_args()
 
     if 'func' in args:
@@ -124,4 +139,5 @@ def main():
         parser.print_help()
 
 if __name__ == '__main__':
+    # Only save configuration with main
     main()
