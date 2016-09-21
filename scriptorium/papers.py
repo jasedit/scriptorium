@@ -83,7 +83,7 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
         pdf_cmd.insert(-2, '-include-directory={0}'.format(template_loc))
 
     if use_shell_escape:
-      pdf_cmd.insert(1, '-shell-escape')
+        pdf_cmd.insert(1, '-shell-escape')
     try:
         subprocess.check_output(pdf_cmd, env=new_env, universal_newlines=True).encode('utf-8')
     except subprocess.CalledProcessError as exc:
