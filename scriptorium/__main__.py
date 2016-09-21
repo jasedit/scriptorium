@@ -123,9 +123,11 @@ def main():
                                  help='List variables available when using the new command')
     template_parser.set_defaults(func=template_cmd)
 
+    # Doctor Command
     doctor_parser = subparsers.add_parser('doctor')
     doctor_parser.set_defaults(func=doctor_cmd)
 
+    # Config Command
     config_parser = subparsers.add_parser('config')
     config_parser.add_argument('-l', '--list', action='store_true', help='List available configuration options and current vaules')
     config_parser.add_argument('value', nargs='*', help='Access configuration value')
