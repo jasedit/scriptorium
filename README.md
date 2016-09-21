@@ -57,6 +57,16 @@ Check that all external dependencies are installed and detected correctly, by ve
 scriptorium doctor
 ```
 
+You can check where templates will be installed:
+```
+scriptorium config TEMPLATE_DIR
+```
+
+or change the directory:
+```
+scriptorium config TEMPLATE_DIR ~/.scriptorium/templates
+```
+
 Install some example [templates](https://github.com/jasedit/simple_templates):
 ```
 scriptorium template -i https://github.com/jasedit/simple_templates
