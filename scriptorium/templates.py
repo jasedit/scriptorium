@@ -27,7 +27,7 @@ def find_template(tname, template_dir=None):
     for dirpath, _, _ in os.walk(template_dir):
         if os.path.basename(dirpath) == tname:
             return os.path.join(template_dir, dirpath)
-    return None
+    raise IOError('{0} cannot be found in {1}'.format(tname, template_dir))
 
 def repo_checkout(repo, rev):
     """Checks out a specific revision of the repository."""
@@ -41,45 +41,55 @@ def install_template(url, template_dir=None, rev=None):
     url_re = re.compile(r'((git|ssh|http(s)?)(:(//)?)|([\w\d]*@))?(?P<url>[\w\.]+).*\/(?P<dir>[\w\-]+)(\.git)(/)?')
     match = url_re.search(url)
     if not match:
-        print('{0} is not a valid git URL'.format(url))
-        return False
+        raise ValueError('{0} is not a valid git URL'.format(url))
     template = match.group('dir')
     template_dir = template_dir if template_dir else scriptorium.TEMPLATE_DIR
     template_dest = os.path.join(template_dir, template)
 
     if os.path.exists(template_dest):
-        print('{0} already exists, cannot install on top'.format(template))
-        return False
+        raise IOError('{0} already exists, cannot install on top'.format(template))
 
     try:
         subprocess.check_output(['git', 'clone', url, template_dest], universal_newlines=True)
     except subprocess.CalledProcessError as exc:
-        print('\n'.join(['Could not clone template:', exc.output]))
+        raise IOError('\n'.join(['Could not clone template:', exc.output]))
 
     treeish_re = re.compile(r'[A-Za-z0-9_\-\.]+')
     if rev and treeish_re.match(rev):
         repo_checkout(template_dest, rev)
 
-    return True
-
-def update_template(template, template_dir=None, rev=None, max_depth=100):
+def update_template(template, template_dir=None, rev=None):
     """Updates the given template repository."""
     template_loc = find_template(template, template_dir)
-    if not template_loc:
-        print('Cannot find template {0}'.format(template))
-        return False
 
     old_cwd = os.getcwd()
     os.chdir(template_loc)
     try:
         if not rev:
-            rev = subprocess.check_output(['git', 'symbolic-ref', '--short', 'HEAD'], universal_newlines=True)
+            git_cmd = ['git', 'symbolic-ref', '--short', 'HEAD']
+            rev = subprocess.check_output(git_cmd, universal_newlines=True)
             rev = rev.rstrip()
         treeish_re = re.compile(r'[A-Za-z0-9_\-\.]+')
         if treeish_re.match(rev):
             subprocess.check_call(['git', 'pull', 'origin', rev])
-    except subprocess.CalledProcessError as e:
-        print('Update failed on {0}'.format(template))
-        return False
+    except subprocess.CalledProcessError as exc:
+        raise IOError('Cannot update {0}:\n {1}'.format(template, exc.output))
     os.chdir(old_cwd)
-    return True
+
+def list_variables(template, template_dir=None):
+    """List variables a template offers for paper creation."""
+    template_dir = template_dir if template_dir else scriptorium.TEMPLATE_DIR
+
+    template_loc = find_template(template, template_dir)
+
+    var_re = re.compile(r'\$(?P<var>[A-Z0-9]+)')
+
+    files = [os.path.join(template_loc, 'frontmatter.mmd'),
+             os.path.join(template_loc, 'metadata.tex')
+            ]
+    variables = []
+    for test_file in files:
+        with open(test_file, 'r') as fp:
+            for match in re.finditer(var_re, fp.read()):
+                variables.append(match.group('var'))
+    return variables

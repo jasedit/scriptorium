@@ -77,5 +77,3 @@ case $os in
   CYGWIN_NT*) installCygwin;;
   *) echo "$os is not currently supported. Please add support and submit a pull request, or file an issue."; exit 2;;
 esac
-
-$dir/setup_templates.sh

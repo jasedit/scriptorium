@@ -50,7 +50,7 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
         raise IOError("{0} does not contain a file that appears to be the root of the paper.".format(paper))
 
     all_mmd = glob.glob('*.mmd')
-    default_mmd = subprocess.check_output(['multimarkdown', '-x', fname], universal_newlines=True).decode('utf-8')
+    default_mmd = subprocess.check_output(['multimarkdown', '-x', fname], universal_newlines=True).encode('utf-8')
     default_mmd = default_mmd.splitlines()
     for mmd in set(all_mmd) - set(default_mmd):
         bname = os.path.basename(mmd).split('.')[0]
@@ -73,10 +73,8 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
 
     #Need to set up environment here
     new_env = dict(os.environ)
-    texinputs = './:{0}'.format(template_loc + '/.//')
-    if 'TEXINPUTS' in new_env:
-      texinputs = '{0}:{1}'.format(texinputs, new_env['TEXINPUTS'])
-    texinputs = texinputs + ':'
+    old_inputs = new_env.get('TEXINPUTS')
+    texinputs = './:{0}:{1}'.format(template_loc + '/.//', old_inputs + ':' if old_inputs else '')
     new_env['TEXINPUTS'] = texinputs
 
     pdf_cmd = ['pdflatex', '-halt-on-error', '-interaction=nonstopmode', tname]
@@ -85,27 +83,29 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
         pdf_cmd.insert(-2, '-include-directory={0}'.format(template_loc))
 
     if use_shell_escape:
-      pdf_cmd.insert(1, '-shell-escape')
+        pdf_cmd.insert(1, '-shell-escape')
     try:
-        subprocess.check_output(pdf_cmd, env=new_env, universal_newlines=True).decode('utf-8')
-    except subprocess.CalledProcessError as e:
-        print('\n'.join(["LaTeX conversion failed with the following output:", e.output]))
-        return None
+        subprocess.check_output(pdf_cmd, env=new_env, universal_newlines=True).encode('utf-8')
+    except subprocess.CalledProcessError as exc:
+        raise IOError(exc.output)
 
-    auxname = '{0}.aux'.format(bname)
-    #Check if bibtex is defined in the frontmatter
-    bibtex_re = re.compile(r'^bibtex:')
-    if bibtex_re.search(open(fname).read()):
-        biber_re = re.compile(r'\\bibdata')
-        full = open('paper.aux').read()
-        with open(os.devnull, 'w') as null:
-            if biber_re.search(full):
-                subprocess.check_call(['bibtex', auxname], stdout=null, stderr=null)
-            else:
-                subprocess.check_call(['biber', bname], stdout=null, stderr=null)
+    try:
+        auxname = '{0}.aux'.format(bname)
+        #Check if bibtex is defined in the frontmatter
+        bibtex_re = re.compile(r'^bibtex:', re.MULTILINE)
+        with open(fname, 'r') as paper_fp:
+            if bibtex_re.search(paper_fp.read()):
+                biber_re = re.compile(r'\\bibdata', re.MULTILINE)
+                full = open('paper.aux').read()
+                if biber_re.search(full):
+                    subprocess.check_output(['bibtex', auxname], universal_newlines=True)
+                else:
+                    subprocess.check_output(['biber', bname], universal_newlines=True)
 
-            subprocess.check_call(pdf_cmd, env=new_env, stdout=null, stderr=null)
-            subprocess.check_call(pdf_cmd, env=new_env, stdout=null, stderr=null)
+                    subprocess.check_output(pdf_cmd, env=new_env, universal_newlines=True)
+                    subprocess.check_output(pdf_cmd, env=new_env, universal_newlines=True)
+    except subprocess.CalledProcessError as exc:
+        raise IOError(exc.output)
 
     # Revert working directory
     if os.getcwd() != old_cwd:
@@ -114,17 +114,16 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
     return os.path.join(paper, '{0}.pdf'.format(bname))
 
 def create(paper_dir, template, force=False, use_git=True, config=None):
-    """Create folder with paper skeleton."""
+    """Create folder with paper skeleton.
+    Returns a list of unpopulated variables if successfully created."""
 
     config = config if config else []
     if os.path.exists(paper_dir) and not force:
-        print('{0} exists, will not overwrite. Use -f to force creation.'.format(paper_dir))
-        return False
+        raise IOError('{0} exists'.format(paper_dir))
     template_dir = scriptorium.find_template(template, scriptorium.TEMPLATE_DIR)
 
     if not template_dir:
-        print('{0} is not an installed template.'.format(template))
-        return False
+        raise ValueError('{0} is not an installed template.'.format(template))
 
     os.makedirs(paper_dir)
     if use_git:
@@ -135,16 +134,16 @@ def create(paper_dir, template, force=False, use_git=True, config=None):
     #Create frontmatter section for paper
     front_file = os.path.join(template_dir, 'frontmatter.mmd')
     if os.path.exists(front_file):
-        with open(front_file, 'r') as fp:
-            paper = fp.read()
+        with open(front_file, 'r') as paper_fp:
+            paper = paper_fp.read()
     else:
         paper = ''
 
     #Create metadata section
     metaex_file = os.path.join(template_dir, 'metadata.tex')
     if os.path.exists(metaex_file):
-        with open(metaex_file, 'r') as fp:
-            metadata = fp.read()
+        with open(metaex_file, 'r') as meta_fp:
+            metadata = meta_fp.read()
     else:
         metadata = ''
 
@@ -154,24 +153,23 @@ def create(paper_dir, template, force=False, use_git=True, config=None):
         metadata = repl.sub(opt[1], metadata)
 
     #Regex to find variable names
-    var_re = re.compile(r'\$[A-Z0-9]+')
+    var_re = re.compile(r'\$[A-Z0-9_\.\-]+')
     paper_file = os.path.join(paper_dir, 'paper.mmd')
-    with open(paper_file, 'w') as fp:
-        fp.write(paper)
+    with open(paper_file, 'w') as paper_fp:
+        paper_fp.write(paper)
         #Only add a newline if previous material exists
         if paper:
-            fp.write('\n')
-        fp.write('latex input: {0}/setup.tex\n'.format(template))
-        fp.write('latex footer: {0}/footer.tex\n\n'.format(template))
+            paper_fp.write('\n')
+        paper_fp.write('latex input: {0}/setup.tex\n'.format(template))
+        paper_fp.write('latex footer: {0}/footer.tex\n\n'.format(template))
 
-    for ii in var_re.finditer(paper):
-        print('{0} contains unpopulated variable {1}'.format(paper_file, ii.group(0)))
+    unset_vars = set([ii.group(0) for ii in var_re.finditer(paper)])
 
     if metadata:
         metadata_file = os.path.join(paper_dir, 'metadata.tex')
-        with open(metadata_file, 'w') as fp:
-            fp.write(metadata)
-        for mtch in var_re.finditer(metadata):
-            print('{0} contains unpopulated variable {1}'.format(metadata_file, mtch.group(0)))
+        with open(metadata_file, 'w') as meta_fp:
+            meta_fp.write(metadata)
+        for match in var_re.finditer(metadata):
+            unset_vars += match.group(0)
 
-    return True
+    return unset_vars

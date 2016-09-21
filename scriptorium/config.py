@@ -3,7 +3,6 @@
 
 import os
 import os.path
-import atexit
 import shutil
 import yaml
 
@@ -36,5 +35,3 @@ def save_config():
     with open(_DEFAULT_CFG, 'w') as cfg_fp:
         cfg = {'TEMPLATE_DIR': scriptorium.TEMPLATE_DIR}
         yaml.dump(cfg, cfg_fp)
-
-atexit.register(save_config)

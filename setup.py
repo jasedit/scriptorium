@@ -11,7 +11,7 @@ long_description = pypandoc.convert_file('README.md', 'rst')
 
 setup(
     name='scriptorium',
-    version='2.0.1',
+    version='2.1.0',
     description='Multimarkdown and LaTeX framework for academic papers.',
     long_description=long_description,
     license='MIT',
@@ -32,5 +32,6 @@ setup(
     entry_points = {
         'console_scripts': ['scriptorium = scriptorium:main'],
     },
-    package_data={'scriptorium': ['data/gitignore']}
+    package_data={'scriptorium': ['data/gitignore']},
+    install_requires=['pyyaml']
     )
