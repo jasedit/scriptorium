@@ -73,7 +73,7 @@ def update_template(template, template_dir=None, rev=None):
         if treeish_re.match(rev):
             subprocess.check_call(['git', 'pull', 'origin', rev])
     except subprocess.CalledProcessError as exc:
-        raise IOError('Cannot update {0}'.format(template))
+        raise IOError('Cannot update {0}:\n {1}'.format(template, exc.output))
     os.chdir(old_cwd)
 
 def list_variables(template, template_dir=None):
