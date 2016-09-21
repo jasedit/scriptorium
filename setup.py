@@ -32,5 +32,6 @@ setup(
     entry_points = {
         'console_scripts': ['scriptorium = scriptorium:main'],
     },
-    package_data={'scriptorium': ['data/gitignore']}
+    package_data={'scriptorium': ['data/gitignore']},
+    install_requires=['pyyaml']
     )
