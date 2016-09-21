@@ -15,7 +15,7 @@ REQUIRED_PACKAGES = {
 SPLIT_TOKENS = {
     'Windows' : ';',
     'Darwin': ':',
-    'linux': ':'
+    'Linux': ':'
 }
 
 BINARY_EXT = defaultdict(str, [('Windows', '.exe')])
