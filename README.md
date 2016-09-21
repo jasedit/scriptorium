@@ -52,6 +52,11 @@ These instructions provide a method to configure Scriptorium to work on Windows 
 
 Scriptorium can be invoked directly from the command line using the name `scriptorium`.
 
+Check that all external dependencies are installed and detected correctly, by veryifying the following command returns nothing:
+```
+scriptorium doctor
+```
+
 Install some example [templates](https://github.com/jasedit/simple_templates):
 ```
 scriptorium template -i https://github.com/jasedit/simple_templates
