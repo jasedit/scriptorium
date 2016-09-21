@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 """Installation and doctor oriented commands."""
 
-import subprocess
 import os
 import platform
 from collections import defaultdict
@@ -20,14 +19,6 @@ SPLIT_TOKENS = {
 
 BINARY_EXT = defaultdict(str, [('Windows', '.exe')])
 
-def required_binaries():
-    """Return flat list of all binaries"""
-    all_binaries = []
-    for binaries in REQUIRED_BINARIES.values():
-        all_binaries += binaries
-
-    return all_binaries
-
 def find_binaries(binaries):
     """Checks that all the required tools are installed."""
     found_binaries = set()
@@ -44,19 +35,22 @@ def find_binaries(binaries):
     return found_binaries
 
 def find_missing_packages():
+    """Tests for existence of external binaries,
+    returning dict of packages to binaries found missing.
+    """
     missing_packages = {}
     for package, binaries in REQUIRED_PACKAGES.items():
         if not find_binaries(binaries):
-          if package not in missing_packages:
-              missing_packages[package] = []
-          missing_packages[package].append(package)
-          continue
+            if package not in missing_packages:
+                missing_packages[package] = []
+            missing_packages[package].append(package)
+            continue
     return missing_packages
 
 def find_missing_binaries():
     """Return list of missing binaries."""
     missing_binaries = []
     missing_packages = find_missing_packages()
-    for package, binaries in missing_packages:
+    for binaries in missing_packages.values():
         missing_binaries += binaries
     return missing_binaries
