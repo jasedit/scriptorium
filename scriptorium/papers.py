@@ -94,18 +94,18 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
     try:
         auxname = '{0}.aux'.format(bname)
         #Check if bibtex is defined in the frontmatter
-        bibtex_re = re.compile(r'^bibtex:')
-        if bibtex_re.search(open(fname).read()):
-            biber_re = re.compile(r'\\bibdata')
-            full = open('paper.aux').read()
-            with open(os.devnull, 'w') as null:
+        bibtex_re = re.compile(r'^bibtex:', re.MULTILINE)
+        with open(fname, 'r') as paper_fp:
+            if bibtex_re.search(paper_fp.read()):
+                biber_re = re.compile(r'\\bibdata', re.MULTILINE)
+                full = open('paper.aux').read()
                 if biber_re.search(full):
-                    subprocess.check_output(['bibtex', auxname], stdout=null, stderr=null)
+                    subprocess.check_output(['bibtex', auxname], universal_newlines=True)
                 else:
-                    subprocess.check_output(['biber', bname], stdout=null, stderr=null)
+                    subprocess.check_output(['biber', bname], universal_newlines=True)
 
-                subprocess.check_call(pdf_cmd, env=new_env, stdout=null, stderr=null)
-                subprocess.check_call(pdf_cmd, env=new_env, stdout=null, stderr=null)
+                    subprocess.check_output(pdf_cmd, env=new_env, universal_newlines=True)
+                    subprocess.check_output(pdf_cmd, env=new_env, universal_newlines=True)
     except subprocess.CalledProcessError as exc:
         raise IOError(exc.output)
 
