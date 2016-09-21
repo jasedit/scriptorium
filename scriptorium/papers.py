@@ -73,10 +73,8 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
 
     #Need to set up environment here
     new_env = dict(os.environ)
-    texinputs = './:{0}'.format(template_loc + '/.//')
-    if 'TEXINPUTS' in new_env:
-      texinputs = '{0}:{1}'.format(texinputs, new_env['TEXINPUTS'])
-    texinputs = texinputs + ':'
+    old_inputs = new_env.get('TEXINPUTS')
+    texinputs = './:{0}:{1}'.format(template_loc + '/.//', old_inputs + ':' if old_inputs else '')
     new_env['TEXINPUTS'] = texinputs
 
     pdf_cmd = ['pdflatex', '-halt-on-error', '-interaction=nonstopmode', tname]
