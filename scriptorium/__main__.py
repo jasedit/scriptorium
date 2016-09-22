@@ -51,7 +51,7 @@ def template_cmd(args):
         scriptorium.install_template(args.install, args.template_dir)
 
     if args.variables:
-        variables = scriptorium.list_variables(args.template_dir)
+        variables = scriptorium.list_variables(args.variables, args.template_dir)
         print('\n'.join(variables))
 
 def create(args):
