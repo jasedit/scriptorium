@@ -63,7 +63,7 @@ def doctor_cmd(args):
     """Command for checking the health of scriptorium."""
     missing_packages = scriptorium.find_missing_packages()
     if missing_packages:
-        for package, binaries in missing_packages:
+        for package in missing_packages:
             print('Missing package {0}\n'.format(package))
 
 def config_cmd(args):
