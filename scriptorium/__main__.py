@@ -112,7 +112,7 @@ def main():
     template_parser = subparsers.add_parser("template")
     template_parser.add_argument('-l', '--list', action='store_true', default=False,
                                  help='List available templates')
-    template_parser.add_argument('-u', '--update', default=None,
+    template_parser.add_argument('-u', '--update',
                                  help='Update the given template to the latest version')
     template_parser.add_argument('-r', '--readme', help='Print README for the specified template')
     template_parser.add_argument('-d', '--template_dir', default=None,
@@ -129,7 +129,8 @@ def main():
 
     # Config Command
     config_parser = subparsers.add_parser('config')
-    config_parser.add_argument('-l', '--list', action='store_true', help='List available configuration options and current vaules')
+    config_parser.add_argument('-l', '--list', action='store_true',
+                               help='List available configuration options and current vaules')
     config_parser.add_argument('value', nargs='*', help='Access configuration value')
     config_parser.set_defaults(func=config_cmd)
 
