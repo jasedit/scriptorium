@@ -29,4 +29,6 @@ paper.aux
 *.blg
 *.lof
 *.lot
+*.swp
+*.swo
 *~
