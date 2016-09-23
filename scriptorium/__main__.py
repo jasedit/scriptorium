@@ -33,7 +33,6 @@ def info(args):
 
 def template_cmd(args):
     """Prints out all installed templates."""
-
     if args.update:
         scriptorium.update_template(args.update, args.template_dir)
 
@@ -78,6 +77,7 @@ def config_cmd(args):
         scriptorium.save_config()
 
 def main():
+    """Main function for executing scriptorium as a standalone script."""
     parser = argparse.ArgumentParser()
 
     subparsers = parser.add_subparsers()
