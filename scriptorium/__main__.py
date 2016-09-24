@@ -51,7 +51,7 @@ def template_cmd(args):
         scriptorium.install_template(args.install, args.template_dir)
 
     if args.variables:
-        variables = scriptorium.list_variables(args.template_dir)
+        variables = scriptorium.list_variables(args.variables, args.template_dir)
         print('\n'.join(variables))
 
 def create(args):
@@ -63,7 +63,7 @@ def doctor_cmd(args):
     """Command for checking the health of scriptorium."""
     missing_packages = scriptorium.find_missing_packages()
     if missing_packages:
-        for package, binaries in missing_packages:
+        for package in missing_packages:
             print('Missing package {0}\n'.format(package))
 
 def config_cmd(args):
@@ -112,7 +112,7 @@ def main():
     template_parser = subparsers.add_parser("template")
     template_parser.add_argument('-l', '--list', action='store_true', default=False,
                                  help='List available templates')
-    template_parser.add_argument('-u', '--update', default=None,
+    template_parser.add_argument('-u', '--update',
                                  help='Update the given template to the latest version')
     template_parser.add_argument('-r', '--readme', help='Print README for the specified template')
     template_parser.add_argument('-d', '--template_dir', default=None,
@@ -129,7 +129,8 @@ def main():
 
     # Config Command
     config_parser = subparsers.add_parser('config')
-    config_parser.add_argument('-l', '--list', action='store_true', help='List available configuration options and current vaules')
+    config_parser.add_argument('-l', '--list', action='store_true',
+                               help='List available configuration options and current vaules')
     config_parser.add_argument('value', nargs='*', help='Access configuration value')
     config_parser.set_defaults(func=config_cmd)
 
