@@ -1,0 +1,6 @@
+ignore-paths:
+  - scriptorium/__init__.py
+python-targets:
+  - 2
+  - 3
+doc-warnings: true
