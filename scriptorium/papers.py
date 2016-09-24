@@ -12,7 +12,6 @@ import scriptorium
 
 def paper_root(dname):
     """Given a directory, finds the root document for the paper."""
-
     root_doc = None
     for fname in glob.glob(os.path.join(dname, '*.mmd')):
         #Metadata only exists in the root document
@@ -25,7 +24,6 @@ def paper_root(dname):
 
 def get_template(fname):
     """Attempts to find the template of a paper in a given file."""
-
     output = subprocess.check_output(['multimarkdown', '-e', 'latexfooter', fname]).decode('utf-8')
     template_re = re.compile(r'(?P<template>[a-zA-Z0-9._]*)\/footer.tex')
 
@@ -35,7 +33,6 @@ def get_template(fname):
 
 def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
     """Build paper in the given directory, returning the PDF filename if successful."""
-
     template_dir = template_dir if template_dir else scriptorium.TEMPLATE_DIR
     paper = os.path.abspath(paper_dir)
     if not os.path.isdir(paper):
