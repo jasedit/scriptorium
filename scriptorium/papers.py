@@ -126,9 +126,9 @@ def create(paper_dir, template, force=False, use_git=True, config=None):
     template_dir = scriptorium.find_template(template, scriptorium.TEMPLATE_DIR)
 
     os.makedirs(paper_dir)
-    if use_git:
+    if use_git and not os.path.exists(os.path.join(paper_dir, '.gitignore')):
         shutil.copyfile(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data',
-                        'gitignore'),
+                                     'gitignore'),
                         os.path.join(paper_dir, '.gitignore'))
 
     files = {'paper.mmd': 'frontmatter.mmd',
