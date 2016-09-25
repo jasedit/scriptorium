@@ -39,18 +39,18 @@ def get_template(fname):
 
 def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
     """Build paper in the given directory, returning the PDF filename if successful."""
-    template_dir = template_dir if template_dir else scriptorium.TEMPLATE_DIR
-    paper = os.path.abspath(paper_dir)
-    if not os.path.isdir(paper):
-        raise IOError("{0} is not a valid directory".format(paper))
+    template_dir = template_dir or scriptorium.TEMPLATE_DIR
+    paper_dir = os.path.abspath(paper_dir)
+    if not os.path.isdir(paper_dir):
+        raise IOError("{0} is not a valid directory".format(paper_dir))
     old_cwd = os.getcwd()
     if old_cwd != paper_dir:
-        os.chdir(paper)
+        os.chdir(paper_dir)
 
     fname = paper_root('.')
 
     if not fname:
-        raise IOError("{0} does not contain a file that appears to be the root of the paper.".format(paper))
+        raise IOError("{0} has no obvious root.".format(paper_dir))
 
     #Convert all auxillary MMD files to LaTeX
     for mmd in glob.glob('*.mmd'):
@@ -114,7 +114,7 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
     if os.getcwd() != old_cwd:
         os.chdir(old_cwd)
 
-    return os.path.join(paper, '{0}.pdf'.format(bname))
+    return os.path.join(paper_dir, '{0}.pdf'.format(bname))
 
 def create(paper_dir, template, force=False, use_git=True, config=None):
     """Create folder with paper skeleton.
