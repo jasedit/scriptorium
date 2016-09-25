@@ -118,61 +118,44 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
 
 def create(paper_dir, template, force=False, use_git=True, config=None):
     """Create folder with paper skeleton.
-    Returns a list of unpopulated variables if successfully created."""
-
-    config = config if config else []
+    Returns a list of unpopulated variables if successfully created.
+    """
     if os.path.exists(paper_dir) and not force:
         raise IOError('{0} exists'.format(paper_dir))
-    template_dir = scriptorium.find_template(template, scriptorium.TEMPLATE_DIR)
 
-    if not template_dir:
-        raise ValueError('{0} is not an installed template.'.format(template))
+    template_dir = scriptorium.find_template(template, scriptorium.TEMPLATE_DIR)
 
     os.makedirs(paper_dir)
     if use_git:
-        here = os.path.dirname(os.path.realpath(__file__))
-        giname = os.path.join(here, 'data', 'gitignore')
-        shutil.copyfile(giname, os.path.join(paper_dir, '.gitignore'))
+        shutil.copyfile(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data',
+                        'gitignore'),
+                        os.path.join(paper_dir, '.gitignore'))
 
-    #Create frontmatter section for paper
-    front_file = os.path.join(template_dir, 'frontmatter.mmd')
-    if os.path.exists(front_file):
-        with open(front_file, 'r') as paper_fp:
-            paper = paper_fp.read()
-    else:
-        paper = ''
+    files = {'paper.mmd': 'frontmatter.mmd',
+             'metadata.tex': 'metadata.tex'}
+    texts = {}
+    for ofile, ifile in files.items():
+        ifile = os.path.join(template_dir, ifile)
+        try:
+            with open(ifile, 'r') as ifp:
+                texts[ofile] = ifp.read()
+        except IOError:
+            texts[ofile] = ''
 
-    #Create metadata section
-    metaex_file = os.path.join(template_dir, 'metadata.tex')
-    if os.path.exists(metaex_file):
-        with open(metaex_file, 'r') as meta_fp:
-            metadata = meta_fp.read()
-    else:
-        metadata = ''
-
-    for opt in config:
-        repl = re.compile(r'\${0}'.format(opt[0].upper()))
-        paper = repl.sub(opt[1], paper)
-        metadata = repl.sub(opt[1], metadata)
+    for opt in config or []:
+        for ofile, text in texts.items():
+            texts[ofile] = re.sub(r'\${0}'.format(opt[0].upper()), opt[1], text)
 
     #Regex to find variable names
     var_re = re.compile(r'\$[A-Z0-9_\.\-]+')
-    paper_file = os.path.join(paper_dir, 'paper.mmd')
-    with open(paper_file, 'w') as paper_fp:
-        paper_fp.write(paper)
-        #Only add a newline if previous material exists
-        if paper:
-            paper_fp.write('\n')
-        paper_fp.write('latex input: {0}/setup.tex\n'.format(template))
-        paper_fp.write('latex footer: {0}/footer.tex\n\n'.format(template))
-
-    unset_vars = set([ii.group(0) for ii in var_re.finditer(paper)])
-
-    if metadata:
-        metadata_file = os.path.join(paper_dir, 'metadata.tex')
-        with open(metadata_file, 'w') as meta_fp:
-            meta_fp.write(metadata)
-        for match in var_re.finditer(metadata):
-            unset_vars += match.group(0)
+    unset_vars = set()
+    for ofile, text in texts.items():
+        unset_vars |= set([ii.group(0) for ii in var_re.finditer(text)])
+        with open(os.path.join(paper_dir, ofile), 'w') as ofp:
+            ofp.write(text)
+            if ofile == 'paper.mmd':
+                ofp.write('\n')
+                ofp.write('latex input: {0}/setup.tex\n'.format(template))
+                ofp.write('latex footer: {0}/footer.tex\n\n'.format(template))
 
     return unset_vars
