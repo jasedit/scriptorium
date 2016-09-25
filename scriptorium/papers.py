@@ -142,9 +142,12 @@ def create(paper_dir, template, force=False, use_git=True, config=None):
         except IOError:
             texts[ofile] = ''
 
-    for opt in config or []:
-        for ofile, text in texts.items():
-            texts[ofile] = re.sub(r'\${0}'.format(opt[0].upper()), opt[1], text)
+    #Inject template as macro argument
+    config['TEMPLATE'] = template
+    #One line regex thanks to http://stackoverflow.com/a/6117124/59184
+    for ofile, text in texts.items():
+        texts[ofile] = re.sub("|".join([r'\${0}'.format(ii) for ii in config]),
+                              lambda m: config[m.group(0)[1:]], text)
 
     #Regex to find variable names
     var_re = re.compile(r'\$[A-Z0-9_\.\-]+')
@@ -153,9 +156,5 @@ def create(paper_dir, template, force=False, use_git=True, config=None):
         unset_vars |= set([ii.group(0) for ii in var_re.finditer(text)])
         with open(os.path.join(paper_dir, ofile), 'w') as ofp:
             ofp.write(text)
-            if ofile == 'paper.mmd':
-                ofp.write('\n')
-                ofp.write('latex input: {0}/setup.tex\n'.format(template))
-                ofp.write('latex footer: {0}/footer.tex\n\n'.format(template))
 
     return unset_vars
