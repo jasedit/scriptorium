@@ -11,7 +11,7 @@ long_description = pypandoc.convert_file('README.md', 'rst')
 
 setup(
     name='scriptorium',
-    version='2.1.1',
+    version='2.2.0',
     description='Multimarkdown and LaTeX framework for academic papers.',
     long_description=long_description,
     license='MIT',
