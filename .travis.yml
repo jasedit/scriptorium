@@ -1,0 +1,9 @@
+language: python
+sudo: required
+install:
+    - sudo apt-get install pandoc
+    - pip install pypandoc pymmd
+    - python setup.py install
+    - sudo python -c "import pymmd; pymmd.build_mmd('/usr/local/lib')"; sudo ldconfig
+script:
+    - echo "This should have unit tests"
