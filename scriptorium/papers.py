@@ -16,21 +16,26 @@ def paper_root(dname):
     """Given a directory, finds the root document for the paper."""
     root_doc = None
     for fname in glob.glob(os.path.join(dname, '*.mmd')):
-        #Metadata only exists in the root document
-        if pymmd.has_metadata_from(fname, pymmd.COMPLETE):
+        #Template metadata only exists in root
+        if get_template(fname):
             root_doc = fname
             break
 
     return os.path.basename(root_doc) if root_doc else None
 
-def get_template(fname):
-    """Attempts to find the template of a paper in a given file."""
-    template = pymmd.extract_metadata_value_from(fname, 'latexfooter', pymmd.COMPLETE)
+def _get_template(txt):
+    """Extract template name from string containing document text"""
+    template = pymmd.value(txt, 'latexfooter', pymmd.COMPLETE)
     template_re = re.compile(r'(?P<template>[a-zA-Z0-9._]*)\/footer.tex')
 
     match = template_re.search(template)
 
     return match.group('template') if match else None
+
+def get_template(fname):
+    """Attempts to find the template of a paper in a given file."""
+    with open(fname, 'r') as mmd_fp:
+        return _get_template(mmd_fp.read())
 
 def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
     """Build paper in the given directory, returning the PDF filename if successful."""
@@ -47,10 +52,13 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
     if not fname:
         raise IOError("{0} does not contain a file that appears to be the root of the paper.".format(paper))
 
-    for mmd in set(glob.glob('*.mmd')) - set(pymmd.manifest(fname)):
+    #Convert all auxillary MMD files to LaTeX
+    for mmd in glob.glob('*.mmd'):
         bname = os.path.basename(mmd).split('.')[0]
         tname = '{0}.tex'.format(bname)
-        pymmd.convert_from(mmd, fmt=pymmd.LATEX, oname=tname)
+        with open(mmd, 'r') as mmd_fp, open(tname, 'w') as tex_fp:
+            txt = pymmd.convert(mmd_fp.read(), fmt=pymmd.LATEX, dname=mmd)
+            tex_fp.write(txt)
 
     bname = os.path.basename(fname).split('.')[0]
     tname = '{0}.tex'.format(bname)
