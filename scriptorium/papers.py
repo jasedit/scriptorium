@@ -8,6 +8,8 @@ import os
 import shutil
 import platform
 
+import pymmd
+
 import scriptorium
 
 def paper_root(dname):
@@ -15,8 +17,7 @@ def paper_root(dname):
     root_doc = None
     for fname in glob.glob(os.path.join(dname, '*.mmd')):
         #Metadata only exists in the root document
-        output = subprocess.check_output(['multimarkdown', '-m', fname]).decode('utf-8')
-        if output:
+        if pymmd.has_metadata_from(fname, pymmd.COMPLETE):
             root_doc = fname
             break
 
@@ -24,10 +25,10 @@ def paper_root(dname):
 
 def get_template(fname):
     """Attempts to find the template of a paper in a given file."""
-    output = subprocess.check_output(['multimarkdown', '-e', 'latexfooter', fname]).decode('utf-8')
+    template = pymmd.extract_metadata_value_from(fname, 'latexfooter', pymmd.COMPLETE)
     template_re = re.compile(r'(?P<template>[a-zA-Z0-9._]*)\/footer.tex')
 
-    match = template_re.search(output)
+    match = template_re.search(template)
 
     return match.group('template') if match else None
 
@@ -46,13 +47,10 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
     if not fname:
         raise IOError("{0} does not contain a file that appears to be the root of the paper.".format(paper))
 
-    all_mmd = glob.glob('*.mmd')
-    default_mmd = subprocess.check_output(['multimarkdown', '-x', fname], universal_newlines=True).encode('utf-8')
-    default_mmd = default_mmd.splitlines()
-    for mmd in set(all_mmd) - set(default_mmd):
+    for mmd in set(glob.glob('*.mmd')) - set(pymmd.manifest(fname)):
         bname = os.path.basename(mmd).split('.')[0]
         tname = '{0}.tex'.format(bname)
-        subprocess.check_call(['multimarkdown', '-t', 'latex', '-o', tname, mmd])
+        pymmd.convert_from(mmd, fmt=pymmd.LATEX, oname=tname)
 
     bname = os.path.basename(fname).split('.')[0]
     tname = '{0}.tex'.format(bname)
