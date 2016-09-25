@@ -59,7 +59,7 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
     if not template:
         raise IOError('{0} does not appear to have lines necessary to load a template.'.format(fname))
 
-    template_loc = scriptorium.find_template(template)
+    template_loc = scriptorium.find_template(template, template_dir)
 
     if not template_loc:
         raise IOError('{0} template not installed in {1}'.format(template, template_dir))
