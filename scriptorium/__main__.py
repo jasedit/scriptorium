@@ -2,6 +2,7 @@
 #Script to build a scriptorium paper in a cross-platform friendly fashion
 
 import argparse
+import argcomplete
 import shutil
 import sys
 import os
@@ -134,6 +135,7 @@ def main():
     config_parser.add_argument('value', nargs='*', help='Access configuration value')
     config_parser.set_defaults(func=config_cmd)
 
+    argcomplete.autocomplete(parser)
     args = parser.parse_args()
 
     if 'func' in args:
