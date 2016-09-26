@@ -8,51 +8,57 @@ import os
 import shutil
 import platform
 
+import pymmd
+
 import scriptorium
 
 def paper_root(dname):
     """Given a directory, finds the root document for the paper."""
     root_doc = None
     for fname in glob.glob(os.path.join(dname, '*.mmd')):
-        #Metadata only exists in the root document
-        output = subprocess.check_output(['multimarkdown', '-m', fname]).decode('utf-8')
-        if output:
+        #Template metadata only exists in root
+        if get_template(fname):
             root_doc = fname
             break
 
     return os.path.basename(root_doc) if root_doc else None
 
-def get_template(fname):
-    """Attempts to find the template of a paper in a given file."""
-    output = subprocess.check_output(['multimarkdown', '-e', 'latexfooter', fname]).decode('utf-8')
+def _get_template(txt):
+    """Extract template name from string containing document text"""
+    template = pymmd.value(txt, 'latexfooter', pymmd.COMPLETE)
     template_re = re.compile(r'(?P<template>[a-zA-Z0-9._]*)\/footer.tex')
 
-    match = template_re.search(output)
+    match = template_re.search(template)
 
     return match.group('template') if match else None
 
+def get_template(fname):
+    """Attempts to find the template of a paper in a given file."""
+    with open(fname, 'r') as mmd_fp:
+        return _get_template(mmd_fp.read())
+
 def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
     """Build paper in the given directory, returning the PDF filename if successful."""
-    template_dir = template_dir if template_dir else scriptorium.TEMPLATE_DIR
-    paper = os.path.abspath(paper_dir)
-    if not os.path.isdir(paper):
-        raise IOError("{0} is not a valid directory".format(paper))
+    template_dir = template_dir or scriptorium.TEMPLATE_DIR
+    paper_dir = os.path.abspath(paper_dir)
+    if not os.path.isdir(paper_dir):
+        raise IOError("{0} is not a valid directory".format(paper_dir))
     old_cwd = os.getcwd()
     if old_cwd != paper_dir:
-        os.chdir(paper)
+        os.chdir(paper_dir)
 
     fname = paper_root('.')
 
     if not fname:
-        raise IOError("{0} does not contain a file that appears to be the root of the paper.".format(paper))
+        raise IOError("{0} has no obvious root.".format(paper_dir))
 
-    all_mmd = glob.glob('*.mmd')
-    default_mmd = subprocess.check_output(['multimarkdown', '-x', fname], universal_newlines=True).encode('utf-8')
-    default_mmd = default_mmd.splitlines()
-    for mmd in set(all_mmd) - set(default_mmd):
+    #Convert all auxillary MMD files to LaTeX
+    for mmd in glob.glob('*.mmd'):
         bname = os.path.basename(mmd).split('.')[0]
         tname = '{0}.tex'.format(bname)
-        subprocess.check_call(['multimarkdown', '-t', 'latex', '-o', tname, mmd])
+        with open(mmd, 'r') as mmd_fp, open(tname, 'w') as tex_fp:
+            txt = pymmd.convert(mmd_fp.read(), fmt=pymmd.LATEX, dname=mmd)
+            tex_fp.write(txt)
 
     bname = os.path.basename(fname).split('.')[0]
     tname = '{0}.tex'.format(bname)
@@ -61,7 +67,7 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
     if not template:
         raise IOError('{0} does not appear to have lines necessary to load a template.'.format(fname))
 
-    template_loc = scriptorium.find_template(template)
+    template_loc = scriptorium.find_template(template, template_dir)
 
     if not template_loc:
         raise IOError('{0} template not installed in {1}'.format(template, template_dir))
@@ -108,65 +114,47 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
     if os.getcwd() != old_cwd:
         os.chdir(old_cwd)
 
-    return os.path.join(paper, '{0}.pdf'.format(bname))
+    return os.path.join(paper_dir, '{0}.pdf'.format(bname))
 
 def create(paper_dir, template, force=False, use_git=True, config=None):
     """Create folder with paper skeleton.
-    Returns a list of unpopulated variables if successfully created."""
-
-    config = config if config else []
+    Returns a list of unpopulated variables if successfully created.
+    """
     if os.path.exists(paper_dir) and not force:
         raise IOError('{0} exists'.format(paper_dir))
+
     template_dir = scriptorium.find_template(template, scriptorium.TEMPLATE_DIR)
 
-    if not template_dir:
-        raise ValueError('{0} is not an installed template.'.format(template))
-
     os.makedirs(paper_dir)
-    if use_git:
-        here = os.path.dirname(os.path.realpath(__file__))
-        giname = os.path.join(here, 'data', 'gitignore')
-        shutil.copyfile(giname, os.path.join(paper_dir, '.gitignore'))
+    if use_git and not os.path.exists(os.path.join(paper_dir, '.gitignore')):
+        shutil.copyfile(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data',
+                                     'gitignore'),
+                        os.path.join(paper_dir, '.gitignore'))
 
-    #Create frontmatter section for paper
-    front_file = os.path.join(template_dir, 'frontmatter.mmd')
-    if os.path.exists(front_file):
-        with open(front_file, 'r') as paper_fp:
-            paper = paper_fp.read()
-    else:
-        paper = ''
+    files = {'paper.mmd': 'frontmatter.mmd',
+             'metadata.tex': 'metadata.tex'}
+    texts = {}
+    for ofile, ifile in files.items():
+        ifile = os.path.join(template_dir, ifile)
+        try:
+            with open(ifile, 'r') as ifp:
+                texts[ofile] = ifp.read()
+        except IOError:
+            texts[ofile] = ''
 
-    #Create metadata section
-    metaex_file = os.path.join(template_dir, 'metadata.tex')
-    if os.path.exists(metaex_file):
-        with open(metaex_file, 'r') as meta_fp:
-            metadata = meta_fp.read()
-    else:
-        metadata = ''
-
-    for opt in config:
-        repl = re.compile(r'\${0}'.format(opt[0].upper()))
-        paper = repl.sub(opt[1], paper)
-        metadata = repl.sub(opt[1], metadata)
+    #Inject template as macro argument
+    config['TEMPLATE'] = template
+    #One line regex thanks to http://stackoverflow.com/a/6117124/59184
+    for ofile, text in texts.items():
+        texts[ofile] = re.sub("|".join([r'\${0}'.format(ii) for ii in config]),
+                              lambda m: config[m.group(0)[1:]], text)
 
     #Regex to find variable names
     var_re = re.compile(r'\$[A-Z0-9_\.\-]+')
-    paper_file = os.path.join(paper_dir, 'paper.mmd')
-    with open(paper_file, 'w') as paper_fp:
-        paper_fp.write(paper)
-        #Only add a newline if previous material exists
-        if paper:
-            paper_fp.write('\n')
-        paper_fp.write('latex input: {0}/setup.tex\n'.format(template))
-        paper_fp.write('latex footer: {0}/footer.tex\n\n'.format(template))
-
-    unset_vars = set([ii.group(0) for ii in var_re.finditer(paper)])
-
-    if metadata:
-        metadata_file = os.path.join(paper_dir, 'metadata.tex')
-        with open(metadata_file, 'w') as meta_fp:
-            meta_fp.write(metadata)
-        for match in var_re.finditer(metadata):
-            unset_vars += match.group(0)
+    unset_vars = set()
+    for ofile, text in texts.items():
+        unset_vars |= set([ii.group(0) for ii in var_re.finditer(text)])
+        with open(os.path.join(paper_dir, ofile), 'w') as ofp:
+            ofp.write(text)
 
     return unset_vars

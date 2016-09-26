@@ -55,12 +55,13 @@ def template_cmd(args):
         variables = scriptorium.list_variables(args.variables, args.template_dir)
         print('\n'.join(variables))
 
-def create(args):
+def create_cmd(args):
     """Creates a new paper given flags."""
+    args.config = {k.upper():v for k, v in args.config}
     if not scriptorium.create(args.output, args.template, force=args.force, config=args.config):
         sys.exit(3)
 
-def doctor_cmd(args):
+def doctor_cmd(_):
     """Command for checking the health of scriptorium."""
     missing_packages = scriptorium.find_missing_packages()
     if missing_packages:
@@ -107,7 +108,7 @@ def main():
     new_parser.add_argument("-t", "--template", help="Template to use in paper.")
     new_parser.add_argument("-c", "--config", nargs=2, action='append', default=[],
                             help='Provide "key" "value" to replace in default paper.')
-    new_parser.set_defaults(func=create)
+    new_parser.set_defaults(func=create_cmd)
 
     # Template Command
     template_parser = subparsers.add_parser("template")
