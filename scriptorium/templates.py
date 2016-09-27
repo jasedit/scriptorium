@@ -63,12 +63,13 @@ def update_template(template, template_dir=None, rev=None):
     old_cwd = os.getcwd()
     os.chdir(template_loc)
     try:
-        if not rev:
-            git_cmd = ['git', 'symbolic-ref', '--short', 'HEAD']
-            rev = subprocess.check_output(git_cmd, universal_newlines=True)
-            rev = rev.rstrip()
+        git_cmd = ['git', 'symbolic-ref', '--short', 'HEAD']
+        current_rev = subprocess.check_output(git_cmd, universal_newlines=True)
+        current_rev = current_rev.rstrip()
         treeish_re = re.compile(r'[A-Za-z0-9_\-\.]+')
         if treeish_re.match(rev):
+            if rev != current_rev:
+                subprocess.check_call(['git', 'checkout', rev])
             subprocess.check_call(['git', 'pull', 'origin', rev])
     except subprocess.CalledProcessError as exc:
         raise IOError('Cannot update {0}:\n {1}'.format(template, exc.output))
