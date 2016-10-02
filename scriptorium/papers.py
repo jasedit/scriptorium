@@ -105,8 +105,8 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
                 else:
                     subprocess.check_output(['biber', bname], universal_newlines=True)
 
-                    subprocess.check_output(pdf_cmd, env=new_env, universal_newlines=True)
-                    subprocess.check_output(pdf_cmd, env=new_env, universal_newlines=True)
+                subprocess.check_output(pdf_cmd, env=new_env, universal_newlines=True)
+                subprocess.check_output(pdf_cmd, env=new_env, universal_newlines=True)
     except subprocess.CalledProcessError as exc:
         raise IOError(exc.output)
 
