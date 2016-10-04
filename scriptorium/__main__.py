@@ -35,7 +35,8 @@ def info(args):
 def template_cmd(args):
     """Prints out all installed templates."""
     if args.update:
-        scriptorium.update_template(args.update, args.template_dir)
+        rev = args.update[1] if len(args.update) > 1 else None
+        scriptorium.update_template(args.update[0], args.template_dir, rev)
 
     if args.list:
         templates = scriptorium.all_templates(args.template_dir)
@@ -114,7 +115,7 @@ def main():
     template_parser = subparsers.add_parser("template")
     template_parser.add_argument('-l', '--list', action='store_true', default=False,
                                  help='List available templates')
-    template_parser.add_argument('-u', '--update',
+    template_parser.add_argument('-u', '--update', nargs='+',
                                  help='Update the given template to the latest version')
     template_parser.add_argument('-r', '--readme', help='Print README for the specified template')
     template_parser.add_argument('-d', '--template_dir', default=None,
