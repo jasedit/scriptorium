@@ -89,7 +89,7 @@ def list_variables(template, template_dir=None):
     variables = []
     for test_file in files:
         try:
-            with open(test_file, 'r') as fp:
+            with open(test_file, 'Ur') as fp:
                 for match in re.finditer(var_re, fp.read()):
                     if match.group('var') != 'TEMPLATE':
                         variables.append(match.group('var'))
