@@ -92,6 +92,6 @@ def list_variables(template, template_dir=None):
             with open(test_file, 'r') as fp:
                 for match in re.finditer(var_re, fp.read()):
                     variables.append(match.group('var'))
-        except FileNotFoundError:
+        except EnvironmentError:
             pass
     return variables
