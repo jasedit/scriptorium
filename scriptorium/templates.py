@@ -91,7 +91,8 @@ def list_variables(template, template_dir=None):
         try:
             with open(test_file, 'r') as fp:
                 for match in re.finditer(var_re, fp.read()):
-                    variables.append(match.group('var'))
+                    if match.group('var') != 'TEMPLATE':
+                        variables.append(match.group('var'))
         except EnvironmentError:
             pass
-    return variables
+    return list(set(variables))
