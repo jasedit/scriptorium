@@ -63,9 +63,11 @@ def update_template(template, template_dir=None, rev=None):
     old_cwd = os.getcwd()
     os.chdir(template_loc)
     try:
+        subprocess.check_call(['git', 'fetch', 'origin'])
         git_cmd = ['git', 'symbolic-ref', '--short', 'HEAD']
         current_rev = subprocess.check_output(git_cmd, universal_newlines=True)
         current_rev = current_rev.rstrip()
+        rev = rev if rev else current_rev
         treeish_re = re.compile(r'[A-Za-z0-9_\-\.]+')
         if treeish_re.match(rev):
             if rev != current_rev:
