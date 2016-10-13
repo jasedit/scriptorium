@@ -34,7 +34,7 @@ def _get_template(txt):
 
 def get_template(fname):
     """Attempts to find the template of a paper in a given file."""
-    with open(fname, 'r') as mmd_fp:
+    with open(fname, 'Ur', encoding='utf8') as mmd_fp:
         return _get_template(mmd_fp.read())
 
 def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
@@ -56,7 +56,7 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
     for mmd in glob.glob('*.mmd'):
         bname = os.path.basename(mmd).split('.')[0]
         tname = '{0}.tex'.format(bname)
-        with open(mmd, 'r') as mmd_fp, open(tname, 'w') as tex_fp:
+        with open(mmd, 'Ur') as mmd_fp, open(tname, 'w') as tex_fp:
             txt = pymmd.convert(mmd_fp.read(), fmt=pymmd.LATEX, dname=mmd)
             tex_fp.write(txt)
 
@@ -96,10 +96,10 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
         auxname = '{0}.aux'.format(bname)
         #Check if bibtex is defined in the frontmatter
         bibtex_re = re.compile(r'^bibtex:', re.MULTILINE)
-        with open(fname, 'r') as paper_fp:
+        with open(fname, 'Ur') as paper_fp:
             if bibtex_re.search(paper_fp.read()):
                 biber_re = re.compile(r'\\bibdata', re.MULTILINE)
-                full = open('paper.aux').read()
+                full = open('paper.aux', 'Ur').read()
                 if biber_re.search(full):
                     subprocess.check_output(['bibtex', auxname], universal_newlines=True)
                 else:
@@ -137,7 +137,7 @@ def create(paper_dir, template, force=False, use_git=True, config=None):
     for ofile, ifile in files.items():
         ifile = os.path.join(template_dir, ifile)
         try:
-            with open(ifile, 'r') as ifp:
+            with open(ifile, 'Ur') as ifp:
                 texts[ofile] = ifp.read()
         except IOError:
             texts[ofile] = ''
