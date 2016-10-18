@@ -12,7 +12,7 @@ import scriptorium
 
 def build_cmd(args):
     """Creates PDF from paper in the requested location."""
-    pdf = scriptorium.to_pdf(args.paper, use_shell_escape=args.shell_escape)
+    pdf = scriptorium.to_pdf(args.paper, use_shell_escape=args.shell_escape, flatten=args.flatten)
 
     if args.output and pdf != args.output:
         shutil.move(pdf, args.output)
@@ -92,6 +92,8 @@ def main():
     build_parser.add_argument('-o', '--output', help='Destination of PDF')
     build_parser.add_argument('-s', '--shell-escape', action='store_true', default=False,
                               help='Flag indicating shell-escape should be used')
+    build_parser.add_argument('-f', '--flatten', action='store_true', default=False,
+                              help='Flatten root LaTeX file output')
     build_parser.set_defaults(func=build_cmd)
 
     # Info Command

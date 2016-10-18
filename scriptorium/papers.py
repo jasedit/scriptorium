@@ -7,6 +7,7 @@ import re
 import os
 import shutil
 import platform
+import tempfile
 
 import pymmd
 
@@ -37,7 +38,7 @@ def get_template(fname):
     with open(fname, 'Ur', encoding='utf8') as mmd_fp:
         return _get_template(mmd_fp.read())
 
-def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
+def to_pdf(paper_dir, template_dir=None, use_shell_escape=False, flatten=False):
     """Build paper in the given directory, returning the PDF filename if successful."""
     template_dir = template_dir or scriptorium.TEMPLATE_DIR
     paper_dir = os.path.abspath(paper_dir)
@@ -79,6 +80,11 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
     old_inputs = new_env.get('TEXINPUTS')
     texinputs = './:{0}:{1}'.format(template_loc + '/.//', old_inputs + ':' if old_inputs else '')
     new_env['TEXINPUTS'] = texinputs
+
+    if flatten:
+        with tempfile.NamedTemporaryFile() as tmp:
+            subprocess.check_call(['latexpand', '-o', tmp.name, tname], env=new_env)
+            shutil.copyfile(tmp.name, tname)
 
     pdf_cmd = ['pdflatex', '-halt-on-error', '-interaction=nonstopmode', tname]
 
