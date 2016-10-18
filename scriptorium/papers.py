@@ -105,7 +105,7 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False, flatten=False):
         with open(fname, 'Ur') as paper_fp:
             if bibtex_re.search(paper_fp.read()):
                 biber_re = re.compile(r'\\bibdata', re.MULTILINE)
-                full = open('paper.aux', 'Ur').read()
+                full = open(auxname, 'Ur').read()
                 if biber_re.search(full):
                     subprocess.check_output(['bibtex', auxname], universal_newlines=True)
                 else:
