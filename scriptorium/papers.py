@@ -15,7 +15,9 @@ import scriptorium
 def paper_root(dname):
     """Given a directory, finds the root document for the paper."""
     root_doc = None
-    for fname in glob.glob(os.path.join(dname, '*.mmd')):
+    fexts = ['mmd', 'md', 'txt']
+    files = [ii for jj in fexts for ii in glob.glob(os.path.join(dname, '*.' + jj))]
+    for fname in files:
         #Template metadata only exists in root
         if get_template(fname):
             root_doc = fname
@@ -53,7 +55,9 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False):
         raise IOError("{0} has no obvious root.".format(paper_dir))
 
     #Convert all auxillary MMD files to LaTeX
-    for mmd in glob.glob('*.mmd'):
+    fexts = ['mmd', 'md', 'txt']
+    files = [ii for jj in fexts for ii in glob.glob(os.path.join(paper_dir, '*.' + jj))]
+    for mmd in files:
         bname = os.path.basename(mmd).split('.')[0]
         tname = '{0}.tex'.format(bname)
         with open(mmd, 'Ur') as mmd_fp, open(tname, 'w') as tex_fp:
