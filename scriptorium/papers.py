@@ -37,7 +37,7 @@ def _get_template(txt):
 
 def get_template(fname):
     """Attempts to find the template of a paper in a given file."""
-    with open(fname, 'Ur', encoding='utf8') as mmd_fp:
+    with open(fname, 'Ur') as mmd_fp:
         return _get_template(mmd_fp.read())
 
 def to_pdf(paper_dir, template_dir=None, use_shell_escape=False, flatten=False):
