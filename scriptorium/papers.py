@@ -13,12 +13,16 @@ import pymmd
 
 import scriptorium
 
+def _list_files(dname):
+    """Builds list of all files which could be converted via MultiMarkdown."""
+    fexts = ['mmd', 'md', 'txt']
+    return [ii for jj in fexts for ii in glob.glob(os.path.join(dname, '*.' + jj))]
+
 def paper_root(dname):
     """Given a directory, finds the root document for the paper."""
     root_doc = None
-    fexts = ['mmd', 'md', 'txt']
-    files = [ii for jj in fexts for ii in glob.glob(os.path.join(dname, '*.' + jj))]
-    for fname in files:
+
+    for fname in _list_files(dname):
         #Template metadata only exists in root
         if get_template(fname):
             root_doc = fname
@@ -56,9 +60,7 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False, flatten=False):
         raise IOError("{0} has no obvious root.".format(paper_dir))
 
     #Convert all auxillary MMD files to LaTeX
-    fexts = ['mmd', 'md', 'txt']
-    files = [ii for jj in fexts for ii in glob.glob(os.path.join(paper_dir, '*.' + jj))]
-    for mmd in files:
+    for mmd in _list_files(paper_dir):
         bname = os.path.basename(mmd).split('.')[0]
         tname = '{0}.tex'.format(bname)
         with open(mmd, 'Ur') as mmd_fp, open(tname, 'w') as tex_fp:
