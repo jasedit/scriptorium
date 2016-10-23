@@ -47,14 +47,19 @@ def get_template(fname):
 def to_pdf(paper_dir, template_dir=None, use_shell_escape=False, flatten=False):
     """Build paper in the given directory, returning the PDF filename if successful."""
     template_dir = template_dir or scriptorium.TEMPLATE_DIR
+
     paper_dir = os.path.abspath(paper_dir)
-    if not os.path.isdir(paper_dir):
+    if os.path.isdir(paper_dir):
+        fname = paper_root(paper_dir)
+    elif os.path.isfile(paper_dir):
+        fname = paper_dir
+        paper_dir = os.path.dirname(paper_dir)
+    else:
         raise IOError("{0} is not a valid directory".format(paper_dir))
+
     old_cwd = os.getcwd()
     if old_cwd != paper_dir:
         os.chdir(paper_dir)
-
-    fname = paper_root('.')
 
     if not fname:
         raise IOError("{0} has no obvious root.".format(paper_dir))
