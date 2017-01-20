@@ -69,7 +69,7 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False, flatten=False):
         bname = os.path.basename(mmd).split('.')[0]
         tname = '{0}.tex'.format(bname)
         with open(mmd, 'Ur') as mmd_fp, open(tname, 'w') as tex_fp:
-            txt = pymmd.convert(mmd_fp.read(), fmt=pymmd.LATEX, dname=mmd)
+            txt = pymmd.convert(mmd_fp.read(), fmt=pymmd.LATEX, dname=mmd, ext=pymmd.SMART)
             tex_fp.write(txt)
 
     bname = os.path.basename(fname).split('.')[0]
