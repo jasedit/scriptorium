@@ -118,3 +118,16 @@ def get_manifest(template, template_dir=None):
         with open(manifest_path, 'Ur') as mfp:
             manifest = json.load(mfp)
     return manifest
+
+def get_default_config(template, template_dir=None):
+    """Get default configuration options if available."""
+    template_dir = template_dir if template_dir else scriptorium.TEMPLATE_DIR
+    template_loc = find_template(template, template_dir)
+    config_path = os.path.join(template_loc, 'default_config')
+    config = {}
+
+    if os.path.exists(config_path):
+        with open(config_path, 'Ur') as cfp:
+            raw_config = json.load(cfp)
+        config = {kk.upper(): vv for kk, vv in raw_config.items()}
+    return config
