@@ -97,7 +97,7 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False, flatten=False):
             subprocess.check_call(['latexpand', '-o', tmp.name, tname], env=new_env)
             shutil.copyfile(tmp.name, tname)
 
-    pdf_cmd = ['pdflatex', '-halt-on-error', '-interaction=nonstopmode', tname]
+    pdf_cmd = [scriptorium.LATEX_CMD, '-halt-on-error', '-interaction=nonstopmode', tname]
 
     if platform.system() == 'Windows':
         pdf_cmd.insert(-2, '-include-directory={0}'.format(template_loc))

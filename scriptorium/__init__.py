@@ -2,6 +2,7 @@
 """Initialization of scriptorium package."""
 
 TEMPLATE_DIR = None
+LATEX_CMD = None
 
 from .config import read_config, save_config
 

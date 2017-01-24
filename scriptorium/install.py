@@ -4,10 +4,11 @@
 import os
 import platform
 from collections import defaultdict
+from scriptorium import LATEX_CMD
 
 REQUIRED_PACKAGES = {
     'git': ['git'],
-    'latex': ['pdflatex', 'biber']
+    'latex': [LATEX_CMD, 'biber']
 }
 
 SPLIT_TOKENS = {
