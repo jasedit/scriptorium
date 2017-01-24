@@ -148,8 +148,7 @@ def create(paper_dir, template, force=False, use_git=True, config=None):
                                      'gitignore'),
                         os.path.join(paper_dir, '.gitignore'))
 
-    files = {'paper.mmd': 'frontmatter.mmd',
-             'metadata.tex': 'metadata.tex'}
+    files = scriptorium.get_manifest(template)
     texts = {}
     for ofile, ifile in files.items():
         ifile = os.path.join(template_dir, ifile)
@@ -161,10 +160,12 @@ def create(paper_dir, template, force=False, use_git=True, config=None):
 
     #Inject template as macro argument
     config['TEMPLATE'] = template
+    full_config = scriptorium.get_default_config(template)
+    full_config.update(config)
     #One line regex thanks to http://stackoverflow.com/a/6117124/59184
     for ofile, text in texts.items():
-        texts[ofile] = re.sub("|".join([r'\${0}'.format(ii) for ii in config]),
-                              lambda m: config[m.group(0)[1:]], text)
+        texts[ofile] = re.sub("|".join([r'\${0}'.format(ii) for ii in full_config]),
+                              lambda m: full_config[m.group(0)[1:]], text)
 
     #Regex to find variable names
     var_re = re.compile(r'\$[A-Z0-9_\.\-]+')
