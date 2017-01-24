@@ -148,8 +148,7 @@ def create(paper_dir, template, force=False, use_git=True, config=None):
                                      'gitignore'),
                         os.path.join(paper_dir, '.gitignore'))
 
-    files = {'paper.mmd': 'frontmatter.mmd',
-             'metadata.tex': 'metadata.tex'}
+    files = scriptorium.get_manifest(template)
     texts = {}
     for ofile, ifile in files.items():
         ifile = os.path.join(template_dir, ifile)
