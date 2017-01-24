@@ -56,6 +56,12 @@ def template_cmd(args):
         variables = scriptorium.list_variables(args.variables, args.template_dir)
         print('\n'.join(variables))
 
+    if args.manifest:
+        manifest = scriptorium.get_manifest(args.manifest, args.template_dir)
+
+        for kk, vv in manifest.items():
+            print("{0} -> {1}".format(vv, kk))
+
 def create_cmd(args):
     """Creates a new paper given flags."""
     args.config = {k.upper():v for k, v in args.config}
@@ -126,6 +132,8 @@ def main():
                                  help='Install repository at given URL in template directory')
     template_parser.add_argument('-v', '--variables',
                                  help='List variables available when using the new command')
+    template_parser.add_argument('-m', '--manifest',
+                                help='List the manifest of files this template provides for new documents')
     template_parser.set_defaults(func=template_cmd)
 
     # Doctor Command
