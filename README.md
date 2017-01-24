@@ -74,7 +74,7 @@ scriptorium config TEMPLATE_DIR ~/.scriptorium/templates
 
 Install some example [templates](https://github.com/jasedit/simple_templates):
 ```
-scriptorium template -i https://github.com/jasedit/simple_templates
+scriptorium template -i https://github.com/jasedit/simple_templates.git
 ```
 
 To list which templates are currently available in scriptorium:
