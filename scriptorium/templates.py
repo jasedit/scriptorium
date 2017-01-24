@@ -5,7 +5,7 @@ import subprocess
 import re
 import os
 import os.path
-import json
+import yaml
 
 import scriptorium
 
@@ -116,7 +116,7 @@ def get_manifest(template, template_dir=None):
 
     if os.path.exists(os.path.join(manifest_path)):
         with open(manifest_path, 'Ur') as mfp:
-            manifest = json.load(mfp)
+            manifest = yaml.load(mfp)
     return manifest
 
 def get_default_config(template, template_dir=None):
@@ -128,6 +128,6 @@ def get_default_config(template, template_dir=None):
 
     if os.path.exists(config_path):
         with open(config_path, 'Ur') as cfp:
-            raw_config = json.load(cfp)
+            raw_config = yaml.load(cfp)
         config = {kk.upper(): vv for kk, vv in raw_config.items()}
     return config
