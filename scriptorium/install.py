@@ -6,9 +6,8 @@ import platform
 from collections import defaultdict
 
 REQUIRED_PACKAGES = {
-  'git': ['git'],
-  'latex': ['pdflatex', 'biber'],
-  'multimarkdown': ['multimarkdown']
+    'git': ['git'],
+    'latex': ['pdflatex', 'biber']
 }
 
 SPLIT_TOKENS = {
