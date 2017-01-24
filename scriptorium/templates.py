@@ -5,6 +5,7 @@ import subprocess
 import re
 import os
 import os.path
+import json
 
 import scriptorium
 
@@ -98,3 +99,22 @@ def list_variables(template, template_dir=None):
         except EnvironmentError:
             pass
     return list(set(variables))
+
+def get_manifest(template, template_dir=None):
+    """
+    Get manifest for a given template with keys as output names, and values as input names.
+
+    This list of files defines which files should be used when creating a new paper using this document.
+    """
+    template_dir = template_dir if template_dir else scriptorium.TEMPLATE_DIR
+    template_loc = find_template(template, template_dir)
+    manifest_path = os.path.join(template_loc, 'manifest')
+    manifest = {
+        'paper.mmd': 'frontmatter.mmd',
+        'metadata.tex': 'metadata.tex'
+        }
+
+    if os.path.exists(os.path.join(manifest_path)):
+        with open(manifest_path, 'Ur') as mfp:
+            manifest = json.load(mfp)
+    return manifest
