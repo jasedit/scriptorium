@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+"""Initialization of scriptorium package."""
 
 TEMPLATE_DIR = None
 
