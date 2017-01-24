@@ -46,7 +46,7 @@ def get_template(fname):
 
 def to_pdf(paper_dir, template_dir=None, use_shell_escape=False, flatten=False):
     """Build paper in the given directory, returning the PDF filename if successful."""
-    template_dir = template_dir or scriptorium.TEMPLATE_DIR
+    template_dir = template_dir or scriptorium.CONFIG['TEMPLATE_DIR']
 
     paper_dir = os.path.abspath(paper_dir)
     if os.path.isdir(paper_dir):
@@ -97,7 +97,7 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False, flatten=False):
             subprocess.check_call(['latexpand', '-o', tmp.name, tname], env=new_env)
             shutil.copyfile(tmp.name, tname)
 
-    pdf_cmd = [scriptorium.LATEX_CMD, '-halt-on-error', '-interaction=nonstopmode', tname]
+    pdf_cmd = [scriptorium.CONFIG['LATEX_CMD'], '-halt-on-error', '-interaction=nonstopmode', tname]
 
     if platform.system() == 'Windows':
         pdf_cmd.insert(-2, '-include-directory={0}'.format(template_loc))
@@ -140,7 +140,7 @@ def create(paper_dir, template, force=False, use_git=True, config=None):
     if os.path.exists(paper_dir) and not force:
         raise IOError('{0} exists'.format(paper_dir))
 
-    template_dir = scriptorium.find_template(template, scriptorium.TEMPLATE_DIR)
+    template_dir = scriptorium.find_template(template, scriptorium.CONFIG['TEMPLATE_DIR'])
 
     os.makedirs(paper_dir)
     if use_git and not os.path.exists(os.path.join(paper_dir, '.gitignore')):

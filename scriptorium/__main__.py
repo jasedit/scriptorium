@@ -7,6 +7,7 @@ import shutil
 import sys
 import os
 import os.path
+import yaml
 
 import scriptorium
 
@@ -78,10 +79,9 @@ def doctor_cmd(_):
 def config_cmd(args):
     """Command to access configuration values."""
     if args.list:
-        print('TEMPLATE_DIR = {0}'.format(scriptorium.TEMPLATE_DIR))
-        print('LATEX_CMD = {0}'.format(scriptorium.LATEX_CMD))
+        print(yaml.dump(scriptorium.CONFIG, default_flow_style=False))
     elif len(args.value) == 1:
-        print(getattr(scriptorium, args.value[0]))
+        print(yaml.dump({args.value[0] : scriptorium.CONFIG[args.value[0]]}))
     elif len(args.value) == 2:
         setattr(scriptorium, args.value[0], args.value[1])
         scriptorium.save_config()
