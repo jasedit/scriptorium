@@ -79,6 +79,7 @@ def config_cmd(args):
     """Command to access configuration values."""
     if args.list:
         print('TEMPLATE_DIR = {0}'.format(scriptorium.TEMPLATE_DIR))
+        print('LATEX_CMD = {0}'.format(scriptorium.LATEX_CMD))
     elif len(args.value) == 1:
         print(getattr(scriptorium, args.value[0]))
     elif len(args.value) == 2:
