@@ -8,6 +8,7 @@ import os
 import shutil
 import platform
 import tempfile
+import mmap
 
 import pymmd
 
@@ -42,7 +43,14 @@ def _get_template(txt):
 def get_template(fname):
     """Attempts to find the template of a paper in a given file."""
     with open(fname, 'Ur') as mmd_fp:
-        return _get_template(mmd_fp.read())
+        mm = mmap.mmap(mmd_fp.fileno(), 0, prot=mmap.PROT_READ)
+        blank_line = '\n\n'
+        idx = mm.find(bytearray(blank_line, 'utf-8'))
+        if idx == -1:
+            return None
+        mm.seek(0)
+        frontmatter = mm.read(idx).decode('utf-8')
+        return _get_template(frontmatter)
 
 def to_pdf(paper_dir, template_dir=None, use_shell_escape=False, flatten=False):
     """Build paper in the given directory, returning the PDF filename if successful."""
