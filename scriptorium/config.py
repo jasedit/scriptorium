@@ -7,24 +7,26 @@ import yaml
 import scriptorium
 
 _DEFAULT_DIR = os.path.join(os.path.expanduser("~"), '.scriptorium')
-_DEFAULT_CFG = os.path.join(_DEFAULT_DIR, 'config')
+_CFG_FILE = os.path.join(_DEFAULT_DIR, 'config')
+
+_DEFAULT_CFG = {
+    'TEMPLATE_DIR': os.path.join(_DEFAULT_DIR, 'templates'),
+    'LATEX_CMD': 'pdflatex'
+}
 
 def read_config():
     """Read configuration values for scriptorium."""
     try:
-        with open(_DEFAULT_CFG, 'Ur') as cfg_fp:
+        with open(_CFG_FILE, 'Ur') as cfg_fp:
             cfg = yaml.load(cfg_fp)
-            scriptorium.TEMPLATE_DIR = cfg['TEMPLATE_DIR']
+            scriptorium.CONFIG.update(cfg)
     except EnvironmentError:
-        tdir = os.path.join(_DEFAULT_DIR, 'templates')
-        if not os.path.exists(tdir):
-            os.makedirs(tdir)
-        scriptorium.TEMPLATE_DIR = tdir
+        if not os.path.exists(scriptorium.CONFIG['TEMPLATE_DIR']):
+            os.makedirs(scriptorium.CONFIG['TEMPLATE_DIR'])
         #Save configuration from first time
         save_config()
 
 def save_config():
     """Save configuration values for scriptorium."""
-    with open(_DEFAULT_CFG, 'w') as cfg_fp:
-        cfg = {'TEMPLATE_DIR': scriptorium.TEMPLATE_DIR}
-        yaml.dump(cfg, cfg_fp)
+    with open(_CFG_FILE, 'w') as cfg_fp:
+        yaml.dump(scriptorium.CONFIG, cfg_fp)

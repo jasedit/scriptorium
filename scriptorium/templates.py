@@ -5,14 +5,14 @@ import subprocess
 import re
 import os
 import os.path
-import json
+import yaml
 
 import scriptorium
 
 def all_templates(dname):
     """Builds list of installed templates."""
     if not dname:
-        dname = scriptorium.TEMPLATE_DIR
+        dname = scriptorium.CONFIG['TEMPLATE_DIR']
     templates = []
     for dirpath, _, filenames in os.walk(dname):
         if 'setup.tex' in filenames:
@@ -22,7 +22,7 @@ def all_templates(dname):
 
 def find_template(tname, template_dir=None):
     """Searches given template directory for the named template."""
-    template_dir = template_dir if template_dir else scriptorium.TEMPLATE_DIR
+    template_dir = template_dir if template_dir else scriptorium.CONFIG['TEMPLATE_DIR']
     for dirpath, _, _ in os.walk(template_dir):
         if os.path.basename(dirpath) == tname:
             return os.path.join(template_dir, dirpath)
@@ -42,7 +42,7 @@ def install_template(url, template_dir=None, rev=None):
     if not match:
         raise ValueError('{0} is not a valid git URL'.format(url))
     template = match.group('dir')
-    template_dir = template_dir if template_dir else scriptorium.TEMPLATE_DIR
+    template_dir = template_dir if template_dir else scriptorium.CONFIG['TEMPLATE_DIR']
     template_dest = os.path.join(template_dir, template)
 
     if os.path.exists(template_dest):
@@ -80,7 +80,7 @@ def update_template(template, template_dir=None, rev=None):
 
 def list_variables(template, template_dir=None):
     """List variables a template offers for paper creation."""
-    template_dir = template_dir if template_dir else scriptorium.TEMPLATE_DIR
+    template_dir = template_dir if template_dir else scriptorium.CONFIG['TEMPLATE_DIR']
 
     template_loc = find_template(template, template_dir)
 
@@ -106,7 +106,7 @@ def get_manifest(template, template_dir=None):
 
     This list of files defines which files should be used when creating a new paper using this document.
     """
-    template_dir = template_dir if template_dir else scriptorium.TEMPLATE_DIR
+    template_dir = template_dir if template_dir else scriptorium.CONFIG['TEMPLATE_DIR']
     template_loc = find_template(template, template_dir)
     manifest_path = os.path.join(template_loc, 'manifest.yml')
     manifest = {
@@ -116,18 +116,18 @@ def get_manifest(template, template_dir=None):
 
     if os.path.exists(os.path.join(manifest_path)):
         with open(manifest_path, 'Ur') as mfp:
-            manifest = json.load(mfp)
+            manifest = yaml.load(mfp)
     return manifest
 
 def get_default_config(template, template_dir=None):
     """Get default configuration options if available."""
-    template_dir = template_dir if template_dir else scriptorium.TEMPLATE_DIR
+    template_dir = template_dir if template_dir else scriptorium.CONFIG['TEMPLATE_DIR']
     template_loc = find_template(template, template_dir)
     config_path = os.path.join(template_loc, 'default_config.yml')
     config = {}
 
     if os.path.exists(config_path):
         with open(config_path, 'Ur') as cfp:
-            raw_config = json.load(cfp)
+            raw_config = yaml.load(cfp)
         config = {kk.upper(): vv for kk, vv in raw_config.items()}
     return config

@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 """Initialization of scriptorium package."""
 
-TEMPLATE_DIR = None
+from .config import _DEFAULT_CFG
+CONFIG = _DEFAULT_CFG.copy()
 
 from .config import read_config, save_config
 
