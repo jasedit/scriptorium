@@ -108,7 +108,7 @@ def get_manifest(template, template_dir=None):
     """
     template_dir = template_dir if template_dir else scriptorium.TEMPLATE_DIR
     template_loc = find_template(template, template_dir)
-    manifest_path = os.path.join(template_loc, 'manifest')
+    manifest_path = os.path.join(template_loc, 'manifest.yml')
     manifest = {
         'paper.mmd': 'frontmatter.mmd',
         'metadata.tex': 'metadata.tex'
