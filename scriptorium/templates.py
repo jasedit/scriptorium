@@ -123,7 +123,7 @@ def get_default_config(template, template_dir=None):
     """Get default configuration options if available."""
     template_dir = template_dir if template_dir else scriptorium.TEMPLATE_DIR
     template_loc = find_template(template, template_dir)
-    config_path = os.path.join(template_loc, 'default_config')
+    config_path = os.path.join(template_loc, 'default_config.yml')
     config = {}
 
     if os.path.exists(config_path):
