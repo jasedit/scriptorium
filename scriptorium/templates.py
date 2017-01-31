@@ -9,7 +9,7 @@ import yaml
 
 import scriptorium
 
-def all_templates(dname):
+def all_templates(dname=None):
     """Builds list of installed templates."""
     if not dname:
         dname = scriptorium.CONFIG['TEMPLATE_DIR']
