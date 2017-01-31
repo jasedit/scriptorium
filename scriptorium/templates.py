@@ -9,9 +9,9 @@ import yaml
 
 import scriptorium
 
-def all_templates(dname):
+def all_templates(dname=None):
     """Builds list of installed templates."""
-    if not dname:
+    if not dname or not os.path.exists(dname):
         dname = scriptorium.CONFIG['TEMPLATE_DIR']
     templates = []
     for dirpath, _, filenames in os.walk(dname):
