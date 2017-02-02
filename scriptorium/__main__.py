@@ -90,6 +90,8 @@ def main():
     """Main function for executing scriptorium as a standalone script."""
     parser = argparse.ArgumentParser()
 
+    parser.add_argument('-v', '--version', action="store_true")
+
     subparsers = parser.add_subparsers()
 
     # Build Command
@@ -150,6 +152,10 @@ def main():
 
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
+
+    if args.version:
+        print(scriptorium.__version__)
+        return 0
 
     if 'func' in args:
         args.func(args)

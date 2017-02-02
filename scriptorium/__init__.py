@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 """Initialization of scriptorium package."""
 
+from ._version import __version__
+
 from .config import _DEFAULT_CFG
 CONFIG = _DEFAULT_CFG.copy()
 
