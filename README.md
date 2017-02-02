@@ -26,6 +26,7 @@ In light of these observations, this framework aims to provide:
 1. Install external dependencies:
     1. [git](https://git-scm.com/)
     2. [LaTeX](http://www.latex-project.org/)
+        1. Some distributions don't include [biber](http://biblatex-biber.sourceforge.net), which should be installed as well
     3. [Python](http://python.org/)
 2. Execute `pip install scriptorium`
 3. Install the MultiMarkdown shared library by executing `sudo python -c "import pymmd; pymmd.build_mmd('/usr/local/lib')"; sudo ldconfig`
@@ -82,7 +83,7 @@ To list which templates are currently available in scriptorium:
 scriptorium template -l
 ```
 
-To create a new paper using the report template previously installed:
+To create a new paper in the directory `example_report` using the report template previously installed:
 ```
 scriptorium new example_report -t report -c author "John Doe" -c title "My Example Report"
 ```
