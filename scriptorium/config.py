@@ -11,7 +11,7 @@ _CFG_FILE = os.path.join(_DEFAULT_DIR, 'config')
 
 _DEFAULT_CFG = {
     'TEMPLATE_DIR': os.path.join(_DEFAULT_DIR, 'templates'),
-    'LATEX_CMD': 'pdflatex'
+    'LATEX_CMD': 'xelatex'
 }
 
 def read_config():
