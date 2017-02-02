@@ -42,6 +42,8 @@ def _get_template(txt):
 
 def get_template(fname):
     """Attempts to find the template of a paper in a given file."""
+    if os.stat(fname).st_size == 0:
+        return None
     with open(fname, 'Ur') as mmd_fp:
         mm = mmap.mmap(mmd_fp.fileno(), 0, prot=mmap.PROT_READ)
         blank_line = '\n\n'
