@@ -83,7 +83,7 @@ def config_cmd(args):
     elif len(args.value) == 1:
         print(yaml.dump({args.value[0] : scriptorium.CONFIG[args.value[0]]}))
     elif len(args.value) == 2:
-        setattr(scriptorium, args.value[0], args.value[1])
+        scriptorium.CONFIG[args.value[0].upper()] = args.value[1]
         scriptorium.save_config()
 
 def main():
