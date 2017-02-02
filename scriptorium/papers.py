@@ -45,13 +45,13 @@ def get_template(fname):
     if os.stat(fname).st_size == 0:
         return None
     with open(fname, 'Ur') as mmd_fp:
-        mm = mmap.mmap(mmd_fp.fileno(), 0, prot=mmap.PROT_READ)
+        mmf = mmap.mmap(mmd_fp.fileno(), 0, prot=mmap.PROT_READ)
         blank_line = '\n\n'
-        idx = mm.find(bytearray(blank_line, 'utf-8'))
+        idx = mmf.find(bytearray(blank_line, 'utf-8'))
         if idx == -1:
             return None
-        mm.seek(0)
-        frontmatter = mm.read(idx).decode('utf-8')
+        mmf.seek(0)
+        frontmatter = mmf.read(idx).decode('utf-8')
         return _get_template(frontmatter)
 
 def to_pdf(paper_dir, template_dir=None, use_shell_escape=False, flatten=False):
