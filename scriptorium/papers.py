@@ -133,9 +133,10 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False, flatten=False):
 
     bname = os.path.basename(fname).split('.')[0]
     if flatten:
+        tname = '{0}.tex'.format(bname)
         with tempfile.NamedTemporaryFile() as tmp:
             subprocess.check_call(['latexpand', '-o', tmp.name, tname], env=new_env)
-            shutil.copyfile(tmp.name, '{0}.tex'.format(bname))
+            shutil.copyfile(tmp.name, tname)
     try:
         subprocess.check_output(pdf_cmd, env=new_env, universal_newlines=True).encode('utf-8')
     except subprocess.CalledProcessError as exc:
