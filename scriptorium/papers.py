@@ -143,6 +143,26 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False, flatten=False):
 
     return os.path.join(paper_dir, '{0}.pdf'.format(bname))
 
+def _expand_variables(template, texts, config):
+    # """Given a
+    #Inject template as macro argument
+    config['TEMPLATE'] = template
+    full_config = scriptorium.get_default_config(template)
+    full_config.update(config)
+
+    #One line regex thanks to http://stackoverflow.com/a/6117124/59184
+    for ofile, text in texts.items():
+        texts[ofile] = re.sub("|".join([r'\${0}'.format(ii) for ii in full_config]),
+                              lambda m: full_config[m.group(0)[1:]], text)
+
+    #Regex to find variable names
+    var_re = re.compile(r'\$[A-Z0-9_\.\-]+')
+    unset_vars = set()
+    for ofile, text in texts.items():
+        unset_vars |= set([ii.group(0) for ii in var_re.finditer(text)])
+
+    return unset_vars
+
 def create(paper_dir, template, force=False, use_git=True, config=None):
     """Create folder with paper skeleton.
     Returns a list of unpopulated variables if successfully created.
@@ -168,20 +188,8 @@ def create(paper_dir, template, force=False, use_git=True, config=None):
         except IOError:
             texts[ofile] = ''
 
-    #Inject template as macro argument
-    config['TEMPLATE'] = template
-    full_config = scriptorium.get_default_config(template)
-    full_config.update(config)
-    #One line regex thanks to http://stackoverflow.com/a/6117124/59184
+    unset_vars = _expand_variables(template, texts, config)
     for ofile, text in texts.items():
-        texts[ofile] = re.sub("|".join([r'\${0}'.format(ii) for ii in full_config]),
-                              lambda m: full_config[m.group(0)[1:]], text)
-
-    #Regex to find variable names
-    var_re = re.compile(r'\$[A-Z0-9_\.\-]+')
-    unset_vars = set()
-    for ofile, text in texts.items():
-        unset_vars |= set([ii.group(0) for ii in var_re.finditer(text)])
         with open(os.path.join(paper_dir, ofile), 'w') as ofp:
             ofp.write(text)
 
