@@ -10,9 +10,13 @@ import platform
 import tempfile
 import mmap
 
+import sys
+
 import pymmd
 
 import scriptorium
+
+_BLANK_LINK = bytearray('\n\n', 'utf-8') if sys.version_info >= (3,0) else '\n\n'
 
 def _list_files(dname):
     """Builds list of all files which could be converted via MultiMarkdown."""
@@ -46,8 +50,7 @@ def get_template(fname):
         return None
     with open(fname, 'Ur') as mmd_fp:
         mmf = mmap.mmap(mmd_fp.fileno(), 0, prot=mmap.PROT_READ)
-        blank_line = '\n\n'
-        idx = mmf.find(bytearray(blank_line, 'utf-8'))
+        idx = mmf.find(_BLANK_LINK)
         if idx == -1:
             return None
         mmf.seek(0)
