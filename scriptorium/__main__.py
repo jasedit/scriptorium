@@ -65,7 +65,6 @@ def template_cmd(args):
 
 def create_cmd(args):
     """Creates a new paper given flags."""
-    args.config = {k.upper():v for k, v in args.config}
     if not scriptorium.create(args.output, args.template, force=args.force, config=args.config):
         sys.exit(3)
 
