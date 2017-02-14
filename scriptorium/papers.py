@@ -49,7 +49,7 @@ def get_template(fname):
         blank_line = '\n\n'
         idx = mmf.find(bytearray(blank_line, 'utf-8'))
         if idx == -1:
-            return None
+            idx = mmf.size()
         mmf.seek(0)
         frontmatter = mmf.read(idx).decode('utf-8')
         return _get_template(frontmatter)
