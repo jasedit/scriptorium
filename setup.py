@@ -37,5 +37,9 @@ setup(
         'console_scripts': ['scriptorium = scriptorium:main'],
     },
     package_data={'scriptorium': ['data/gitignore']},
-    install_requires=['pyyaml', 'argcomplete', 'pymmd']
+    install_requires=[
+        'pyyaml',
+        'argcomplete',
+        'pymmd>=0.3'
+    ]
     )
