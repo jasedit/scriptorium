@@ -174,6 +174,7 @@ def _expand_variables(template, texts, config):
     for ofile, text in texts.items():
         unset_vars |= set([ii.group(0) for ii in var_re.finditer(text)])
 
+    unset_vars = set([ii[1:].lower() for ii in unset_vars])
     return unset_vars
 
 def create(paper_dir, template, force=False, use_git=True, config=None):
