@@ -180,7 +180,12 @@ def create(paper_dir, template, force=False, use_git=True, config=None):
     """Create folder with paper skeleton.
     Returns a list of unpopulated variables if successfully created.
     """
-    config = {k.upper():v for k, v in config.items()}
+
+    try:
+        config = {kk.upper():vv for kk, vv in config}
+    except ValueError:
+        config = {kk.upper():vv for kk, vv in config.items()}
+
     if os.path.exists(paper_dir) and not force:
         raise IOError('{0} exists'.format(paper_dir))
 
