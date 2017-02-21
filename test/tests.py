@@ -21,11 +21,12 @@ class TestScriptorium(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
       """Tear down unit test structure."""
-      shutil.rmtree(TestScriptorium.template_dir)
-      shutil.rmtree(TestScriptorium.paper_dir)
+      shutil.rmtree(TestScriptorium.template_dir, ignore_errors=True)
+      shutil.rmtree(TestScriptorium.paper_dir, ignore_errors=True)
 
     def testTemplates(self):
       """Test that template has been installed"""
+      self.assertEqual(TestScriptorium.template_dir, scriptorium.CONFIG['TEMPLATE_DIR'])
       self.assertTrue(os.path.exists(os.path.join(TestScriptorium.template_dir, 'simple_templates')))
       ex_tdir = os.path.join(scriptorium.CONFIG['TEMPLATE_DIR'], 'simple_templates', 'ieeetran')
       self.assertEqual(scriptorium.find_template('ieeetran'), ex_tdir)
