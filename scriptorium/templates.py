@@ -114,9 +114,12 @@ def get_manifest(template, template_dir=None):
         'metadata.tex': 'metadata.tex'
         }
 
-    if os.path.exists(os.path.join(manifest_path)):
+    if os.path.exists(manifest_path):
         with open(manifest_path, 'r') as mfp:
             manifest = yaml.load(mfp)
+
+    #Remove non-existent files from manifest list
+    manifest = {kk:vv for kk, vv in manifest.items() if os.path.exists(os.path.join(template_loc, vv))}
     return manifest
 
 def get_default_config(template, template_dir=None):
