@@ -31,6 +31,10 @@ def read_config():
         #Save configuration from first time
         save_config()
 
+    if not os.path.exists(scriptorium.CONFIG['TEMPLATE_DIR']):
+        err_msg = '{0} is a non-existent template directory'.format(scriptorium.CONFIG['TEMPLATE_DIR'])
+        raise ValueError(err_msg)
+
 def save_config():
     """Save configuration values for scriptorium."""
     _sanitize_paths(scriptorium.CONFIG)
