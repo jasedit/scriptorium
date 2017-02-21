@@ -65,7 +65,8 @@ def template_cmd(args):
 
 def create_cmd(args):
     """Creates a new paper given flags."""
-    if not scriptorium.create(args.output, args.template, force=args.force, config=args.config):
+    config = {kk:vv for kk, vv in args.config}
+    if not scriptorium.create(args.output, args.template, force=args.force, config=config):
         sys.exit(3)
 
 def doctor_cmd(_):

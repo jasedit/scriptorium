@@ -182,10 +182,7 @@ def create(paper_dir, template, force=False, use_git=True, config=None):
     Returns a list of unpopulated variables if successfully created.
     """
 
-    try:
-        config = {kk.upper():vv for kk, vv in config}
-    except ValueError:
-        config = {kk.upper():vv for kk, vv in config.items()}
+    config = {kk.upper():vv for kk, vv in config.items()}
 
     if os.path.exists(paper_dir) and not force:
         raise IOError('{0} exists'.format(paper_dir))
