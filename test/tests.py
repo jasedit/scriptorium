@@ -21,8 +21,8 @@ class TestScriptorium(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
       """Tear down unit test structure."""
-      shutil.rmtree(TestScriptorium.template_dir)
-      shutil.rmtree(TestScriptorium.paper_dir)
+      shutil.rmtree(TestScriptorium.template_dir, ignore_errors=True)
+      shutil.rmtree(TestScriptorium.paper_dir, ignore_errors=True)
 
     def testTemplates(self):
       """Test that template has been installed"""
