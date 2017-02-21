@@ -48,5 +48,22 @@ class TestScriptorium(unittest.TestCase):
 
       os.chdir(old_dir)
 
+    def testConfigLoading(self):
+      """Test saving and loading configuration."""
+      config = scriptorium.CONFIG.copy()
+      scriptorium.save_config()
+      scriptorium.read_config()
+      self.assertEqual(config, scriptorium.CONFIG)
+
+    def testConfiguration(self):
+      """Test configuration option issues"""
+      test_template_dir = "~/.scriptorium"
+      scriptorium.CONFIG['TEMPLATE_DIR'] = test_template_dir
+      scriptorium.save_config()
+      scriptorium.read_config()
+
+      self.assertEqual(scriptorium.CONFIG['TEMPLATE_DIR'], os.path.expanduser(test_template_dir))
+      scriptorium.CONFIG['TEMPLATE_DIR'] = self.template_dir
+
 if __name__ == '__main__':
     unittest.main()
