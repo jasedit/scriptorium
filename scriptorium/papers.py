@@ -48,7 +48,7 @@ def get_template(fname):
     """Attempts to find the template of a paper in a given file."""
     if os.stat(fname).st_size == 0:
         return None
-    with open(fname, 'Ur') as mmd_fp:
+    with open(fname, 'r') as mmd_fp:
         mmf = mmap.mmap(mmd_fp.fileno(), 0, access=mmap.ACCESS_READ)
         idx = mmf.find(_BLANK_LINK)
         if idx == -1:
@@ -95,10 +95,10 @@ def _process_bib(fname):
         auxname = '{0}.aux'.format(bname)
         #Check if bibtex is defined in the frontmatter
         bibtex_re = re.compile(r'^bibtex:', re.MULTILINE)
-        with open(fname, 'Ur') as paper_fp:
+        with open(fname, 'r') as paper_fp:
             if bibtex_re.search(paper_fp.read()):
                 biber_re = re.compile(r'\\bibdata', re.MULTILINE)
-                full = open(auxname, 'Ur').read()
+                full = open(auxname, 'r').read()
                 if biber_re.search(full):
                     subprocess.check_output(['bibtex', auxname], universal_newlines=True)
                 else:
@@ -129,7 +129,7 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False, flatten=False):
     #Convert all auxillary MMD files to LaTeX
     for mmd in _list_files(paper_dir):
         bname = os.path.basename(mmd).split('.')[0]
-        with open(mmd, 'Ur') as mmd_fp, open('{0}.tex'.format(bname), 'w') as tex_fp:
+        with open(mmd, 'r') as mmd_fp, open('{0}.tex'.format(bname), 'w') as tex_fp:
             tex_fp.write(pymmd.convert(mmd_fp.read(), fmt=pymmd.LATEX, dname=mmd, ext=pymmd.SMART))
 
     pdf_cmd, new_env = _build_latex_cmd(fname, template_dir, use_shell_escape)
@@ -203,7 +203,7 @@ def create(paper_dir, template, force=False, use_git=True, config=None):
     for ofile, ifile in files.items():
         ifile = os.path.join(template_dir, ifile)
         try:
-            with open(ifile, 'Ur') as ifp:
+            with open(ifile, 'r') as ifp:
                 texts[ofile] = ifp.read()
         except IOError:
             texts[ofile] = ''
