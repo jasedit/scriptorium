@@ -49,7 +49,7 @@ def get_template(fname):
     if os.stat(fname).st_size == 0:
         return None
     with open(fname, 'Ur') as mmd_fp:
-        mmf = mmap.mmap(mmd_fp.fileno(), 0, prot=mmap.PROT_READ)
+        mmf = mmap.mmap(mmd_fp.fileno(), 0, access=mmap.ACCESS_READ)
         idx = mmf.find(_BLANK_LINK)
         if idx == -1:
             idx = mmf.size()
