@@ -92,7 +92,7 @@ def list_variables(template, template_dir=None):
     variables = []
     for test_file in files:
         try:
-            with open(test_file, 'Ur') as fp:
+            with open(test_file, 'r') as fp:
                 for match in re.finditer(var_re, fp.read()):
                     if match.group('var') != 'TEMPLATE':
                         variables.append(match.group('var'))
@@ -115,7 +115,7 @@ def get_manifest(template, template_dir=None):
         }
 
     if os.path.exists(manifest_path):
-        with open(manifest_path, 'Ur') as mfp:
+        with open(manifest_path, 'r') as mfp:
             manifest = yaml.load(mfp)
 
     #Remove non-existent files from manifest list
@@ -130,7 +130,7 @@ def get_default_config(template, template_dir=None):
     config = {}
 
     if os.path.exists(config_path):
-        with open(config_path, 'Ur') as cfp:
+        with open(config_path, 'r') as cfp:
             raw_config = yaml.load(cfp)
         config = {kk.upper(): vv for kk, vv in raw_config.items()}
     return config

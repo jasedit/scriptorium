@@ -21,7 +21,7 @@ def _sanitize_paths(cfg):
 def read_config():
     """Read configuration values for scriptorium."""
     try:
-        with open(_CFG_FILE, 'Ur') as cfg_fp:
+        with open(_CFG_FILE, 'r') as cfg_fp:
             cfg = yaml.load(cfg_fp)
             scriptorium.CONFIG.update(cfg)
             _sanitize_paths(scriptorium.CONFIG)
