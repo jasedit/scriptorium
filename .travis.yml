@@ -3,6 +3,10 @@ addons:
   apt:
     packages:
       - pandoc
+      - texlive-xetex
+      - texlive-latex-base
+      - texlive-latex-extra
+      - texlive-latex-recommended
 python:
   - "2.7"
   - "3.5"
