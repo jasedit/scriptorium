@@ -5,6 +5,7 @@
 import os
 import tempfile
 import shutil
+import textwrap
 import unittest
 
 import scriptorium
@@ -44,7 +45,23 @@ class TestScriptorium(unittest.TestCase):
       os.chdir('ex_report')
       self.assertEqual(scriptorium.paper_root('.'), 'paper.mmd')
       self.assertEqual(scriptorium.get_template('paper.mmd'), 'report')
-      self.assertTrue(os.path.exists('.'))
+
+      example_text = textwrap.dedent("""\n
+        # Introduction
+
+        This is an example paper.
+
+        # Conclusion
+
+        This paper is awesome.
+        """)
+
+      with open('paper.mmd', 'a') as fp:
+        fp.write(example_text)
+
+      pdf_path = scriptorium.to_pdf('.')
+
+      self.assertTrue(os.path.exists(pdf_path))
 
       os.chdir(old_dir)
 
