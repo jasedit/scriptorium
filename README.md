@@ -29,7 +29,7 @@ In light of these observations, this framework aims to provide:
         1. Some distributions don't include [biber](http://biblatex-biber.sourceforge.net), which should be installed as well
     3. [Python](http://python.org/)
 2. Execute `pip install scriptorium`
-3. Install the MultiMarkdown shared library by executing `sudo python -c "import pymmd; pymmd.build_mmd('/usr/local/lib')"; sudo ldconfig`
+3. Install the MultiMarkdown shared library by executing `sudo python -c "import pymmd; pymmd.build_mmd()"`
 
 # Mac Installation
 
