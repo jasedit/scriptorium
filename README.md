@@ -91,6 +91,7 @@ scriptorium new example_report -t report -c author "John Doe" -c title "My Examp
 Adding example content using the command:
 ```
 echo "
+
 # Introduction
 
 This is an introductory section." >> example_report/paper.mmd
