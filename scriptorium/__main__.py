@@ -66,7 +66,12 @@ def template_cmd(args):
 def create_cmd(args):
     """Creates a new paper given flags."""
     config = {kk:vv for kk, vv in args.config}
-    if not scriptorium.create(args.output, args.template, force=args.force, config=config):
+    unset_vars = scriptorium.create(args.output, args.template, force=args.force, config=config)
+    if unset_vars:
+        if not args.quiet:
+            print('WARNING: Variables are unset! Build will fail until they are defined')
+            for vname in unset_vars:
+                print('${0}'.format(vname.upper()))
         sys.exit(3)
 
 def doctor_cmd(_):
@@ -124,6 +129,8 @@ def main():
     new_parser.add_argument("-t", "--template", help="Template to use in paper.")
     new_parser.add_argument("-c", "--config", nargs=2, action='append', default=[],
                             help='Provide "key" "value" to replace in default paper.')
+    new_parser.add_argument('-q', '--quiet', action='store_true', default=False,
+                            help='Squelch warnings about unset variables')
     new_parser.set_defaults(func=create_cmd)
 
     # Template Command
