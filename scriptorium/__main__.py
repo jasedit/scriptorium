@@ -111,7 +111,7 @@ def main():
 
     # Info Command
     info_parser = subparsers.add_parser('info')
-    info_parser.add_argument('paper', default='.', help='Directory containing paper to make')
+    info_parser.add_argument('paper', default='.', nargs='?', help='Directory containing paper to make')
     info_parser.add_argument('-t', '--template', action='store_true',
                              help='Flag to extract template')
     info_parser.set_defaults(func=info)
