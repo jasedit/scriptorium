@@ -86,6 +86,10 @@ def config_cmd(args):
         scriptorium.CONFIG[args.value[0].upper()] = args.value[1]
         scriptorium.save_config()
 
+def clean_cmd(args):
+    """Command to clean cruft from current directory."""
+    scriptorium.clean(args.paper)
+
 def main():
     """Main function for executing scriptorium as a standalone script."""
     parser = argparse.ArgumentParser()
@@ -149,6 +153,11 @@ def main():
                                help='List available configuration options and current vaules')
     config_parser.add_argument('value', nargs='*', help='Access configuration value')
     config_parser.set_defaults(func=config_cmd)
+
+    #Clean Command
+    clean_parser = subparsers.add_parser('clean')
+    clean_parser.add_argument('paper', default='.', nargs='?', help='Directory containing paper to clean')
+    clean_parser.set_defaults(func=clean_cmd)
 
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
