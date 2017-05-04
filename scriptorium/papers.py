@@ -106,7 +106,7 @@ def _process_bib(fname):
     except subprocess.CalledProcessError as exc:
         raise IOError(exc.output)
 
-def to_pdf(paper_dir, template_dir=None, use_shell_escape=False, flatten=False):
+def to_pdf(paper_dir, template_dir=None, use_shell_escape=False, flatten=False, keep_comments=False):
     """Build paper in the given directory, returning the PDF filename if successful."""
     template_dir = template_dir or scriptorium.CONFIG['TEMPLATE_DIR']
 
@@ -137,8 +137,9 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False, flatten=False):
     bname = os.path.basename(fname).split('.')[0]
     if flatten:
         tname = '{0}.tex'.format(bname)
+        fargs = '--keep-comments' if keep_comments else ''
         with tempfile.NamedTemporaryFile() as tmp:
-            subprocess.check_call(['latexpand', '-o', tmp.name, tname], env=new_env)
+            subprocess.check_call(['latexpand', '-o', tmp.name, tname, fargs], env=new_env)
             shutil.copyfile(tmp.name, tname)
     try:
         subprocess.check_output(pdf_cmd, env=new_env, universal_newlines=True).encode('utf-8')
