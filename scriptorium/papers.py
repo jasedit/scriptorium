@@ -143,6 +143,8 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False, flatten=False, 
             shutil.copyfile(tmp.name, tname)
     try:
         subprocess.check_output(pdf_cmd, env=new_env, universal_newlines=True).encode('utf-8')
+        if os.path.exists(os.path.join(paper_dir, '{0}.xdy'.format(bname))):
+            subprocess.check_output(['makeglossaries', bname], env=new_env, universal_newlines=True)
     except subprocess.CalledProcessError as exc:
         raise IOError(exc.output)
 
@@ -222,7 +224,7 @@ def clean(paper_dir):
 
     bname = os.path.splitext(os.path.basename(root))[0]
     latex_exts = ['aux', 'bbl', 'bcf', 'blg', 'out', 'gls', 'glo', 'lot', 'log', 'toc', 'mtc',
-                  'maf', 'run.xml', 'acn', 'alg', 'ist', 'synctex']
+                  'maf', 'run.xml', 'acn', 'alg', 'ist', 'synctex', 'xdy', 'acr', 'acn']
 
     for fname in [os.path.join(paper_dir, '{0}.{1}').format(bname, ext) for ext in latex_exts]:
         if os.path.exists(fname):
