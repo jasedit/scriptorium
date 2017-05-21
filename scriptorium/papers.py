@@ -4,6 +4,7 @@
 import glob
 import subprocess
 import re
+import locale
 import os
 import shutil
 import platform
@@ -141,17 +142,24 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False, flatten=False, 
         with tempfile.NamedTemporaryFile() as tmp:
             subprocess.check_call(['latexpand', '-o', tmp.name, tname, fargs], env=new_env)
             shutil.copyfile(tmp.name, tname)
+
     try:
-        subprocess.check_output(pdf_cmd, env=new_env, universal_newlines=True).encode('utf-8')
+        subprocess.check_output(pdf_cmd, env=new_env)
         if os.path.exists(os.path.join(paper_dir, '{0}.xdy'.format(bname))):
-            subprocess.check_output(['makeglossaries', bname], env=new_env, universal_newlines=True)
+            subprocess.check_output(['makeglossaries', bname], env=new_env)
     except subprocess.CalledProcessError as exc:
-        raise IOError(exc.output)
+        raise IOError(decodeCPEError(exc.output))
 
     _process_bib(fname)
 
-    subprocess.check_output(pdf_cmd, env=new_env, universal_newlines=True)
-    subprocess.check_output(pdf_cmd, env=new_env, universal_newlines=True)
+    try:
+        subprocess.check_output(pdf_cmd, env=new_env)
+    except subprocess.CalledProcessError as exc:
+        raise IOError(decodeCPEError(exc.output))
+    try:
+        subprocess.check_output(pdf_cmd, env=new_env)
+    except subprocess.CalledProcessError as exc:
+        raise IOError(decodeCPEError(exc.output))
 
     # Revert working directory
     if os.getcwd() != old_cwd:
@@ -230,3 +238,15 @@ def clean(paper_dir):
         if os.path.exists(fname):
             os.remove(fname)
     return True
+
+def decodeCPEError(output):
+    """Attempts to decode a string with a variety of common encodings."""
+    res = None
+    encs = [locale.getpreferredencoding(False), 'utf-8', 'latin-1']
+    for enc in encs:
+        try:
+            res = output.decode(enc)
+            return res
+        except UnicodeDecodeError:
+            pass
+    return None
