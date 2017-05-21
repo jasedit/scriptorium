@@ -231,8 +231,9 @@ def clean(paper_dir):
         return False
 
     bname = os.path.splitext(os.path.basename(root))[0]
-    latex_exts = ['aux', 'bbl', 'bcf', 'blg', 'out', 'gls', 'glo', 'lot', 'log', 'toc', 'mtc',
-                  'maf', 'run.xml', 'acn', 'alg', 'ist', 'synctex', 'xdy', 'acr', 'acn']
+    latex_exts = ['acn', 'acn', 'acr', 'alg', 'aux', 'bbl', 'bcf', 'blg',
+                  'glo', 'gls', 'glsdefs', 'ist', 'log', 'lot', 'maf',
+                  'mtc', 'out', 'run.xml', 'synctex', 'toc', 'xdy']
 
     for fname in [os.path.join(paper_dir, '{0}.{1}').format(bname, ext) for ext in latex_exts]:
         if os.path.exists(fname):
