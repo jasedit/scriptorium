@@ -13,7 +13,8 @@ import scriptorium
 
 def build_cmd(args):
     """Creates PDF from paper in the requested location."""
-    pdf = scriptorium.to_pdf(args.paper, use_shell_escape=args.shell_escape, flatten=args.flatten)
+    pdf = scriptorium.to_pdf(args.paper, use_shell_escape=args.shell_escape, flatten=args.flatten,
+                                            keep_comments=args.keep_comments)
 
     if args.output and pdf != args.output:
         shutil.move(pdf, args.output)
@@ -112,11 +113,14 @@ def main():
                               help='Flag indicating shell-escape should be used')
     build_parser.add_argument('-f', '--flatten', action='store_true', default=False,
                               help='Flatten root LaTeX file output')
+    build_parser.add_argument('-k', '--keep-comments', action='store_true', default=False,
+                              help='Keep comments when flattening the resulting LaTeX file')
     build_parser.set_defaults(func=build_cmd)
 
     # Info Command
     info_parser = subparsers.add_parser('info')
-    info_parser.add_argument('paper', default='.', nargs='?', help='Directory containing paper to make')
+    info_parser.add_argument('paper', default='.', nargs='?',
+                             help='Directory containing paper to make')
     info_parser.add_argument('-t', '--template', action='store_true',
                              help='Flag to extract template')
     info_parser.set_defaults(func=info)
