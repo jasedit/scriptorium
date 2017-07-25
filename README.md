@@ -28,6 +28,7 @@ In light of these observations, this framework aims to provide:
     2. [LaTeX](http://www.latex-project.org/)
         1. Some distributions don't include [biber](http://biblatex-biber.sourceforge.net), which should be installed as well
     3. [Python](http://python.org/)
+    4. [cmake](https://cmake.org/), which is required to build MultiMarkdown
 2. Execute `pip install scriptorium`
 3. Install the MultiMarkdown shared library by executing `sudo python -c "import pymmd; pymmd.build_mmd()"`
 
