@@ -17,7 +17,7 @@ import pymmd
 
 import scriptorium
 
-_BLANK_LINK = bytearray('\n\n', 'utf-8') if sys.version_info >= (3,0) else '\n\n'
+_BLANK_LINK = bytes('\n\n', 'utf-8') if sys.version_info >= (3,0) else '\n\n'
 
 def _list_files(dname):
     """Builds list of all files which could be converted via MultiMarkdown."""
