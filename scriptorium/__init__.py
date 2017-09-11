@@ -10,6 +10,7 @@ from .config import read_config, save_config
 
 read_config()
 
+from .repos import update_repo, clone_repo
 from .papers import paper_root, get_template, to_pdf, create, clean
 from .templates import all_templates, find_template, install_template, update_template
 from .templates import list_variables, get_manifest, get_default_config

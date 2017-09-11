@@ -40,6 +40,7 @@ setup(
     install_requires=[
         'pyyaml',
         'argcomplete',
+        'pygit2',
         'pymmd>=0.3'
     ]
     )

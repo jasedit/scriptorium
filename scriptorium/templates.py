@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 """Tools for reasoning over templates."""
 
-import subprocess
 import re
 import os
 import os.path
 import yaml
+import pygit2
 
 import scriptorium
+from .repos import _parse_repo_url
 
 def all_templates(dname=None):
     """Builds list of installed templates."""
@@ -28,55 +29,16 @@ def find_template(tname, template_dir=None):
             return os.path.join(template_dir, dirpath)
     raise IOError('{0} cannot be found in {1}'.format(tname, template_dir))
 
-def repo_checkout(repo, rev):
-    """Checks out a specific revision of the repository."""
-    old_cwd = os.getcwd()
-    os.chdir(repo)
-    subprocess.check_call(['git', 'checkout', rev])
-    os.chdir(old_cwd)
-
 def install_template(url, template_dir=None, rev=None):
     """Installs a template in the template_dir, optionally selecting a revision."""
-    url_re = re.compile(r'((git|ssh|http(s)?)(:(//)?)|([\w\d]*@))?(?P<url>[\w\.]+).*\/(?P<dir>[\w\-]+)(\.git)(/)?')
-    match = url_re.search(url)
-    if not match:
-        raise ValueError('{0} is not a valid git URL'.format(url))
-    template = match.group('dir')
     template_dir = template_dir if template_dir else scriptorium.CONFIG['TEMPLATE_DIR']
-    template_dest = os.path.join(template_dir, template)
+    scriptorium.clone_repo(url, template_dir, rev)
 
-    if os.path.exists(template_dest):
-        raise IOError('{0} already exists, cannot install on top'.format(template))
-
-    try:
-        subprocess.check_output(['git', 'clone', url, template_dest], universal_newlines=True)
-    except subprocess.CalledProcessError as exc:
-        raise IOError('\n'.join(['Could not clone template:', exc.output]))
-
-    treeish_re = re.compile(r'[A-Za-z0-9_\-\.]+')
-    if rev and treeish_re.match(rev):
-        repo_checkout(template_dest, rev)
-
-def update_template(template, template_dir=None, rev=None):
+def update_template(template, template_dir=None, rev=None, force=False):
     """Updates the given template repository."""
     template_loc = find_template(template, template_dir)
 
-    old_cwd = os.getcwd()
-    os.chdir(template_loc)
-    try:
-        subprocess.check_call(['git', 'fetch', 'origin'])
-        git_cmd = ['git', 'symbolic-ref', '--short', 'HEAD']
-        current_rev = subprocess.check_output(git_cmd, universal_newlines=True)
-        current_rev = current_rev.rstrip()
-        rev = rev if rev else current_rev
-        treeish_re = re.compile(r'[A-Za-z0-9_\-\.]+')
-        if treeish_re.match(rev):
-            if rev != current_rev:
-                subprocess.check_call(['git', 'checkout', rev])
-            subprocess.check_call(['git', 'pull', 'origin', rev])
-    except subprocess.CalledProcessError as exc:
-        raise IOError('Cannot update {0}:\n {1}'.format(template, exc.output))
-    os.chdir(old_cwd)
+    scriptorium.update_repo(template_loc, rev=rev, force=force)
 
 def list_variables(template, template_dir=None):
     """List variables a template offers for paper creation."""
