@@ -1,4 +1,5 @@
 language: python
+sudo: required
 addons:
   apt:
     packages:
@@ -8,13 +9,13 @@ addons:
       - texlive-latex-extra
       - texlive-latex-recommended
       - texlive-fonts-recommended
-      - libgit2-dev
 python:
   - "2.7"
   - "3.4"
   - "3.5"
   - "3.6"
 install:
+    - git clone https://github.com/libgit2/libgit2.git; cd libgit2; mkdir build; cd build; cmake ..; cmake --build . --target=install
     - pip install pypandoc
     - pip install -r requirements.txt
     - python setup.py install
