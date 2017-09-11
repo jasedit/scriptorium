@@ -17,6 +17,7 @@ class TestScriptorium(unittest.TestCase):
       TestScriptorium.template_dir = tempfile.mkdtemp()
       TestScriptorium.paper_dir = tempfile.mkdtemp()
       scriptorium.CONFIG['TEMPLATE_DIR'] = TestScriptorium.template_dir
+      scriptorium.install_template("https://github.com/jasedit/ieee.git")
       scriptorium.install_template("https://github.com/jasedit/simple_templates.git")
 
     @classmethod
