@@ -8,6 +8,7 @@ addons:
       - texlive-latex-extra
       - texlive-latex-recommended
       - texlive-fonts-recommended
+      - libgit2-dev
 python:
   - "2.7"
   - "3.4"
