@@ -15,7 +15,7 @@ python:
   - "3.5"
   - "3.6"
 install:
-    - git clone https://github.com/libgit2/libgit2.git; cd libgit2; mkdir build; cd build; cmake ..; cmake --build . --target install
+    - git clone https://github.com/libgit2/libgit2.git; cd libgit2; mkdir build; cd build; cmake ..; sudo cmake --build . --target install
     - pip install pypandoc
     - pip install -r requirements.txt
     - python setup.py install
