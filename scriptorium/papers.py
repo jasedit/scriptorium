@@ -79,7 +79,8 @@ def _build_latex_cmd(fname, template_dir, use_shell_escape=False):
 
     for ii in ['TEXINPUTS', 'BIBINPUTS', 'BSTINPUTS']:
         old_inputs = new_env.get(ii)
-        inputs = './:{0}:{1}'.format(template_loc + '/.//', old_inputs + ':' if old_inputs else '')
+        old_inputs = old_inputs + ':' if old_inputs else ''
+        inputs = './:{0}:{1}'.format(template_loc + '/.//', old_inputs)
         new_env[ii] = inputs
 
     pdf_cmd = [scriptorium.CONFIG['LATEX_CMD'], '-halt-on-error', '-interaction=nonstopmode', tname]
@@ -91,7 +92,7 @@ def _build_latex_cmd(fname, template_dir, use_shell_escape=False):
         pdf_cmd.insert(1, '-shell-escape')
     return pdf_cmd, new_env
 
-def _process_bib(fname):
+def _process_bib(fname, new_env = {}):
     """Perform processing to generate bibliography data for the given LaTeX file."""
     bname = os.path.basename(fname).split('.')[0]
     try:
@@ -103,9 +104,9 @@ def _process_bib(fname):
                 biber_re = re.compile(r'\\bibdata', re.MULTILINE)
                 full = open(auxname, 'r').read()
                 if biber_re.search(full):
-                    subprocess.check_output(['bibtex', auxname], universal_newlines=True)
+                    subprocess.check_output(['bibtex', auxname], universal_newlines=True, env=new_env)
                 else:
-                    subprocess.check_output(['biber', bname], universal_newlines=True)
+                    subprocess.check_output(['biber', bname], universal_newlines=True, env=new_env)
     except subprocess.CalledProcessError as exc:
         raise IOError(exc.output)
 
@@ -152,7 +153,7 @@ def to_pdf(paper_dir, template_dir=None, use_shell_escape=False, flatten=False, 
     except subprocess.CalledProcessError as exc:
         raise IOError(decodeCPEError(exc.output))
 
-    _process_bib(fname)
+    _process_bib(fname, new_env)
 
     try:
         subprocess.check_output(pdf_cmd, env=new_env)
