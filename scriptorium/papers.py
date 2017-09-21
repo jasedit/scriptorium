@@ -76,9 +76,11 @@ def _build_latex_cmd(fname, template_dir, use_shell_escape=False):
 
     #Need to set up environment here
     new_env = dict(os.environ)
-    old_inputs = new_env.get('TEXINPUTS')
-    texinputs = './:{0}:{1}'.format(template_loc + '/.//', old_inputs + ':' if old_inputs else '')
-    new_env['TEXINPUTS'] = texinputs
+
+    for ii in ['TEXINPUTS', 'BIBINPUTS', 'BSTINPUTS']:
+        old_inputs = new_env.get(ii)
+        inputs = './:{0}:{1}'.format(template_loc + '/.//', old_inputs + ':' if old_inputs else '')
+        new_env[ii] = inputs
 
     pdf_cmd = [scriptorium.CONFIG['LATEX_CMD'], '-halt-on-error', '-interaction=nonstopmode', tname]
 
